@@ -17,5 +17,5 @@ jobs:
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag nlingamp/pt-github:$(date +%s)
     - name: Push Docker image to Docker Hub
-      run: docker push nlingamp/pt-github:latest
+      run: docker push nlingamp/pt-github:$(date +%s)
       
