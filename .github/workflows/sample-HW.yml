@@ -13,3 +13,9 @@ jobs:
     - name: Print Hostname
       run: echo "Hostname $HOSTNAME"
       shell: bash
+      
+    - name: create directory sample
+      run: |
+       mkdir -p sample
+       cd sample/
+       pwd
