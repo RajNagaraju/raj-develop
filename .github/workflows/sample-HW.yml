@@ -11,5 +11,5 @@ jobs:
       run: echo "Hello, world"
 
     - name: Print Hostname
-      run: echo "Histname $HOSTNAME"
+      run: echo "Hostname $HOSTNAME"
       shell: bash
