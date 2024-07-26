@@ -17,5 +17,4 @@ jobs:
     - name: create directory sample
       run: |
        mkdir -p sample
-       cd sample/
-       pwd
+       df -h
