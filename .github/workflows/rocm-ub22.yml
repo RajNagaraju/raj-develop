@@ -25,7 +25,16 @@ jobs:
         unique_tag=$(date +%Y%m%d%H%M%S)
         
         #build the docker image
-        docker buildx build --no-cache --build-arg rocm_repo=6.0 --build-arg rocm_version=6.0.0 --build-arg rocm_lib_version=60000 --build-arg rocm_path=/opt/rocm-6.0.0 -t amddcgpuce/rocm:6.0.0-ub22 -f rocm.ub22.Dockerfile `pwd` --tag nlingamp/pt-github:${unique_tag} .
+        docker buildx build \
+          --no-cache \
+          --build-arg rocm_repo=6.0 \
+          --build-arg rocm_version=6.0.0 \
+          --build-arg rocm_lib_version=60000 \
+          --build-arg rocm_path=/opt/rocm-6.0.0 \
+          --tag amddcgpuce/rocm:6.0.0-ub22 \
+          --tag nlingamp/pt-github:${unique_tag} \
+          -f rocm.ub22.Dockerfile \
+          .
    
     - name: Push Docker image to Docker Hub
       run: docker push nlingamp/pt-github:${unique_tag}
