@@ -7,22 +7,25 @@ on:
         description: 'rocm repo'
         required: true
         default: 6.0
+        
       ROCM_VERSION:
         description: 'rocm-ver'
         required: true
         default: 6.0.0
+        
       ROCM_LIB_VERSION:
         description: 'rocm-lib-ver'
         required: true
         default: 600
+        
       ROCM_PATH:
         description: 'rocm-path'
         required: true
         default: /opt/rocm-6.0.0
-      #IMAGE_TAG:
-       # description: 'docker tag'
-       # required: true
-       # default: ${unique_tag}
+      IMAGE_TAG:
+        description: 'docker tag'
+        required: false # Allow the user to provide a tag or use the default
+        
   
 jobs:
   build:
@@ -33,9 +36,7 @@ jobs:
       ROCM_VERSION: 6.0.0
       ROCM_LIB_VERSION: 60000
       ROCM_PATH: /opt/rocm-6.0.0
-      #IMAGE_TAG: ${unique_tag}
-
-    
+      
     steps:
     - uses: actions/checkout@v4
 
@@ -72,16 +73,22 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
     - name: Build Docker image
+      id: set_tag
       run: |
-          unique_tag=$(date +%Y%m%d%H%M%S)
+          if [ -z "${{ github.event.inputs.image_tag }}" ]; then
+            unique_tag=rocm-ub-22-$(date +%Y%m%d%H%M%S)
+          else
+            unique_tag="${{ github.event.inputs.image_tag }}"
+          fi
+          echo "IMAGE_TAG=${unique_tag}" >> $GITHUB_ENV
+          
           docker buildx build \
             --tag nlingamp/pt-github:${unique_tag} \
             --file Dockerfile \
             .
-          echo "tag=${unique_tag}" >> $GITHUB_ENV
 
     - name: Push Docker image to Docker Hub
       run: |
-        docker push nlingamp/pt-github:${{ env.tag }}
+        docker push nlingamp/pt-github:${{ env.IMAGE_TAG }}
     
         
