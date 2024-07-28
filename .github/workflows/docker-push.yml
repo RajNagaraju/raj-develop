@@ -77,7 +77,7 @@ jobs:
         unique_tag=$(date +%Y%m%d%H%M%S)
 
         docker buildx build \
-        --tag ${{ env.IMAGE_TAG }} \
+        --tag nlingamp/pt-github:${{ env.IMAGE_TAG }} \
         --file Dockerfile \
         .
 
