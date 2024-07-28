@@ -19,10 +19,10 @@ on:
         description: 'rocm-path'
         required: true
         default: /opt/rocm-6.0.0
-      IMAGE_TAG:
-        description: 'docker tag'
-        required: true
-        default: ${unique_tag}
+      #IMAGE_TAG:
+       # description: 'docker tag'
+       # required: true
+       # default: ${unique_tag}
   
 jobs:
   build:
@@ -78,11 +78,10 @@ jobs:
             --tag nlingamp/pt-github:${unique_tag} \
             --file Dockerfile \
             .
-          echo "::set-output name=tag::${unique_tag}"  # Set the output for later use
+          echo "tag=${unique_tag}" >> $GITHUB_ENV
 
     - name: Push Docker image to Docker Hub
       run: |
-        docker push nlingamp/pt-github:${{ steps.build.outputs.tag }}
-        needs: build-and-push
+        docker push nlingamp/pt-github:${{ env.tag }}
     
         
