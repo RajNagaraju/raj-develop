@@ -2,10 +2,39 @@ name: Docker Image CI
 
 on:
   workflow_dispatch:
+    inputs:
+      ROCM_REPO:
+        description: 'rocm repo'
+        required: true
+        default: 6.0
+      ROCM_VERSION:
+        description: 'rocm-ver'
+        required: true
+        default: 6.0.0
+      ROCM_LIB_VERSION:
+        description: 'rocm-lib-ver'
+        required: true
+        default: 600
+      ROCM_PATH:
+        description: 'rocm-path'
+        required: true
+        default: /opt/rocm-6.0.0
+      IMAGE_TAG:
+        description: 'docker tag'
+        required: true
+        default: ${unique_tag}
   
 jobs:
   build:
     runs-on: self-hosted
+
+    env:
+      ROCM_REPO: 6.0
+      ROCM_VERSION: 6.0.0
+      ROCM_LIB_VERSION: 60000
+      ROCM_PATH: /opt/rocm-6.0.0
+      IMAGE_TAG: ${unique_tag}
+
     
     steps:
     - uses: actions/checkout@v4
@@ -51,12 +80,11 @@ jobs:
         #build the docker image
         docker buildx build \
           --no-cache \
-          --build-arg rocm_repo=6.0 \
-          --build-arg rocm_version=6.0.0 \
-          --build-arg rocm_lib_version=60000 \
-          --build-arg rocm_path=/opt/rocm-6.0.0 \
-          --tag amddcgpuce/rocm:6.0.0-ub22 \
-          --tag nlingamp/pt-github:${unique_tag} \
+          --build-arg rocm_repo=${{ env.ROCM_REPO }} \
+          --build-arg rocm_version=${{ env.ROCM_VERSION }} \
+          --build-arg rocm_lib_version=${{ env.ROCM_LIB_VERSION }} \
+          --build-arg rocm_path=${{ env.ROCM_PATH }} \
+          --tag ${{ env.IMAGE_TAG }} \
           -f rocm.ub22.Dockerfile \
           --push .
    
