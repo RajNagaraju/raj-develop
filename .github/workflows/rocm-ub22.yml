@@ -82,7 +82,7 @@ jobs:
           
           #Building docker image
           docker buildx build \
-            --no-cache
+            --no-cache \
             --build-arg rocm_repo=${{ env.ROCM_REPO }} \
             --build-arg rocm_version=${{ env.ROCM_VERSION }} \
             --build-arg rocm_lib_version=${{ env.ROCM_LIB_VERSION }} \
