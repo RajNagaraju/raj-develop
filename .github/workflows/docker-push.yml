@@ -33,7 +33,7 @@ jobs:
       ROCM_VERSION: 6.0.0
       ROCM_LIB_VERSION: 60000
       ROCM_PATH: /opt/rocm-6.0.0
-      IMAGE_TAG: ${unique_tag}
+      #IMAGE_TAG: ${unique_tag}
 
     
     steps:
@@ -71,16 +71,18 @@ jobs:
       with: 
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
-    
-    - name: Build and Push the Docker image
+    - name: Build Docker image
       run: |
-        unique_tag=$(date +%Y%m%d%H%M%S)
-
-        docker buildx build \
-        --tag nlingamp/pt-github:${{ env.IMAGE_TAG }} \
-        --file Dockerfile \
-        .
+          unique_tag=$(date +%Y%m%d%H%M%S)
+          docker buildx build \
+            --tag nlingamp/pt-github:${unique_tag} \
+            --file Dockerfile \
+            .
+          echo "::set-output name=tag::${unique_tag}"  # Set the output for later use
 
     - name: Push Docker image to Docker Hub
-      run: docker push nlingamp/pt-github:${IMAGE_TAG}
+      run: |
+        docker push nlingamp/pt-github:${{ steps.build.outputs.tag }}
+        needs: build-and-push
+    
         
