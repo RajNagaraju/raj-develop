@@ -6,15 +6,15 @@ on:
       ROCM_REPO:
         description: 'rocm repo'
         required: true
-        default: 6.0
+        default: "6.0"
       ROCM_VERSION:
         description: 'rocm-ver'
         required: true
-        default: 6.0.0
+        default: "6.0.0"
       ROCM_LIB_VERSION:
         description: 'rocm-lib-ver'
         required: true
-        default: 600
+        default: "60000"
       ROCM_PATH:
         description: 'rocm-path'
         required: true
@@ -28,9 +28,9 @@ jobs:
     runs-on: self-hosted
 
     env:
-      ROCM_REPO: 6.0
-      ROCM_VERSION: 6.0.0
-      ROCM_LIB_VERSION: 60000
+      ROCM_REPO: "6.0"
+      ROCM_VERSION: "6.0.0"
+      ROCM_LIB_VERSION: "60000"
       ROCM_PATH: /opt/rocm-6.0.0
       
     steps:
