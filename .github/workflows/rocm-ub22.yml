@@ -51,17 +51,17 @@ jobs:
             echo "Docker is already installed."
           fi
 
-    - name: Set up Docker Buildx
-      run: |
-          # Check if Docker Buildx is installed
-          if ! docker buildx version &> /dev/null; then
-            echo "Docker Buildx not found. Installing Docker Buildx..."
-            mkdir -p ~/.docker/cli-plugins/
-            curl -L https://github.com/docker/buildx/releases/latest/download/buildx-linux-amd64 -o ~/.docker/cli-plugins/docker-buildx
-            chmod +x ~/.docker/cli-plugins/docker-buildx
-          else
-            echo "Docker Buildx is already installed."
-          fi
+   # - name: Set up Docker Buildx
+    #  run: |
+      #    # Check if Docker Buildx is installed
+       #   if ! docker buildx version &> /dev/null; then
+       #     echo "Docker Buildx not found. Installing Docker Buildx..."
+      #      mkdir -p ~/.docker/cli-plugins/
+        #    curl -L https://github.com/docker/buildx/releases/latest/download/buildx-linux-amd64 -o ~/.docker/cli-plugins/docker-buildx
+        #    chmod +x ~/.docker/cli-plugins/docker-buildx
+        #  else
+        #    echo "Docker Buildx is already installed."
+         # fi
       
     - name: Login to dockerhub
       uses: docker/login-action@v2
@@ -71,17 +71,19 @@ jobs:
     
     - name: Build the Docker image
       id: set_tag
+      env:
+          IMAGE_TAG_INPUT: ${{ github.event.inputs.image_tag }}
       run: |
           # creating unique tag and parameterized
-          if [ -z "${{ github.event.inputs.image_tag }}" ]; then
+          if [ -z "$IMAGE_TAG_INPUT" ]; then
             unique_tag=rocm-ub-22-$(date +%Y%m%d%H%M%S)
           else
-            unique_tag="${{ github.event.inputs.image_tag }}"
+            unique_tag="$IMAGE_TAG_INPUT"
           fi
           echo "IMAGE_TAG=${unique_tag}" >> $GITHUB_ENV
           
           #Building docker image
-          docker buildx build \
+          docker build \
             --no-cache \
             --build-arg rocm_repo=${{ env.ROCM_REPO }} \
             --build-arg rocm_version=${{ env.ROCM_VERSION }} \
