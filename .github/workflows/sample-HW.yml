@@ -4,7 +4,7 @@ on: workflow_dispatch
 
 jobs:
   first-job:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps: 
     - name: Print Hello-world
@@ -17,5 +17,4 @@ jobs:
     - name: create directory sample
       run: |
        mkdir -p sample
-       cd sample/
-       pwd
+       df -h
