@@ -6,7 +6,7 @@ on:
       ROCM_REPO:
         description: 'rocm repo'
         required: true
-        default: "6.0"
+        default: "6.2"
       ROCM_VERSION:
         description: 'rocm-ver'
         required: true
