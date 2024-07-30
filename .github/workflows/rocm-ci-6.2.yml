@@ -18,7 +18,7 @@ on:
       ROCM_PATH:
         description: 'rocm-path'
         required: true
-        default: /opt/rocm-6.2
+        default: "/opt/rocm-6.2"
       ROCM_CI_ARTIFACTORY_BUILD_URL:
         description: 'Url for ci'
         required: true
@@ -35,7 +35,8 @@ jobs:
       ROCM_REPO: "6.2"
       ROCM_VERSION: "6.2"
       ROCM_LIB_VERSION: "60200"
-      ROCM_PATH: /opt/rocm-6.2
+      ROCM_PATH: "/opt/rocm-6.2"
+      ROCM_CI_ARTIFACTORY_BUILD_URL: "https://repo.radeon.com/rocm/apt/.apt_6.2/"
       
     steps:
     - uses: actions/checkout@v4
@@ -63,16 +64,9 @@ jobs:
     
     - name: Build the Docker image
       id: set_tag
-      env:
-          IMAGE_TAG_INPUT: ${{ github.event.inputs.image_tag }}
       run: |
           # creating unique tag and parameterized
-          if [ -z "$IMAGE_TAG_INPUT" ]; then
-            unique_tag=rocm-ub-22-$(date +%Y%m%d%H%M%S)
-          else
-            unique_tag="$IMAGE_TAG_INPUT"
-          fi
-          echo "IMAGE_TAG=${unique_tag}" >> $GITHUB_ENV
+          unique_tag=Rocm-CI-6.2-$(date +%Y%m%d%H%M%S)
           
           #Building docker image
           docker build \
@@ -81,10 +75,11 @@ jobs:
             --build-arg rocm_version=${{ env.ROCM_VERSION }} \
             --build-arg rocm_lib_version=${{ env.ROCM_LIB_VERSION }} \
             --build-arg rocm_path=${{ env.ROCM_PATH }} \
+            --build-arg rocm_ci_artifactory_build_url=${{ env.ROCM_CI_ARTIFACTORY_BUILD_URL }} \
             --tag nlingamp/pt-github:${unique_tag} \
-            --file rocm.ub22.Dockerfile \
+            --file rocm.ci.ub22.Dockerfile \
             .
 
     - name: Push Docker image to Docker Hub
       run: |
-        docker push nlingamp/pt-github:${{ env.IMAGE_TAG }}
+        docker push nlingamp/pt-github:${unique_tag}
