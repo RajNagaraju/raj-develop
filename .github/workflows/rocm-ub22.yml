@@ -56,37 +56,19 @@ jobs:
       with: 
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
-    
-    - name: Create unique tag and build Docker image
-      id: build
-      env:
-        IMAGE_TAG_INPUT: ${{ github.event.inputs.image_tag }}
+      
+    - name: Build Docker image and tag
       run: |
-          # Generate a unique tag if none is provided
-          if [ -z "$IMAGE_TAG_INPUT" ]; then
-            unique_tag="rocm-ub-22-$(date +%Y%m%d%H%M%S)"
-          else
-            unique_tag="$IMAGE_TAG_INPUT"
-          fi
-
-          # Ensure the tag is valid
-          if [[ ! "$unique_tag" =~ ^[a-zA-Z0-9_/-]+$ ]]; then
-            echo "Invalid tag format: $unique_tag"
-            exit 1
-          fi
-
-          echo "IMAGE_TAG=${unique_tag}" >> $GITHUB_ENV
-          
-          # Build Docker image with the unique tag
           docker build \
+            --no-cache \
             --build-arg ROCM_REPO=${{ env.ROCM_REPO }} \
             --build-arg ROCM_VERSION=${{ env.ROCM_VERSION }} \
             --build-arg ROCM_LIB_VERSION=${{ env.ROCM_LIB_VERSION }} \
             --build-arg ROCM_PATH=${{ env.ROCM_PATH }} \
-            -t nlingamp/pt-github:${unique_tag} \
+            -t nlingamp/pt-github:latest \
             -f rocm.ub.22.Dockerfile
             .
 
     - name: Push Docker image to Docker Hub
       run: |
-          docker push nlingamp/pt-github:${{ env.IMAGE_TAG }}
+          docker push nlingamp/pt-github:latest
