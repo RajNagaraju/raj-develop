@@ -31,7 +31,7 @@ jobs:
       ROCM_REPO: "6.0"
       ROCM_VERSION: "6.0.0"
       ROCM_LIB_VERSION: "60000"
-      ROCM_PATH: /opt/rocm-6.0.0
+      ROCM_PATH: "/opt/rocm-6.0.0"
       
     steps:
     - uses: actions/checkout@v4
