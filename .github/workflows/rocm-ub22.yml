@@ -76,4 +76,4 @@ jobs:
 
     - name: Push Docker image to Docker Hub
       run: |
-        docker push nlingamp/pt-github:${unique.tag}
+        docker push nlingamp/pt-github:${unique_tag}
