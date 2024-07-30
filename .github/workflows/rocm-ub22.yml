@@ -58,15 +58,16 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
       
     - name: Build Docker image and tag
-      id: build  
+      id: set_tag 
       run: |
           docker build \
+            --no-cache \
             --build-arg ROCM_REPO=${{ env.ROCM_REPO }} \
             --build-arg ROCM_VERSION=${{ env.ROCM_VERSION }} \
             --build-arg ROCM_LIB_VERSION=${{ env.ROCM_LIB_VERSION }} \
             --build-arg ROCM_PATH=${{ env.ROCM_PATH }} \
-            -t nlingamp/pt-github:latest \
-            -f rocm.ub.22.Dockerfile
+            --tag nlingamp/pt-github:latest \
+            --file rocm.ub.22.Dockerfile
             .
 
     - name: Push Docker image to Docker Hub
