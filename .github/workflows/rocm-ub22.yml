@@ -51,25 +51,29 @@ jobs:
             echo "Docker is already installed."
           fi
       
-    - name: Login to dockerhub
-      uses: docker/login-action@v2
-      with: 
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-      
-    - name: Build Docker image and tag
-      id: set_tag 
+    - name: Build the Docker image
+      id: set_tag
+      env:
+          IMAGE_TAG_INPUT: ${{ github.event.inputs.image_tag }}
       run: |
+          # creating unique tag and parameterized
+          if [ -z "$IMAGE_TAG_INPUT" ]; then
+            unique_tag=$(date +%Y%m%d%H%M%S)
+          else
+            unique_tag="$IMAGE_TAG_INPUT"
+          fi
+          echo "IMAGE_TAG=${unique_tag}" >> $GITHUB_ENV
+          
+          #Building docker image
           docker build \
             --no-cache \
-            --build-arg ROCM_REPO=${{ env.ROCM_REPO }} \
-            --build-arg ROCM_VERSION=${{ env.ROCM_VERSION }} \
-            --build-arg ROCM_LIB_VERSION=${{ env.ROCM_LIB_VERSION }} \
-            --build-arg ROCM_PATH=${{ env.ROCM_PATH }} \
-            --tag nlingamp/pt-github:rocm-ub22-6.0 \
-            --file rocm.ub.22.Dockerfile
+            --build-arg rocm_repo=${{ env.ROCM_REPO }} \
+            --build-arg rocm_version=${{ env.ROCM_VERSION }} \
+            --build-arg rocm_lib_version=${{ env.ROCM_LIB_VERSION }} \
+            --build-arg rocm_path=${{ env.ROCM_PATH }} \
+            --tag nlingamp/pt-github:${unique_tag} \
+            --file rocm.ub22.Dockerfile \
             .
-
     - name: Push Docker image to Docker Hub
       run: |
-          docker push nlingamp/pt-github:latest
+        docker push nlingamp/pt-github:${{ env.IMAGE_TAG }}
