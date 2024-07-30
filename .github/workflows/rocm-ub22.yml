@@ -58,6 +58,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
       
     - name: Build Docker image and tag
+      id: build  
       run: |
           docker build \
             --no-cache \
