@@ -83,9 +83,9 @@ jobs:
             --build-arg ROCM_VERSION=${{ env.ROCM_VERSION }} \
             --build-arg ROCM_LIB_VERSION=${{ env.ROCM_LIB_VERSION }} \
             --build-arg ROCM_PATH=${{ env.ROCM_PATH }} \
-            -t your-repo/pt-github:${unique_tag} \
+            -t nlingamp/pt-github:${unique_tag} \
             .
 
     - name: Push Docker image to Docker Hub
       run: |
-          docker push your-repo/pt-github:${{ env.IMAGE_TAG }}
+          docker push nlingamp/pt-github:${{ env.IMAGE_TAG }}
