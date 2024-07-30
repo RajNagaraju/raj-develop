@@ -61,7 +61,6 @@ jobs:
       id: build  
       run: |
           docker build \
-            --no-cache \
             --build-arg ROCM_REPO=${{ env.ROCM_REPO }} \
             --build-arg ROCM_VERSION=${{ env.ROCM_VERSION }} \
             --build-arg ROCM_LIB_VERSION=${{ env.ROCM_LIB_VERSION }} \
