@@ -18,7 +18,7 @@ on:
       ROCM_PATH:
         description: 'rocm-path'
         required: true
-        default: /opt/rocm-6.0.0
+        default: "/opt/rocm-6.0.0"
       IMAGE_TAG:
         description: 'docker tag'
         required: false # Allow the user to provide a tag or use the default
