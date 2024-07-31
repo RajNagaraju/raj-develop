@@ -22,7 +22,7 @@ on:
       ROCM_CI_ARTIFACTORY_BUILD_URL:
         description: 'Url for ci'
         required: true
-        default: $ROCM_CI_ARTIFACTORY_BUILD_URL
+        default: ${{ env.ROCM_CI_ARTIFACTORY_BUILD_URL }}
       IMAGE_TAG:
         description: 'docker tag'
         required: false # Allow the user to provide a tag or use the default
