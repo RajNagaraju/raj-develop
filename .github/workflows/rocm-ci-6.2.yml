@@ -31,13 +31,13 @@ jobs:
   build:
     runs-on: self-hosted
 
-    env:
-      ROCM_REPO: "6.2"
-      ROCM_VERSION: "6.2"
-      ROCM_LIB_VERSION: "60200"
-      ROCM_PATH: "/opt/rocm-6.2"
-      ROCM_CI_ARTIFACTORY_BUILD_URL: "https://repo.radeon.com/rocm/apt/.apt_6.2/"
-      DOCKERFILE_PATH: "rocm.ci.ub22.Dockerfile"
+    #env:
+    #  ROCM_REPO: "6.2"
+    #  ROCM_VERSION: "6.2"
+    #  ROCM_LIB_VERSION: "60200"
+    #  ROCM_PATH: "/opt/rocm-6.2"
+    #  ROCM_CI_ARTIFACTORY_BUILD_URL: "https://repo.radeon.com/rocm/apt/.apt_6.2/"
+    #  DOCKERFILE_PATH: "rocm.ci.ub22.Dockerfile"
       
     steps:
     - uses: actions/checkout@v4
@@ -68,18 +68,28 @@ jobs:
       run: |
           # creating unique tag and parameterized
           unique_tag=Rocm-$ROCM_VERSION
-          
-          #Building docker image
+
           docker build \
             --no-cache \
-            --build-arg rocm_repo=${{ env.ROCM_REPO }} \
-            --build-arg rocm_version=${{ env.ROCM_VERSION }} \
-            --build-arg rocm_lib_version=${{ env.ROCM_LIB_VERSION }} \
-            --build-arg rocm_path=${{ env.ROCM_PATH }} \
-            --build-arg rocm_ci_artifactory_build_url=${{ env.ROCM_CI_ARTIFACTORY_BUILD_URL }} \
+            --build-arg rocm_repo=6.2 \
+            --build-arg rocm_version=6.2 \
+            --build-arg rocm_lib_version=60200 \
+            --build-arg rocm_path=/opt/rocm-6.2 \
+            --build-arg rocm_ci_artifactory_build_url=https://repo.radeon.com/rocm/apt/.apt_6.2/ \
             --tag nlingamp/pt-github:${unique_tag} \
-            --file $DOCKERFILE_PATH \
+            --file rocm.ci.ub22.Dockerfile \
             .
+          #Building docker image
+         # docker build \
+         #   --no-cache \
+         #   --build-arg rocm_repo=${{ env.ROCM_REPO }} \
+         #   --build-arg rocm_version=${{ env.ROCM_VERSION }} \
+         #   --build-arg rocm_lib_version=${{ env.ROCM_LIB_VERSION }} \
+         #   --build-arg rocm_path=${{ env.ROCM_PATH }} \
+         #   --build-arg rocm_ci_artifactory_build_url=${{ env.ROCM_CI_ARTIFACTORY_BUILD_URL }} \
+         #   --tag nlingamp/pt-github:${unique_tag} \
+         #   --file $DOCKERFILE_PATH \
+         #   .
 
     - name: Push Docker image to Docker Hub
       run: |
