@@ -22,7 +22,7 @@ on:
       ROCM_CI_ARTIFACTORY_BUILD_URL:
         description: 'Url for ci'
         required: true
-        default: ${{ env.ROCM_CI_ARTIFACTORY_BUILD_URL }}
+        default: "https://repo.radeon.com/rocm/apt/.apt_6.2/"
       IMAGE_TAG:
         description: 'docker tag'
         required: false # Allow the user to provide a tag or use the default
@@ -36,7 +36,7 @@ jobs:
       ROCM_VERSION: "6.2"
       ROCM_LIB_VERSION: "60200"
       ROCM_PATH: "/opt/rocm-6.2"
-      ROCM_CI_ARTIFACTORY_BUILD_URL: ${{ secrets.https://repo.radeon.com/rocm/apt/.apt_6.2/ }}
+      ROCM_CI_ARTIFACTORY_BUILD_URL: "https://repo.radeon.com/rocm/apt/.apt_6.2/"
       DOCKERFILE_PATH: "rocm.ci.ub22.Dockerfile"
       
     steps:
