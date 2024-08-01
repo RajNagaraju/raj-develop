@@ -2,42 +2,42 @@ name: Rocm-CI-Ub
 
 on:
   workflow_dispatch:
-    #inputs:
-      #ROCM_REPO:
-      #  description: 'rocm repo'
-      #  required: true
-      #  default: "6.2"
-      #ROCM_VERSION:
-      #  description: 'rocm-ver'
-      #  required: true
-      #  default: "6.2"
-      #ROCM_LIB_VERSION:
-      #  description: 'rocm-lib-ver'
-      #  required: true
-      #  default: "60200"
-      #ROCM_PATH:
-      #  description: 'rocm-path'
-      #  required: true
-      #  default: "/opt/rocm-6.2"
-      #ROCM_CI_ARTIFACTORY_BUILD_URL:
-      #  description: 'Url for ci'
-      #  required: true
-      #  default: "https://repo.radeon.com/rocm/apt/.apt_6.2/"
-      #IMAGE_TAG:
-      #  description: 'docker tag'
-      #  required: false # Allow the user to provide a tag or use the default
+    inputs:
+      ROCM_REPO:
+        description: 'rocm repo'
+        required: true
+        default: "6.2"
+      ROCM_VERSION:
+        description: 'rocm-ver'
+        required: true
+        default: "6.2"
+      ROCM_LIB_VERSION:
+        description: 'rocm-lib-ver'
+        required: true
+        default: "60200"
+      ROCM_PATH:
+        description: 'rocm-path'
+        required: true
+        default: "/opt/rocm-6.2"
+      ROCM_CI_ARTIFACTORY_BUILD_URL:
+        description: 'Url for ci'
+        required: true
+        default: "https://repo.radeon.com/rocm/apt/.apt_6.2/"
+      IMAGE_TAG:
+        description: 'docker tag'
+        required: false # Allow the user to provide a tag or use the default
         
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: [self-hosted, rocm-framework-38]
 
-    #env:
-    #  ROCM_REPO: "6.2"
-    #  ROCM_VERSION: "6.2"
-    #  ROCM_LIB_VERSION: "60200"
-    #  ROCM_PATH: "/opt/rocm-6.2"
-    #  ROCM_CI_ARTIFACTORY_BUILD_URL: "https://repo.radeon.com/rocm/apt/.apt_6.2/"
-    #  DOCKERFILE_PATH: "rocm.ci.ub22.Dockerfile"
+    env:
+      ROCM_REPO: "6.2"
+      ROCM_VERSION: "6.2"
+      ROCM_LIB_VERSION: "60200"
+      ROCM_PATH: "/opt/rocm-6.2"
+      ROCM_CI_ARTIFACTORY_BUILD_URL: "https://repo.radeon.com/rocm/apt/.apt_6.2/"
+      DOCKERFILE_PATH: "rocm.ci.ub22.Dockerfile"
       
     steps:
     - uses: actions/checkout@v4
@@ -65,31 +65,27 @@ jobs:
     
     - name: Build the Docker image
       id: set_tag
+      env:
+          IMAGE_TAG_INPUT: ${{ github.event.inputs.image_tag }}
       run: |
           # creating unique tag and parameterized
-          #unique_tag=Rocm
-
+          if [ -z "$IMAGE_TAG_INPUT" ]; then
+            unique_tag=Rocm
+          else
+            unique_tag="$IMAGE_TAG_INPUT"
+          fi
+          echo "IMAGE_TAG=${unique_tag}" >> $GITHUB_ENV
+          
+          #Building docker image
           docker build \
             --no-cache \
-            --build-arg rocm_repo="6.2" \
-            --build-arg rocm_version="6.2" \
-            --build-arg rocm_lib_version="60200" \
-            --build-arg rocm_path="/opt/rocm-6.2" \
-            --build-arg rocm_ci_artifactory_build_url="https://repo.radeon.com/rocm/apt/.apt_6.2/" \
-            --tag nlingamp/pt-github:Rocm \
-            --file rocm.ci.ub22.Dockerfile \
+            --build-arg rocm_repo=${{ env.ROCM_REPO }} \
+            --build-arg rocm_version=${{ env.ROCM_VERSION }} \
+            --build-arg rocm_lib_version=${{ env.ROCM_LIB_VERSION }} \
+            --build-arg rocm_path=${{ env.ROCM_PATH }} \
+            --tag nlingamp/pt-github:${unique_tag} \
+            --file $DOCKERFILE_PATH \
             .
-         # Building docker image
-         # docker build \
-         #   --no-cache \
-         #   --build-arg rocm_repo=${{ env.ROCM_REPO }} \
-         #   --build-arg rocm_version=${{ env.ROCM_VERSION }} \
-         #   --build-arg rocm_lib_version=${{ env.ROCM_LIB_VERSION }} \
-         #   --build-arg rocm_path=${{ env.ROCM_PATH }} \
-         #   --build-arg rocm_ci_artifactory_build_url=${{ env.ROCM_CI_ARTIFACTORY_BUILD_URL }} \
-         #   --tag nlingamp/pt-github:Rocm \
-         #   --file rocm.ci.ub22.Dockerfile \
-         #   .
 
     - name: Push Docker image to Docker Hub
       run: |
