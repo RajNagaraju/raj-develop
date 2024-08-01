@@ -22,7 +22,7 @@ on:
       ROCM_CI_ARTIFACTORY_BUILD_URL:
         description: 'Url for ci'
         required: true
-        default: "https://repo.radeon.com/rocm/apt/.apt_6.2/"
+        default: "https://repo.radeon.com/rocm/apt/6.1.3/"
       IMAGE_TAG:
         description: 'docker tag'
         required: false # Allow the user to provide a tag or use the default
@@ -32,12 +32,12 @@ jobs:
     runs-on: [self-hosted, rocm-framework-38]
 
     env:
-      ROCM_REPO: "6.2"
-      ROCM_VERSION: "6.2"
-      ROCM_LIB_VERSION: "60200"
-      ROCM_PATH: "/opt/rocm-6.2"
-      ROCM_CI_ARTIFACTORY_BUILD_URL: "https://repo.radeon.com/rocm/apt/.apt_6.2/"
-      DOCKERFILE_PATH: "rocm.ci.ub22.Dockerfile"
+      ROCM_REPO: "6.1.3"
+      ROCM_VERSION: "6.1.3"
+      ROCM_LIB_VERSION: "60103"
+      ROCM_PATH: "/opt/rocm-6.1.3"
+      ROCM_CI_ARTIFACTORY_BUILD_URL: "https://repo.radeon.com/rocm/apt/6.1.3/"
+      DOCKERFILE_PATH: "docker/rocm-ci/ubuntu22/6.0/Dockerfile"
       
     steps:
     - uses: actions/checkout@v4
