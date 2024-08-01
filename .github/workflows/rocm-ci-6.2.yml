@@ -29,7 +29,7 @@ on:
         
 jobs:
   build:
-    runs-on: [self-hosted, rocm-framework-38]
+    runs-on: self-hosted
 
     env:
       ROCM_REPO: "6.1.3"
