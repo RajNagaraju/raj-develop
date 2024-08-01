@@ -32,7 +32,7 @@ jobs:
       ROCM_VERSION: "6.0.0"
       ROCM_LIB_VERSION: "60000"
       ROCM_PATH: "/opt/rocm-6.0.0"
-      DOCKERFILE_PATH: "docker/rocm/ubuntu22/6.0/"
+      DOCKERFILE_PATH: "docker/rocm/ubuntu22/6.0/Dockerfile"
       
     steps:
     - uses: actions/checkout@v4
