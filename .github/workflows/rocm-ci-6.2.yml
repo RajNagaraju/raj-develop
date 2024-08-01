@@ -6,19 +6,19 @@ on:
       ROCM_REPO:
         description: 'rocm repo'
         required: true
-        default: "6.2"
+        default: "6.1.3"
       ROCM_VERSION:
         description: 'rocm-ver'
         required: true
-        default: "6.2"
+        default: "6.1.3"
       ROCM_LIB_VERSION:
         description: 'rocm-lib-ver'
         required: true
-        default: "60200"
+        default: "60103"
       ROCM_PATH:
         description: 'rocm-path'
         required: true
-        default: "/opt/rocm-6.2"
+        default: "/opt/rocm-6.1.3"
       ROCM_CI_ARTIFACTORY_BUILD_URL:
         description: 'Url for ci'
         required: true
