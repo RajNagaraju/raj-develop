@@ -3,32 +3,32 @@ name: Rocm-ub-22-6.0
 on:
   workflow_dispatch:
     inputs:
-      rocm_repo:
+      ROCM_REPO:
         description: 'rocm repo'
         required: true
-        default: "6.0"
-      rocm_version:
+        default: "6.1.3"
+      ROCM_VERSION:
         description: 'rocm-ver'
         required: true
-        default: "6.0.0"
-      rocm_lib_version:
+        default: "6.1.3"
+      ROCM_LIB_VERSION:
         description: 'rocm-lib-ver'
         required: true
-        default: "60000"
-      rocm_path:
+        default: "60103"
+      ROCM_PATH:
         description: 'rocm-path'
         required: true
-        default: "/opt/rocm-6.0.0"
+        default: "/opt/rocm-6.1.3"
       IMAGE_TAG:
         description: 'docker tag'
-        required: false # Allow the user to provide a tag or use the default
+        required: false # Allow the user to provide a tag or use the defau
         
 jobs:
   build:
     runs-on: self-hosted
 
     env:
-      ROCM_REPO: "6.0.0"
+      ROCM_REPO: "6.0"
       ROCM_VERSION: "6.0.0"
       ROCM_LIB_VERSION: "60000"
       ROCM_PATH: "/opt/rocm-6.0.0"
