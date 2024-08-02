@@ -30,7 +30,8 @@ on:
         
       IMAGE_TAG:
         description: 'docker tag'
-        required: false # Allow the user to provide a tag or use the default
+        required: true
+        default: ROCM-6.0
         
 jobs:
   build:
@@ -64,18 +65,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
     
     - name: Build the Docker image
-      id: set_tag
-      env:
-          IMAGE_TAG_INPUT: ${{ github.event.inputs.image_tag }}
       run: |
-          # creating unique tag and parameterized
-          if [ -z "$IMAGE_TAG_INPUT" ]; then
-            unique_tag=Rocm-CI-6.0
-          else
-            unique_tag="$IMAGE_TAG_INPUT"
-          fi
-          echo "IMAGE_TAG=${unique_tag}" >> $GITHUB_ENV
-          
           #Building docker image
           docker build \
             --no-cache \
@@ -84,7 +74,7 @@ jobs:
             --build-arg rocm_lib_version=${{ github.event.inputs.ROCM_LIB_VERSION }} \
             --build-arg rocm_path=${{ github.event.inputs.ROCM_PATH }} \
             --build-arg rocm_ci_artifactory_build_url=${{ github.event.inputs.ROCM_CI_ARTIFACTORY_BUILD_URL }} \
-            --tag nlingamp/pt-github:${unique_tag} \
+            --tag nlingamp/pt-github:${{ github.event.inputs.IMAGE_TAG }}\
             --file $DOCKERFILE_PATH \
             .
 
