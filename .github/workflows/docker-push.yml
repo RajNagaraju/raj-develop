@@ -19,10 +19,10 @@ on:
         description: 'rocm-path'
         required: true
         default: "/opt/rocm-6.1.3"
-      IMAGE_TAG:
+      UNIQUE_TAG:
         description: 'docker tag'
-        required: false # Allow the user to provide a tag or use the default
-        
+        required: true
+        default: "ROCM-6.1.3"
 jobs:
   build:
     runs-on: [self-hosted, rocm-framework-38]
@@ -56,17 +56,7 @@ jobs:
     
     - name: Build the Docker image
       id: set_tag
-      env:
-          IMAGE_TAG_INPUT: ${{ github.event.inputs.image_tag }}
       run: |
-          # creating unique tag and parameterized
-          if [ -z "$IMAGE_TAG_INPUT" ]; then
-            unique_tag=rocm-$ROCM_VERSION
-          else
-            unique_tag="$IMAGE_TAG_INPUT"
-          fi
-          echo "IMAGE_TAG=${unique_tag}" >> $GITHUB_ENV
-          
           #Building docker image
           docker build \
             --no-cache \
@@ -74,9 +64,9 @@ jobs:
             --build-arg rocm_version=${{ github.event.inputs.ROCM_VERSION }} \
             --build-arg rocm_lib_version=${{ github.event.inputs.ROCM_LIB_VERSION }} \
             --build-arg rocm_path=${{ github.event.inputs.ROCM_PATH }} \
-            --tag nlingamp/pt-github:${unique_tag} \
+            --tag nlingamp/pt-github:${{ github.event.inputs.UNIQUE_TAG }} \
             --file $DOCKERFILE_PATH \
             .
     - name: Push Docker image to Docker Hub
       run: |
-        docker push nlingamp/pt-github:${{ env.IMAGE_TAG }}
+        docker push nlingamp/pt-github:${{ env.UNIQUE_TAG }}
