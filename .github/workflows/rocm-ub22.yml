@@ -3,19 +3,19 @@ name: Rocm-ub-22-6.0
 on:
   workflow_dispatch:
     inputs:
-      ROCM_REPO:
+      rocm_repo:
         description: 'rocm repo'
         required: true
         default: "6.0"
-      ROCM_VERSION:
+      rocm_version:
         description: 'rocm-ver'
         required: true
         default: "6.0.0"
-      ROCM_LIB_VERSION:
+      rocm_lib_version:
         description: 'rocm-lib-ver'
         required: true
         default: "60000"
-      ROCM_PATH:
+      rocm_path:
         description: 'rocm-path'
         required: true
         default: "/opt/rocm-6.0.0"
@@ -25,13 +25,14 @@ on:
         
 jobs:
   build:
-    runs-on: [self-hosted, rocm-framework-38]
+    runs-on: self-hosted
 
     env:
-      ROCM_REPO: "6.0"
+      ROCM_REPO: "6.0.0"
       ROCM_VERSION: "6.0.0"
       ROCM_LIB_VERSION: "60000"
       ROCM_PATH: "/opt/rocm-6.0.0"
+      DOCKERFILE_PATH: "docker/rocm/ubuntu22/6.0/Dockerfile"
       
     steps:
     - uses: actions/checkout@v4
@@ -63,7 +64,7 @@ jobs:
       run: |
           # creating unique tag and parameterized
           if [ -z "$IMAGE_TAG_INPUT" ]; then
-            unique_tag=rocm-ub-22-$(date +%Y%m%d%H%M%S)
+            unique_tag=Rocm-ub-test
           else
             unique_tag="$IMAGE_TAG_INPUT"
           fi
