@@ -5,27 +5,27 @@ on:
     inputs:
       ROCM_REPO:
         description: 'rocm repo'
-        required: false 
+        required: true
         default: "6.0"
         
       ROCM_VERSION:
         description: 'rocm-ver'
-        required: false 
+        required: true
         default: "6.0.0"
         
       ROCM_LIB_VERSION:
         description: 'rocm-lib-ver'
-        required: false 
+        required: true
         default: "60000"
         
       ROCM_PATH:
         description: 'rocm-path'
-        required: false 
+        required: true
         default: "/opt/rocm-6.0.0"
         
       ROCM_CI_ARTIFACTORY_BUILD_URL:
         description: 'Url for ci'
-        required: false 
+        required: true
         default: "https://repo.radeon.com/rocm/apt/.apt_6.0/"
         
       IMAGE_TAG:
@@ -34,14 +34,9 @@ on:
         
 jobs:
   build:
-    runs-on: [self-hosted, rocm-framework-38]
+    runs-on: self-hosted
 
     env:
-      ROCM_REPO: "6.0.1"
-      ROCM_VERSION: "6.0.1"
-      ROCM_LIB_VERSION: "60001"
-      ROCM_PATH: "/opt/rocm-6.0.1"
-      ROCM_CI_ARTIFACTORY_BUILD_URL: "https://repo.radeon.com/rocm/apt/.apt_6.0.1/"
       DOCKERFILE_PATH: "docker/rocm-ci/ubuntu22/6.0/Dockerfile"
       
     steps:
@@ -75,7 +70,7 @@ jobs:
       run: |
           # creating unique tag and parameterized
           if [ -z "$IMAGE_TAG_INPUT" ]; then
-            unique_tag=Rocm-$ROCM_REPO
+            unique_tag=Rocm-CI-6.0
           else
             unique_tag="$IMAGE_TAG_INPUT"
           fi
@@ -84,10 +79,11 @@ jobs:
           #Building docker image
           docker build \
             --no-cache \
-            --build-arg rocm_repo=${{ env.ROCM_REPO }} \
-            --build-arg rocm_version=${{ env.ROCM_VERSION }} \
-            --build-arg rocm_lib_version=${{ env.ROCM_LIB_VERSION }} \
-            --build-arg rocm_path=${{ env.ROCM_PATH }} \
+            --build-arg rocm_repo=${{ github.event.inputs.ROCM_REPO }} \
+            --build-arg rocm_version=${{ github.event.inputs.ROCM_VERSION }} \
+            --build-arg rocm_lib_version=${{ github.event.inputs.ROCM_LIB_VERSION }} \
+            --build-arg rocm_path=${{ github.event.inputs.ROCM_PATH }} \
+            --build-arg rocm_ci_artifactory_build_url=${{ github.event.inputs.ROCM_CI_ARTIFACTORY_BUILD_URL }}
             --tag nlingamp/pt-github:${unique_tag} \
             --file $DOCKERFILE_PATH \
             .
