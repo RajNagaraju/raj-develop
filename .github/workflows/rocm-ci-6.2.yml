@@ -83,7 +83,7 @@ jobs:
             --build-arg rocm_version=${{ github.event.inputs.ROCM_VERSION }} \
             --build-arg rocm_lib_version=${{ github.event.inputs.ROCM_LIB_VERSION }} \
             --build-arg rocm_path=${{ github.event.inputs.ROCM_PATH }} \
-            --build-arg rocm_ci_artifactory_build_url=${{ github.event.inputs.ROCM_CI_ARTIFACTORY_BUILD_URL }}
+            --build-arg rocm_ci_artifactory_build_url=${{ github.event.inputs.ROCM_CI_ARTIFACTORY_BUILD_URL }} \
             --tag nlingamp/pt-github:${unique_tag} \
             --file $DOCKERFILE_PATH \
             .
