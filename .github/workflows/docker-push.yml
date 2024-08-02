@@ -28,10 +28,6 @@ jobs:
     runs-on: [self-hosted, rocm-framework-38]
 
     env:
-      ROCM_REPO: "6.1.3"
-      ROCM_VERSION: "6.1.3"
-      ROCM_LIB_VERSION: "60103"
-      ROCM_PATH: "/opt/rocm-6.1.3"
       DOCKERFILE_PATH: "docker/rocm/ubuntu22/6.0/Dockerfile"
       
     steps:
@@ -74,10 +70,10 @@ jobs:
           #Building docker image
           docker build \
             --no-cache \
-            --build-arg rocm_repo=${{ env.ROCM_REPO }} \
-            --build-arg rocm_version=${{ env.ROCM_VERSION }} \
-            --build-arg rocm_lib_version=${{ env.ROCM_LIB_VERSION }} \
-            --build-arg rocm_path=${{ env.ROCM_PATH }} \
+            --build-arg rocm_repo=${{ github.event.inputs.ROCM_REPO }} \
+            --build-arg rocm_version=${{ github.event.inputs.ROCM_VERSION }} \
+            --build-arg rocm_lib_version=${{ github.event.inputs.ROCM_LIB_VERSION }} \
+            --build-arg rocm_path=${{ github.event.inputs.ROCM_PATH }} \
             --tag nlingamp/pt-github:${unique_tag} \
             --file $DOCKERFILE_PATH \
             .
