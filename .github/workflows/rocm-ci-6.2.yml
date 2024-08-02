@@ -70,7 +70,7 @@ jobs:
       run: |
           # creating unique tag and parameterized
           if [ -z "$IMAGE_TAG_INPUT" ]; then
-            unique_tag=Rocm-ci
+            unique_tag=Rocm-$ROCM_REPO
           else
             unique_tag="$IMAGE_TAG_INPUT"
           fi
@@ -89,4 +89,4 @@ jobs:
 
     - name: Push Docker image to Docker Hub
       run: |
-        docker push nlingamp/pt-github:Rocm
+        docker push nlingamp/pt-github:${unique_tag}
