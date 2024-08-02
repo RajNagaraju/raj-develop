@@ -19,7 +19,7 @@ on:
         description: 'rocm-path'
         required: true
         default: "/opt/rocm-6.1.3"
-      UNIQUE_TAG:
+      IMAGE_TAG:
         description: 'docker tag'
         required: true
         default: "ROCM-6.1.3"
@@ -55,7 +55,6 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
     
     - name: Build the Docker image
-      id: set_tag
       run: |
           #Building docker image
           docker build \
@@ -64,9 +63,9 @@ jobs:
             --build-arg rocm_version=${{ github.event.inputs.ROCM_VERSION }} \
             --build-arg rocm_lib_version=${{ github.event.inputs.ROCM_LIB_VERSION }} \
             --build-arg rocm_path=${{ github.event.inputs.ROCM_PATH }} \
-            --tag nlingamp/pt-github:${{ github.event.inputs.UNIQUE_TAG }} \
+            --tag nlingamp/pt-github:${{ github.event.inputs.IMAGE_TAG }} \
             --file $DOCKERFILE_PATH \
             .
     - name: Push Docker image to Docker Hub
       run: |
-        docker push nlingamp/pt-github:${{ env.UNIQUE_TAG }}
+        docker push nlingamp/pt-github:${{ github.event.inputs.IMAGE_TAG }}
