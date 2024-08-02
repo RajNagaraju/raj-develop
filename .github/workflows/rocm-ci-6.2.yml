@@ -80,4 +80,4 @@ jobs:
 
     - name: Push Docker image to Docker Hub
       run: |
-        docker push nlingamp/pt-github:${{ env.IMAGE_TAG }}
+        docker push nlingamp/pt-github:${{ github.event.inputs.IMAGE_TAG }}
