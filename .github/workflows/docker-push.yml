@@ -10,7 +10,7 @@ on:
       ROCM_VERSION:
         description: 'rocm-ver'
         required: true
-        default: "6.2.0"
+        default: "6.2"
       ROCM_LIB_VERSION:
         description: 'rocm-lib-ver'
         required: true
@@ -18,7 +18,7 @@ on:
       ROCM_PATH:
         description: 'rocm-path'
         required: true
-        default: "/opt/rocm-6.2.0"
+        default: "/opt/rocm-6.2"
       IMAGE_TAG:
         description: 'docker tag'
         required: true
@@ -63,9 +63,10 @@ jobs:
             --build-arg rocm_version=${{ github.event.inputs.ROCM_VERSION }} \
             --build-arg rocm_lib_version=${{ github.event.inputs.ROCM_LIB_VERSION }} \
             --build-arg rocm_path=${{ github.event.inputs.ROCM_PATH }} \
-            --tag nlingamp/pt-github/rocm:${{ github.event.inputs.IMAGE_TAG }} \
+            --tag rocm:${{ github.event.inputs.IMAGE_TAG }} \
             --file $DOCKERFILE_PATH \
             .
     - name: Push Docker image to Docker Hub
       run: |
+        docker tag rocm:${{ github.event.inputs.IMAGE_TAG }} nlingamp/pt-github/rocm:${{ github.event.inputs.IMAGE_TAG }}
         docker push nlingamp/pt-github/rocm:${{ github.event.inputs.IMAGE_TAG }}
