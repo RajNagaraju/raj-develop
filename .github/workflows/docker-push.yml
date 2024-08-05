@@ -28,7 +28,7 @@ jobs:
     runs-on: [self-hosted, rocm-framework-38]
 
     env:
-      DOCKERFILE_PATH: "docker/rocm/ubuntu22/6.0/Dockerfile"
+      DOCKERFILE_PATH: "docker/ubuntu22/rocm-6.2/Dockerfile"
       
     steps:
     - uses: actions/checkout@v4
