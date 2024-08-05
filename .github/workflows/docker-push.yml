@@ -22,7 +22,7 @@ on:
       IMAGE_TAG:
         description: 'docker tag'
         required: true
-        default: "rocm:6.2.0-ub22"
+        default: "6.2.0-ub22"
 jobs:
   build:
     runs-on: [self-hosted, rocm-framework-38]
@@ -63,9 +63,9 @@ jobs:
             --build-arg rocm_version=${{ github.event.inputs.ROCM_VERSION }} \
             --build-arg rocm_lib_version=${{ github.event.inputs.ROCM_LIB_VERSION }} \
             --build-arg rocm_path=${{ github.event.inputs.ROCM_PATH }} \
-            --tag nlingamp/pt-github:${{ github.event.inputs.IMAGE_TAG }} \
+            --tag nlingamp/pt-github/rocm:${{ github.event.inputs.IMAGE_TAG }} \
             --file $DOCKERFILE_PATH \
             .
     - name: Push Docker image to Docker Hub
       run: |
-        docker push nlingamp/pt-github:${{ github.event.inputs.IMAGE_TAG }}
+        docker push nlingamp/pt-github/rocm:${{ github.event.inputs.IMAGE_TAG }}
