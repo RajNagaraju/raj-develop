@@ -1,7 +1,7 @@
 name: Rocm test 6.2 push action
 
 on:
- push:
+  push:
     branches:
       - main
     paths:
