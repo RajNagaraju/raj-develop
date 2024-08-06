@@ -1,7 +1,10 @@
-name: docker-push.yml
+name: Build docker image for 6.2
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
+  workflow_dispatch:  
     inputs:
       ROCM_REPO:
         description: 'rocm repo'
@@ -22,17 +25,24 @@ on:
       IMAGE_TAG:
         description: 'docker tag'
         required: true
-        default: "6.2.0-ub22"
+        default: "rocm-6.2.0-ub22"
 jobs:
   build:
     runs-on: [self-hosted, rocm-framework-38]
-
-    env:
-      DOCKERFILE_PATH: "docker/ubuntu22/Dockerfile"
       
     steps:
-    - uses: actions/checkout@v4
-    
+    - name: checkout main branch
+      uses: actions/checkout@v4
+      with:
+        ref: main
+        path: .github/workflow/docker-push.yml
+      
+    - name: checkout Dockerfile branch
+      uses: actions/checkout@v4
+      with:
+         ref: Raj-test
+         path: docker/ubuntu22/Dockerfile
+      
     - name: Set up Docker
       run: |
           # Check if Docker is installed
@@ -63,9 +73,10 @@ jobs:
             --build-arg rocm_version=${{ github.event.inputs.ROCM_VERSION }} \
             --build-arg rocm_lib_version=${{ github.event.inputs.ROCM_LIB_VERSION }} \
             --build-arg rocm_path=${{ github.event.inputs.ROCM_PATH }} \
-            --tag rocm:${{ github.event.inputs.IMAGE_TAG }} \
-            --file $DOCKERFILE_PATH \
+            --tag nlingamp/pt-github:${{ github.event.inputs.IMAGE_TAG }} \
+            --file docker/ubuntu/Dockerfile \
             .
-    #- name: Push Docker image to Docker Hub
-    #  run: |
-    #    docker push /rocm:${{ github.event.inputs.IMAGE_TAG }}
+    - name: Push Docker image to Docker Hub
+      run: |
+        docker push nlingamp/pt-github:${{ github.event.inputs.IMAGE_TAG }}
+
