@@ -61,7 +61,7 @@ jobs:
             --build-arg rocm_lib_version=${{ env.ROCM_LIB_VERSION }} \
             --build-arg rocm_path=${{ env.ROCM_PATH }} \
             --tag nlingamp/pt-github:${{ env.IMAGE_TAG }} \
-            --file $DOCKERFILE_PATH \
+            --file ${{ env.DOCKERFILE_PATH }} \
             .
     - name: Push Docker image to Docker Hub
       run: |
