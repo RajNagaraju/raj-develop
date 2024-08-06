@@ -29,7 +29,14 @@ on:
 jobs:
   build:
     runs-on: [self-hosted, rocm-framework-38]
-      
+    env:
+      ROCM_REPO: "6.2"
+      ROCM_VERSION: "6.2.0"
+      ROCM_LIB_VERSION: "60200"
+      ROCM_PATH: "/opt/rocm-6.2"
+      IMAGE_TAG: "rocm-6.2.0-ub22"
+      DOCKERFILE_PATH: "Raj-test/docker/ubuntu22/Dockerfile"
+
     steps:
     - name: checkout main branch
       uses: actions/checkout@v4
@@ -74,7 +81,7 @@ jobs:
             --build-arg rocm_lib_version=${{ github.event.inputs.ROCM_LIB_VERSION }} \
             --build-arg rocm_path=${{ github.event.inputs.ROCM_PATH }} \
             --tag nlingamp/pt-github:${{ github.event.inputs.IMAGE_TAG }} \
-            --file docker/ubuntu/Dockerfile \
+            --file $DOCKERFILE_PATH
             .
     - name: Push Docker image to Docker Hub
       run: |
