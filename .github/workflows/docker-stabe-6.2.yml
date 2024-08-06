@@ -5,8 +5,8 @@ on:
     branches:
       - main
     paths:
-      - 'docker/ubuntu22/rocm-6.2/Dockerfile'
-      - '.github/workflow/docker-stable-6.2.yml'
+      - docker/ubuntu22/rocm-6.2/Dockerfile
+      - .github/workflow/docker-stable-6.2.yml
         
 jobs:
   build:
