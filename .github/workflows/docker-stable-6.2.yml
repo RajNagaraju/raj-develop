@@ -18,20 +18,12 @@ jobs:
       ROCM_LIB_VERSION: "60200"
       ROCM_PATH: "/opt/rocm-6.2"
       IMAGE_TAG: "rocm-6.2.0-ub22"
-      DOCKERFILE_PATH: "docker/ubuntu22/rocm-6.2/docker/ubuntu22/rocm-6.2/Dockerfile"
+      DOCKERFILE_PATH: "docker/ubuntu22/rocm-6.2/Dockerfile"
       
     steps:
     - name: checkout main branch
       uses: actions/checkout@v4
-      with:
-        ref: main
       
-    - name: checkout Dockerfile branch
-      uses: actions/checkout@v4
-      with:
-         ref: Raj-test
-         path: docker/ubuntu22/rocm-6.2/docker/ubuntu22/rocm-6.2
-
     - name: Install Docker (if not already installed)
       run: |
         if ! command -v docker &> /dev/null; then
@@ -66,7 +58,7 @@ jobs:
             --build-arg rocm_path=${{ env.ROCM_PATH }} \
             --tag nlingamp/pt-github:${{ env.IMAGE_TAG }} \
             --file ${{ env.DOCKERFILE_PATH }} \
-            docker/ubuntu22/rocm-6.2/docker/ubuntu22/rocm-6.2
+            .
     - name: Push Docker image to Docker Hub
       run: |
         docker push nlingamp/pt-github:${{ env.IMAGE_TAG }}
