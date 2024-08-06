@@ -53,6 +53,10 @@ jobs:
     
     - name: Build the Docker image
       run: |
+          # verify the files
+          ls -R docker/ubuntu22
+
+          #Build Docker image
           docker build \
             --no-cache \
             --build-arg rocm_repo=${{ env.ROCM_REPO }} \
@@ -61,7 +65,7 @@ jobs:
             --build-arg rocm_path=${{ env.ROCM_PATH }} \
             --tag nlingamp/pt-github:${{ env.IMAGE_TAG }} \
             --file ${{ env.DOCKERFILE_PATH }} \
-            .
+            docker/ubuntu22
     - name: Push Docker image to Docker Hub
       run: |
         docker push nlingamp/pt-github:${{ env.IMAGE_TAG }}
