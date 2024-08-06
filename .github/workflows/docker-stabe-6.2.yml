@@ -1,4 +1,4 @@
-name: Rocm-test 6.2 push action
+name: Rocm test 6.2 push action
 
 on:
  push:
