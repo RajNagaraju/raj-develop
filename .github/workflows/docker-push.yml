@@ -1,9 +1,6 @@
 name: Build docker image for 6.2
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:  
     inputs:
       ROCM_REPO:
