@@ -30,7 +30,7 @@ jobs:
       uses: actions/checkout@v4
       with:
          ref: Raj-test
-         path: docker/ubuntu22/
+         path: docker/ubuntu22
 
     - name: Install Docker (if not already installed)
       run: |
