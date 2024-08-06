@@ -1,0 +1,68 @@
+name: Rocm test 6.2 push action
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - docker/ubuntu22/rocm-6.2/Dockerfile
+      - .github/workflow/docker-stable-6.2.yml
+        
+jobs:
+  build:
+    runs-on: [self-hosted, rocm-framework-38]
+
+    env:
+      ROCM_REPO: "6.2"
+      ROCM_VERSION: "6.2.0"
+      ROCM_LIB_VERSION: "60200"
+      ROCM_PATH: "/opt/rocm-6.2"
+      IMAGE_TAG: "rocm-6.2.0-ub22"
+      DOCKERFILE_PATH: "Raj-test/docker/ubuntu22/Dockerfile"
+      
+    steps:
+    - name: checkout main branch
+      uses: actions/checkout@v4
+      with:
+        ref: main
+      
+    - name: checkout Dockerfile branch
+      uses: actions/checkout@v4
+      with:
+         ref: Raj-test
+         path: Raj-test/docker/ubuntu22/Dockerfile
+
+    - name: Install Docker (if not already installed)
+      run: |
+        if ! command -v docker &> /dev/null; then
+          echo "Docker not found. Installing Docker..."
+          sudo apt-get update -y
+          sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
+          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+          sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+          sudo apt-get update -y
+          sudo apt-get install -y docker-ce
+        else
+          echo "Docker is already installed."
+        fi
+      
+    - name: Login to dockerhub
+      uses: docker/login-action@v2
+      with: 
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+    
+    - name: Build the Docker image
+      run: |
+          docker build \
+            --no-cache \
+            --build-arg rocm_repo=${{ env.ROCM_REPO }} \
+            --build-arg rocm_version=${{ env.ROCM_VERSION }} \
+            --build-arg rocm_lib_version=${{ env.ROCM_LIB_VERSION }} \
+            --build-arg rocm_path=${{ env.ROCM_PATH }} \
+            --tag nlingamp/pt-github:${{ env.IMAGE_TAG }} \
+            --file ${{ env.DOCKERFILE_PATH }} \
+            .
+    - name: Push Docker image to Docker Hub
+      run: |
+        docker push nlingamp/pt-github:${{ env.IMAGE_TAG }}
