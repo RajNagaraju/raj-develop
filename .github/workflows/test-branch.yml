@@ -3,9 +3,9 @@ name: testing test-branch dockerfile
 on:
   push:
     branches:
-      - Raj-dev
+      - Raj-Dev
     paths:
-      - docker/ubuntu22/rocm-6.2/*
+      - docker/ubuntu22/rocm-6.2/**
         
 jobs:
   build:
@@ -23,7 +23,7 @@ jobs:
     - name: checkout dev branch
       uses: actions/checkout@v4
       with:
-        ref: Raj-dev
+        ref: Raj-Dev
       
     - name: Login to dockerhub
       uses: docker/login-action@v4
