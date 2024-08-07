@@ -6,7 +6,7 @@ on:
       - Raj-dev
     paths:
       - '.github/workflows/test-branch.yml'
-      - 'docker/ubuntu22/rocm-6.2/'
+      - 'docker/ubuntu22/rocm-6.2/*'
         
 jobs:
   build:
