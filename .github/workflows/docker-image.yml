@@ -20,5 +20,5 @@ jobs:
       run: docker build . --file docker/Dockerfile --tag rocm:6.2.0-ub22
       
     - name: Push Docker image to Docker Hub
-      run: docker push rocm:6.2.0-ub22
+      run: docker push nlingamp/rocm:6.2.0-ub22
       
