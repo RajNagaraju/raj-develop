@@ -1,7 +1,7 @@
 # ROCm Dockerfile
 # Copyright (c) 2024 Advanced Micro Devices, Inc. All Rights Reserved.
 # Author(s): sid.srinivasan@amd.com, srinivasan.subramanian@amd.com
-# V1.11 adding Rocm package dependcies(mesa pkg)
+# V1.11 added Rocm package dependcies(mesa pkg)
 # Revision: V1.10
 # V1.10 setup link to system libgomp.so
 # V1.9 add gdb, update-alternatives make gcc 12 default
