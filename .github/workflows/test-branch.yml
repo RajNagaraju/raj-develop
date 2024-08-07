@@ -6,6 +6,7 @@ on:
       - Raj-Dev
     paths:
       - docker/ubuntu22/rocm-6.2/**
+      - README.md
         
 jobs:
   build:
