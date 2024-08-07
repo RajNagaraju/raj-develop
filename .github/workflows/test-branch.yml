@@ -3,14 +3,14 @@ name: testing test-branch dockerfile
 on:
   push:
     branches:
-      - Raj-test
+      - Raj-dev
     paths:
       - '.github/workflows/test-branch.yml'
-      - 'docker/ubuntu22/rocm-6.2/Dockerfile'
+      - 'docker/ubuntu22/rocm-6.2/'
         
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: [self-hosted, rocm-framework-38]
 
     env:
       ROCM_REPO: "6.2"
@@ -18,37 +18,20 @@ jobs:
       ROCM_LIB_VERSION: "60200"
       ROCM_PATH: "/opt/rocm-6.2"
       IMAGE_TAG: "rocm-6.2.0-ub22"
-      DOCKERFILE_PATH: "docker/Dockerfile"
+      DOCKERFILE_PATH: "docker/ubuntu22/rocm-6.2/Dockerfile"
       
     steps:
     - name: checkout main branch
       uses: actions/checkout@v4
       
-    - name: Install Docker (if not already installed)
-      run: |
-        if ! command -v docker &> /dev/null; then
-          echo "Docker not found. Installing Docker..."
-          sudo apt-get update -y
-          sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
-          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-          sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-          sudo apt-get update -y
-          sudo apt-get install -y docker-ce
-        else
-          echo "Docker is already installed."
-        fi
-      
     - name: Login to dockerhub
-      uses: docker/login-action@v2
+      uses: docker/login-action@v4
       with: 
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
     
     - name: Build the Docker image
       run: |
-          # verify the files
-          ls -l docker/ubuntu22/rocm-6.2
-
           #Build Docker image
           docker build \
             --no-cache \
