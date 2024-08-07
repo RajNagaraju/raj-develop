@@ -3,7 +3,7 @@ name: testing test-branch dockerfile
 on:
   push:
     branches:
-      - Raj-Dev
+      - main
     paths:
       - docker/ubuntu22/rocm-6.2/**
         
