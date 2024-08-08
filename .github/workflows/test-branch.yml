@@ -6,7 +6,6 @@ on:
       - Raj-Dev
     paths:
       - docker/ubuntu22/rocm-6.2/**
-      - README.md
         
 jobs:
   build:
@@ -17,7 +16,7 @@ jobs:
       ROCM_VERSION: "6.2.0"
       ROCM_LIB_VERSION: "60200"
       ROCM_PATH: "/opt/rocm-6.2"
-      IMAGE_TAG: "rocm-6.2.0-ub22"
+      IMAGE_TAG: "6.2.0-ub22"
       DOCKERFILE_PATH: "docker/ubuntu22/rocm-6.2/Dockerfile"
       
     steps:
@@ -41,9 +40,9 @@ jobs:
             --build-arg rocm_version=${{ env.ROCM_VERSION }} \
             --build-arg rocm_lib_version=${{ env.ROCM_LIB_VERSION }} \
             --build-arg rocm_path=${{ env.ROCM_PATH }} \
-            --tag nlingamp/pt-github:${{ env.IMAGE_TAG }} \
+            --tag nlingamp/rocm:${{ env.IMAGE_TAG }} \
             --file ${{ env.DOCKERFILE_PATH }} \
             .
     - name: Push Docker image to Docker Hub
       run: |
-        docker push nlingamp/pt-github:${{ env.IMAGE_TAG }}
+        docker push nlingamp/rocm:${{ env.IMAGE_TAG }}
