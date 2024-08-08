@@ -1,0 +1,23 @@
+name: Pull and test docker image
+
+on:
+  push:
+    branches:
+      - main
+  
+jobs:
+  test:
+    runs-on: self-hosted
+
+    steps:
+    - name: checkout repositery
+      uses: actions/checkout@v4
+
+    - name: Login to dockerhub
+      uses: docker/login-action@v2
+      with: 
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Pull the docker image
+      run: docker pull nlingamp/pt-github:rocm-6-2.0-ub22
