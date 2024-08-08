@@ -20,4 +20,4 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: Pull the docker image
-      run: docker pull nlingamp/pt-github:rocm-6-2.0-ub22
+      run: docker pull nlingamp/pt-github:rocm-6.2.0-ub22
