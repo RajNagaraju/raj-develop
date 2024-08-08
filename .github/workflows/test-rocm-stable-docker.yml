@@ -7,7 +7,7 @@ on:
   
 jobs:
   test:
-    runs-on: self-hosted
+    runs-on: [self-hosted, rocm-framework-38]
 
     steps:
     - name: checkout repositery
@@ -20,4 +20,4 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: Pull the docker image
-      run: docker pull nlingamp/pt-github:rocm-6.2.0-ub22
+      run: docker pull nlingamp/rocm:6.2.0-ub22
