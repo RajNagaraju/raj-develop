@@ -1,13 +1,8 @@
 name: testing test-branch dockerfile
 
 on:
-  push:
-    branches:
-      - Raj-Dev
-    paths:
-      - docker/ubuntu22/rocm-6.2/**
-      - README.md
-        
+  workflow_dispatch:
+    
 jobs:
   build:
     runs-on: [self-hosted, rocm-framework-38]

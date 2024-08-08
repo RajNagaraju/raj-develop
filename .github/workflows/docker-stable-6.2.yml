@@ -1,13 +1,8 @@
 name: Rocm test 6.2 push action
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - '.github/workflows/docker-stable-6.2.yml'
-      - 'docker/ubuntu22/rocm-6.2/Dockerfile'
-        
+  workflow_dispatch:
+
 jobs:
   build:
     runs-on: [self-hosted, rocm-framework-38]
