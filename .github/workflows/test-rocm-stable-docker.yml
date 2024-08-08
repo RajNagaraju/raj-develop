@@ -21,3 +21,7 @@ jobs:
 
     - name: Pull the docker image
       run: docker pull nlingamp/rocm:6.2.0-ub22
+
+    - name: Run Docker Container and Execute Commands
+      run: |
+        docker run --privileged --network=host --ipc=host nlingamp/rocm:6.2.0-ub22 rocm-smi
