@@ -32,8 +32,6 @@ jobs:
     
     - name: Build the Docker image
       run: |
-
-
           #Build Docker image
           docker build \
             --no-cache \
@@ -44,6 +42,7 @@ jobs:
             --tag nlingamp/rocm:${{ env.IMAGE_TAG }} \
             --file ${{ env.DOCKERFILE_PATH }} \
             .
+            
     - name: Push Docker image to Docker Hub
       run: |
         docker push nlingamp/rocm:${{ env.IMAGE_TAG }}
