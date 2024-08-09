@@ -25,8 +25,8 @@ jobs:
 
     - name: Run Docker Container and Execute Commands
       run: |
-        docker run --privileged --network=host --ipc=host ${{ github.event.inputs.DOCKER_CONTAINER }}:${{ github.event.inputs.IMAGE_TAG }} rocm-smi --rm
-        
+        docker run --privileged --network=host --ipc=host ${{ github.event.inputs.DOCKER_CONTAINER }}:${{ github.event.inputs.IMAGE_TAG }} rocm-smi
+
     - name: Remove Docker Image
       run: |
         # Remove the Docker image
