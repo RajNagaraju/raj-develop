@@ -1,10 +1,17 @@
 name: Pull and test docker image
 
 on:
-  push:
-    branches:
-      - main
-  
+  workflow_dispatch: 
+    inputs:
+      DOCKER_CONTAINER:
+        description: "Docker-user & reponame"
+        required: true 
+        default: "nlingamp/rocm"
+      IMAGE_TAG:
+        description: 'docker tag'
+        required: true
+        default: "6.2.0-ub22"
+ 
 jobs:
   test:
     runs-on: [self-hosted, rocm-framework-38]
@@ -13,15 +20,14 @@ jobs:
     - name: checkout repositery
       uses: actions/checkout@v4
 
-    - name: Login to dockerhub
-      uses: docker/login-action@v2
-      with: 
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
     - name: Pull the docker image
-      run: docker pull nlingamp/rocm:6.2.0-ub22
+      run: docker pull ${{ github.event.inputs.DOCKER_CONTAINER }}:${{ github.event.inputs.IMAGE_TAG }}
 
     - name: Run Docker Container and Execute Commands
       run: |
-        docker run --privileged --network=host --ipc=host nlingamp/rocm:6.2.0-ub22 rocm-smi
+        docker run --privileged --network=host --ipc=host ${{ github.event.inputs.DOCKER_CONTAINER }}:${{ github.event.inputs.IMAGE_TAG }} rocm-smi --rm
+        
+    - name: Remove Docker Image
+      run: |
+        # Remove the Docker image
+        docker rmi ${{ github.event.inputs.DOCKER_CONTAINER }}:${{ github.event.inputs.IMAGE_TAG }} || true
