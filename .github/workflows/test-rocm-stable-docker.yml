@@ -25,7 +25,16 @@ jobs:
 
     - name: Run Docker Container and Execute Commands
       run: |
-        docker run --privileged --network=host --ipc=host ${{ github.event.inputs.DOCKER_CONTAINER }}:${{ github.event.inputs.IMAGE_TAG }} rocm-smi
+        container_id=$(docker run -d --privileged --network=host --ipc=host --name temp_container ${{ github.event.inputs.DOCKER_CONTAINER }}:${{ github.event.inputs.IMAGE_TAG }} rocm-smi)
+          echo "Container ID: $container_id"
+          echo "CONTAINER_ID=$container_id" >> $GITHUB_ENV
+          
+    - name: Stop and Remove Docker Container
+      run: |
+        # Stop and remove the container using the ID from the previous step
+        docker stop $CONTAINER_ID || true
+        docker rm $CONTAINER_ID || true
+
 
     - name: Remove Docker Image
       run: |
