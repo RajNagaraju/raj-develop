@@ -1,0 +1,58 @@
+# This is a basic workflow template provided as an example to use for
+# creating workflow yml files.
+# 
+# This workflow checks out the repo and runs two jobs: rocm-smi, rocminfo
+#
+name: rocm-docker-tests
+
+# This controls when the workflow is run. Set on to workflow_
+on:
+  # This allows workflow to be run manually from Actions tab
+  workflow_dispatch:
+    # When invoked, the user is prompted to enter the following inputs
+    inputs:
+      DOCKER_CONTAINER:
+        description: 'Enter the docker container name, ex: handle/name'
+        required: true 
+        default: "amddcgpuce/rocm"
+      DOCKER_DIGEST_OR_TAG:
+        description: 'Enter the docker digest or tag below'
+        required: true
+        default: "6.2.0-ub22"
+
+# The jobs section defines jobs to run. Each job has completion status
+jobs:
+  # Define a checkout job
+  checkout:
+    # Specify the runner that the job will run on
+    runs-on: [self-hosted, mi100]
+
+    # Define the set of steps or tasks executed by the job
+    steps:
+      # Check out repository under $GITHUB_WORKSPACE
+      - uses: actions/checkout@v4
+
+  # Define a rocm-smi job
+  rocm-smi:
+    # Specify the runner that the job will run on
+    runs-on: [self-hosted, mi100]
+
+    # Define the set of steps or tasks executed by the job
+    steps:
+      # Run a single command, rocm-smi, using runners shell
+      - name: Run a single command, rocm-smi, invoking docker container
+        run: docker run --rm --privileged --network=host --ipc=host ${{ github.event.inputs.DOCKER_CONTAINER }}:${{ github.event.inputs.DOCKER_DIGEST_OR_TAG }} rocm-smi
+
+  # Define a rocminfo job
+  rocminfo:
+    # Specify the runner that the job will run on
+    runs-on: [self-hosted, mi100]
+
+    # Define the set of steps or tasks executed by the job
+    steps:
+      # Run a set of commands using runners shell, use '|'
+      - name: Echo the command and run rocminfo, invoking the docker container
+        run: |
+          echo Run rocminfo
+          echo docker run --rm --privileged --network=host --ipc=host ${{ github.event.inputs.DOCKER_CONTAINER }}:${{ github.event.inputs.DOCKER_DIGEST_OR_TAG }} rocminfo
+          docker run --rm --privileged --network=host --ipc=host ${{ github.event.inputs.DOCKER_CONTAINER }}:${{ github.event.inputs.DOCKER_DIGEST_OR_TAG }} rocminfo
