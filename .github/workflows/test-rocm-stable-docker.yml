@@ -7,36 +7,35 @@ on:
         description: "Docker-user & reponame"
         required: true 
         default: "nlingamp/rocm"
-      IMAGE_TAG:
-        description: 'docker tag'
+      DIGEST_OR_IMAGE_TAG:
+        description: 'docker tag or diges'
         required: true
         default: "6.2.0-ub22"
  
 jobs:
-  test:
+  checkout:
     runs-on: [self-hosted, rocm-framework-38]
 
     steps:
     - name: checkout repositery
       uses: actions/checkout@v4
+ 
+  #define rocminfo job
+  rocm-smi:
+    runs-on: [self-hosted, rocm-framework-38]
 
-    - name: Pull the docker image
-      run: docker pull ${{ github.event.inputs.DOCKER_CONTAINER }}:${{ github.event.inputs.IMAGE_TAG }}
-
+    steps:
     - name: Run Docker Container and Execute Commands
       run: |
-        container_id=$(docker run -d --privileged --network=host --ipc=host --name temp_container ${{ github.event.inputs.DOCKER_CONTAINER }}:${{ github.event.inputs.IMAGE_TAG }} rocm-smi)
-          echo "Container ID: $container_id"
-          echo "CONTAINER_ID=$container_id" >> $GITHUB_ENV
-          
+        docker run --rm --privileged --network=host --ipc=host ${{ github.event.inputs.DOCKER_CONTAINER }}:${{ github.event.inputs.DIGEST_OR_IMAGE_TAG }} rocm-smi
+        
+  #define rocminfo job
+  rocminfo:
+    runs-on: [self-hosted, rocm-framework-38]
+
+    steps:      
     - name: Stop and Remove Docker Container
       run: |
-        # Stop and remove the container using the ID from the previous step
-        docker stop $CONTAINER_ID || true
-        docker rm $CONTAINER_ID || true
-
-
-    - name: Remove Docker Image
-      run: |
-        # Remove the Docker image
-        docker rmi ${{ github.event.inputs.DOCKER_CONTAINER }}:${{ github.event.inputs.IMAGE_TAG }} || true
+        echo Run rocminfo
+        echo docker run --rm --privileged --network=host --ipc=host ${{ github.event.inputs.DOCKER_CONTAINER }}:${{ github.event.inputs.DIGEST_OR_IMAGE_TAG }} rocminfo
+        docker run --rm --privileged --network=host --ipc=host ${{ github.event.inputs.DOCKER_CONTAINER }}:${{ github.event.inputs.DIGEST_OR_IMAGE_TAG }} rocminfo
