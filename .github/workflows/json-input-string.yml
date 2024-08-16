@@ -13,8 +13,8 @@ jobs:
       - name: Read and process sample json file
         run: |
           # sample json file loading
-          JSON_FILE='sample.json'
+          JSON_FILE='docker/sample.json'
 
           # read the sample json and ouput it
           JSON_STRING=$(cat $JSON_FILE)
-          echo "Read JSOn: $JSON_STRING"
+          echo "Read JSON: $JSON_STRING"
