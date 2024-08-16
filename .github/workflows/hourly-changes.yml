@@ -3,7 +3,7 @@ name: Hourly changes in MAIN
 on:
   schedule:
     # Runs every hour
-    - cron: '*/5 * * * *'
+    #- cron: '*/5 * * * *'
 
 jobs:
   check-changes:
