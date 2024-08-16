@@ -7,20 +7,12 @@ on:
         description: "Enter the submit date (YYYY-MM-DDTHH:MM:SS)"
         required: true
         default: ''
-      COMPONENT:
-        description: "Enter the component"
+      COMPONENT_VERSION:
+        description: 'Enter the component:"", and version: "", '
         required: true
-        default: ''
-      VERSION:
-        description: "Enter the version"
-        required: true
-        default: ''
-      REPO:
-        description: "Enter the repository"
-        required: true
-        default: ''
-      COMMITHASH:
-        description: "Enter the commit hash"
+        default: '{}'
+      REPO_COMMITHASH:
+        description: 'Enter the repo:"", and commithas: "", '
         required: true
         default: ''
       AISW_TEST_TARGET_GOAL:
@@ -30,11 +22,30 @@ on:
       ROCM_DETAILS:
         description: "Enter json format string rocm_cuda_score, gfxarch:, rocm_version:, rocm_actual_testcount:, rocm_score: "
         required: true
-        default: '{}'
+        default: '{"rocm_cuda_score" : "98.44", "gfxarch" : "MI250", "rocm_version" : "6.1", "rocm_actual_testcount" : "358763", "rocm_score" : "99.67"}'
       NV_DETAILS:
         description: "Enter json format string nvarch:, cuda_version:, cuda_actual_testcount:, cuda_score:"
         required: true
-        default: '{}'
+        default: '{"nvarch" : "A10G", "cuda_version" : "12.1", "cuda_actual_testcount" : "359149", "cuda_score" : "99.77"}'
+      VERSION_DETAILS:
+        description: "Enter json format string mkl, python"
+        required: true
+        default: '{"mkl" : "2024.1", "python" : "3.8"}'
+      ROCM_CUDA_SCORE_DETAILS:
+        description: "Enter the ROCm-CUDA score details"
+        required: true
+        default: '{"comment" : "Additional explanations:  string"}'
+      ROCM_SCORE_DETAILS:
+        description: "Enter the ROCm score details"
+        required: true
+        default: '{"comment" : "Additional explanations:  string"}'
+      CUDA_SCORE_DETAILS:
+        description: "Enter the CUDA score details"
+        required: true
+        default: '{"comment" : "Additional explanations:  string"}'
+
+
+      
 
 jobs:
   process-json:
@@ -55,6 +66,10 @@ jobs:
           # Read JSON input from the workflow input
           JSON_ROCM_STRING='${{ github.event.inputs.ROCM_DETAILS }}'
           JSON_NV_STRING='${{ github.event.inputs.NV_DETAILS }}'
+          JSON_VERSION_STRING='${{ github.event.inputs.VERSION_DETAILS }}'
+          JSON_RCS_STRING='${{ github.event.inputs.ROCM_CUDA_SCORE_DETAILS }}'
+          JSON_RS_STRING='${{ github.event.inputs.ROCM_SCORE_DETAILS }}'
+          JSON_CS_STRING='${{ github.event.inputs.CUDA_SCORE_DETAILS }}'
           
           # json input string
           schema_version="${{ env.SCHEMA_VERSION }}"
@@ -75,6 +90,7 @@ jobs:
           cuda_version=$(echo "$JSON_NV_STRING" | jq -r '.cuda_version')
           cuda_actual_testcount=$(echo "$JSON_NV_STRING" | jq -r '.cuda_actual_testcount')
           cuda_score=$(echo "$JSON_NV_STRING" | jq -r '.cuda_score')
+         
           
           # Print extracted values to logs
           echo "Schema_version: $schema_version"
@@ -93,3 +109,7 @@ jobs:
           echo "CUDA Version: $cuda_version"
           echo "CUDA Actual Test Count: $cuda_actual_testcount"
           echo "CUDA Score: $cuda_score"
+          echo "VERSION_DETAILS: "
+          echo "ROCM_CUDA_SCORE_DETAILS:"
+          echo "ROCM_SCORE_DETAILS:"
+          echo "CUDA_SCORE_DETAILS:"
