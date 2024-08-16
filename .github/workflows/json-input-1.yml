@@ -3,26 +3,58 @@ name: Process JSON Input DATA
 on:
   workflow_dispatch:
     inputs:
-      json_input:
+      JSON_INPUT:
         description: "Enter all JSON data as a single JSON string"
         required: true
-        default: '{}'
+        default: |
+          { "submit_date" : "Jul 24, 2024",
+            "component" : "Pytorch",
+            "version" : "latest",
+            "repo" : "https://github.com/pytorch",
+            "commithash" : "4eee2e7a6dfbd9caab6a1e59088744ae91f2aa25",
+            "aisw_test_target_goal" : "359944",
+            "rocm_cuda_score" : "98.44",
+            "gfxarch" : "MI250",
+            "rocm_version" : "6.1",
+            "rocm_actual_testcount" : "358763",
+            "rocm_score" : "99.67",
+            "nvarch" : "A10G",
+            "cuda_version" : "12.1",
+            "cuda_actual_testcount" : "359149",
+            "cuda_score" : "99.77"
+          }
+      VERSION_DETAILS:
+        description: "Enter json format string mkl, python"
+        required: true
+        default: '{"mkl" : "2024.1", "python" : "3.8"}'
+      ROCM_CUDA_SCORE_DETAILS:
+        description: "Enter the ROCm-CUDA score details"
+        required: true
+        default: '{"comment" : "Additional explanations:  string"}'
+      ROCM_SCORE_DETAILS:
+        description: "Enter the ROCm score details"
+        required: true
+        default: '{"comment" : "Additional explanations:  string"}'
+      CUDA_SCORE_DETAILS:
+        description: "Enter the CUDA score details"
+        required: true
+        default: '{"comment" : "Additional explanations:  string"}'
 
 jobs:
   process-json:
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    env:
+      SCHEMA_VERSION: "V4"
 
+    steps:
       - name: Install jq
         run: sudo apt-get install -y jq
 
       - name: Parse JSON input
         run: |
           # Read JSON input from the workflow input
-          JSON_STRING='${{ github.event.inputs.json_input }}'
+          JSON_STRING='${{ github.event.inputs.JSON_INPUT }}'
           
           # Use jq to parse JSON and extract values
           submit_date=$(echo "$JSON_STRING" | jq -r '.submit_date')
@@ -40,7 +72,14 @@ jobs:
           cuda_version=$(echo "$JSON_STRING" | jq -r '.cuda_version')
           cuda_actual_testcount=$(echo "$JSON_STRING" | jq -r '.cuda_actual_testcount')
           cuda_score=$(echo "$JSON_STRING" | jq -r '.cuda_score')
-          
+
+          # JSON INPUT Values
+          schema_version="${{ env.SCHEMA_VERSION }}"
+          version_details='${{ github.event.inputs.VERSION_DETAILS }}'
+          rocm_cuda_score_details='${{ github.event.inputs.ROCM_CUDA_SCORE_DETAILS }}'
+          rocm_score_details='${{ github.event.inputs.ROCM_SCORE_DETAILS }}'
+          cuda_score_details='${{ github.event.inputs.CUDA_SCORE_DETAILS }}'
+
           # Print extracted values to logs
           echo "Submit Date: $submit_date"
           echo "Component: $component"
