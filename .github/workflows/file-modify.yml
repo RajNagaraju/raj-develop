@@ -1,0 +1,29 @@
+name: file modify docker/sample.json
+
+on:
+    push:
+        paths:
+            - 'docker/sample.json'
+            - 'docker/rocm/ubuntu22/6.0/hw.txt'
+
+jobs:
+    run-workflow1:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: checkout repo
+              uses: actions/checkout@v4
+
+            - name: run workflow2
+              run: | 
+                # File paths
+                JSON_FILE='docker/sample.json'
+                TEXT_FILE='docker/rocm/ubuntu22/6.0/hw.txt'
+
+                # read the json values
+                JSON_STRING=$(cat $JSON_FILE)
+                echo " JSON DATA: $JSON_STRING"
+
+                # Read the text changes
+                TEXT_DATA=$(cat $TEXT_FILE)
+                echo "TExt Data: $TEXT_DATA"
