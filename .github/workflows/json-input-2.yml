@@ -1,0 +1,91 @@
+name: JSON INPUT
+
+on:
+  workflow_dispatch:
+    inputs:
+      SUBMIT_DATE:
+        description: "Enter the submit date (YYYY-MM-DDTHH:MM:SS)"
+        required: true
+        default: ''
+      COMPONENT:
+        description: "Enter the component"
+        required: true
+        default: ''
+      VERSION:
+        description: "Enter the version"
+        required: true
+        default: ''
+      REPO:
+        description: "Enter the repository"
+        required: true
+        default: ''
+      COMMITHASH:
+        description: "Enter the commit hash"
+        required: true
+        default: ''
+      AISW_TEST_TARGET_GOAL:
+        description: "Enter the AISW test target goal"
+        required: true
+        default: '0.00'
+      ROCM_DETAILS:
+        description: "Enter the ROCm-CUDA score"
+        required: true
+        default: '{ROCM_CUDA_SCORE:"", GFXARCH:"", ROCM_VERISON:"", ROCM_ACTUAL_TESTCOUNT:"", ROCM_SCORE:""}'
+      NV_DETAILS:
+        description: "Enter the NVIDIA architecture"
+        required: true
+        default: '{NVARCH:"", CUDA_VERSION:"", CUDA_ACTUAL_TESTCOUNT:"", CUDA_SCORE:"" }'
+
+jobs:
+  process-json:
+    runs-on: ubuntu-latest
+
+    env:
+      SCHEMA_VERSION: "V4"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
+      - name: Parse JSON input
+        run: |
+          # Read JSON input from the workflow input
+          JSON_STRING='${{ github.event.inputs.json_input }}'
+          
+          # Use jq to parse JSON and extract values
+          schema-version=${{ env.SCHEMA_VERSION }} \
+          submit_date=${{ env.SUBMIT_DATE}} \
+          component=${{ env.COMPONENT}} \
+          version=${{ env.VERSION}} \
+          repo=${{ env.REPO}} \
+          commithash=${{ env.COMMITHASH}} \
+          aisw_test_target_goal=${{ env.AISW_TEST_TARGET_GOAL}} \
+          rocm_cuda_score=$(echo "$JSON_STRING" | jq -r '.rocm_cuda_score')
+          gfxarch=$(echo "$JSON_STRING" | jq -r '.gfxarch')
+          rocm_version=$(echo "$JSON_STRING" | jq -r '.rocm_version')
+          rocm_actual_testcount=$(echo "$JSON_STRING" | jq -r '.rocm_actual_testcount')
+          rocm_score=$(echo "$JSON_STRING" | jq -r '.rocm_score')
+          nvarch=$(echo "$JSON_STRING" | jq -r '.nvarch')
+          cuda_version=$(echo "$JSON_STRING" | jq -r '.cuda_version')
+          cuda_actual_testcount=$(echo "$JSON_STRING" | jq -r '.cuda_actual_testcount')
+          cuda_score=$(echo "$JSON_STRING" | jq -r '.cuda_score')
+          
+          # Print extracted values to logs
+          echo "Submit Date: $submit_date"
+          echo "Component: $component"
+          echo "Version: $version"
+          echo "Repo: $repo"
+          echo "Commit Hash: $commithash"
+          echo "AISW Test Target Goal: $aisw_test_target_goal"
+          echo "ROCm CUDA Score: $rocm_cuda_score"
+          echo "GFXARCH: $gfxarch"
+          echo "ROCm Version: $rocm_version"
+          echo "ROCm Actual Test Count: $rocm_actual_testcount"
+          echo "ROCm Score: $rocm_score"
+          echo "NVARCH: $nvarch"
+          echo "CUDA Version: $cuda_version"
+          echo "CUDA Actual Test Count: $cuda_actual_testcount"
+          echo "CUDA Score: $cuda_score"
