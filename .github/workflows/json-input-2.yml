@@ -63,21 +63,23 @@ jobs:
           # Read JSON input from the workflow input
           JSON_ROCM_STRING='${{ github.event.inputs.ROCM_DETAILS }}'
           JSON_NV_STRING='${{ github.event.inputs.NV_DETAILS }}'
-          #JSON_VERSION_STRING='${{ github.event.inputs.VERSION_DETAILS }}'
-          #JSON_RCS_STRING='${{ github.event.inputs.ROCM_CUDA_SCORE_DETAILS }}'
-          #JSON_RS_STRING='${{ github.event.inputs.ROCM_SCORE_DETAILS }}'
-          #JSON_CS_STRING='${{ github.event.inputs.CUDA_SCORE_DETAILS }}'
+          JSON_COMP_VER_STRING='${{ github.event.inputs.COMPONENT_VERSION }}'
+          JSON_REPO_CH_STRING='${{ github.event.inputs.REPO_COMMITHASH }}'
           
           # json input string
           schema_version="${{ env.SCHEMA_VERSION }}"
           submit_date="${{ github.event.inputs.SUBMIT_DATE }}"
-          component="${{ github.event.inputs.COMPONENT }}"
-          version="${{ github.event.inputs.VERSION }}"
-          repo="${{ github.event.inputs.REPO }}"
-          commithash="${{ github.event.inputs.COMMITHASH }}"
           aisw_test_target_goal="${{ github.event.inputs.AISW_TEST_TARGET_GOAL }}"
+          version_details='${{ github.event.inputs.VERSION_DETAILS }}'
+          rocm_cuda_score_details='${{ github.event.inputs.ROCM_CUDA_SCORE_DETAILS }}'
+          rocm_score_details='${{ github.event.inputs.ROCM_SCORE_DETAILS }}'
+          cuda_score_details='${{ github.event.inputs.CUDA_SCORE_DETAILS }}'
 
           # Use jq to parse JSON and extract values
+          component=$(echo "$JSON_COMP_VER_STRING" | jq -r '.component')
+          version=$(echo "$JSON_COMP_VER_STRING" | jq -r '.version')
+          repo=$(echo "$JSON_REPO_CH_STRING" | jq -r '.repo')
+          commithash=$(echo "$JSON_REPO_CH_STRING" | jq -r '.commithash')
           rocm_cuda_score=$(echo "$JSON_ROCM_STRING" | jq -r '.rocm_cuda_score')
           gfxarch=$(echo "$JSON_ROCM_STRING" | jq -r '.gfxarch')
           rocm_version=$(echo "$JSON_ROCM_STRING" | jq -r '.rocm_version')
@@ -87,13 +89,6 @@ jobs:
           cuda_version=$(echo "$JSON_NV_STRING" | jq -r '.cuda_version')
           cuda_actual_testcount=$(echo "$JSON_NV_STRING" | jq -r '.cuda_actual_testcount')
           cuda_score=$(echo "$JSON_NV_STRING" | jq -r '.cuda_score')
-
-          #JSON INPUT string
-          version_details='${{ github.event.inputs.VERSION_DETAILS }}'
-          rocm_cuda_score_details='${{ github.event.inputs.ROCM_CUDA_SCORE_DETAILS }}'
-          rocm_score_details='${{ github.event.inputs.ROCM_SCORE_DETAILS }}'
-          cuda_score_details='${{ github.event.inputs.CUDA_SCORE_DETAILS }}'
-          
           
           # Print extracted values to logs
           echo "Schema_version: $schema_version"
