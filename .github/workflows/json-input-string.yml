@@ -10,10 +10,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: checkout the repo
+        uses: actions/checkout@v4
+        
       - name: Read and process sample json file
         run: |
           # sample json file loading
-          JSON_FILE='docker/sample.json'
+          JSON_FILE='sample.json'
 
           # read the sample json and ouput it
           JSON_STRING=$(cat $JSON_FILE)
