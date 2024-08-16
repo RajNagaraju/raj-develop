@@ -81,6 +81,7 @@ jobs:
           cuda_score_details='${{ github.event.inputs.CUDA_SCORE_DETAILS }}'
 
           # Print extracted values to logs
+          echo "Schema_Version: $schema_version"
           echo "Submit Date: $submit_date"
           echo "Component: $component"
           echo "Version: $version"
@@ -96,3 +97,7 @@ jobs:
           echo "CUDA Version: $cuda_version"
           echo "CUDA Actual Test Count: $cuda_actual_testcount"
           echo "CUDA Score: $cuda_score"
+          echo "Version_details: $version_details"
+          echo "Rocm_cuda_score_details: $rocm_cuda_score_details"
+          echo "Rocm_score_details: $rocm_score_details"
+          echo "Cuda_score_details: $cuda_score_details"
