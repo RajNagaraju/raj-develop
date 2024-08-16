@@ -28,11 +28,11 @@ on:
         required: true
         default: '0.00'
       ROCM_DETAILS:
-        description: "Enter json format details ROCM_CUDA_SCORE:, GFXARCH:, ROCM_VERISON:, ROCM_ACTUAL_TESTCOUNT:, ROCM_SCORE: "
+        description: "Enter json format string rocm_cuda_score, gfxarch:, rocm_version:, rocm_actual_testcount:, rocm_score: "
         required: true
         default: '{}'
       NV_DETAILS:
-        description: "Enter json fromat details NVARCH:, CUDA_VERSION:, CUDA_ACTUAL_TESTCOUNT:, CUDA_SCORE:"
+        description: "Enter json format string nvarch:, cuda_version:, cuda_actual_testcount:, cuda_score:"
         required: true
         default: '{}'
 
@@ -53,9 +53,10 @@ jobs:
       - name: Parse JSON input
         run: |
           # Read JSON input from the workflow input
-          JSON_STRING='${{ github.event.inputs.json_input }}'
+          JSON_ROCM_STRING='${{ github.event.inputs.ROCM_DETAILS }}'
+          JSON_NV_STRING='${{ github.event.inputs.NV_DETAILS }}'
           
-          # Use jq to parse JSON and extract values
+          # json input string
           schema_version="${{ env.SCHEMA_VERSION }}"
           submit_date="${{ github.event.inputs.SUBMIT_DATE }}"
           component="${{ github.event.inputs.COMPONENT }}"
@@ -63,15 +64,17 @@ jobs:
           repo="${{ github.event.inputs.REPO }}"
           commithash="${{ github.event.inputs.COMMITHASH }}"
           aisw_test_target_goal="${{ github.event.inputs.AISW_TEST_TARGET_GOAL }}"
-          rocm_cuda_score=$(echo "$JSON_STRING" | jq -r '.rocm_cuda_score')
-          gfxarch=$(echo "$JSON_STRING" | jq -r '.gfxarch')
-          rocm_version=$(echo "$JSON_STRING" | jq -r '.rocm_version')
-          rocm_actual_testcount=$(echo "$JSON_STRING" | jq -r '.rocm_actual_testcount')
-          rocm_score=$(echo "$JSON_STRING" | jq -r '.rocm_score')
-          nvarch=$(echo "$JSON_STRING" | jq -r '.nvarch')
-          cuda_version=$(echo "$JSON_STRING" | jq -r '.cuda_version')
-          cuda_actual_testcount=$(echo "$JSON_STRING" | jq -r '.cuda_actual_testcount')
-          cuda_score=$(echo "$JSON_STRING" | jq -r '.cuda_score')
+
+          # Use jq to parse JSON and extract values
+          rocm_cuda_score=$(echo "$JSON_ROCM_STRING" | jq -r '.rocm_cuda_score')
+          gfxarch=$(echo "$JSON_ROCM_STRING" | jq -r '.gfxarch')
+          rocm_version=$(echo "$JSON_ROCM_STRING" | jq -r '.rocm_version')
+          rocm_actual_testcount=$(echo "$JSON_ROCM_STRING" | jq -r '.rocm_actual_testcount')
+          rocm_score=$(echo "$JSON_ROCM_STRING" | jq -r '.rocm_score')
+          nvarch=$(echo "$JSON_NV_STRING" | jq -r '.nvarch')
+          cuda_version=$(echo "$JSON_NV_STRING" | jq -r '.cuda_version')
+          cuda_actual_testcount=$(echo "$JSON_NV_STRING" | jq -r '.cuda_actual_testcount')
+          cuda_score=$(echo "$JSON_NV_STRING" | jq -r '.cuda_score')
           
           # Print extracted values to logs
           echo "Schema_version: $schema_version"
