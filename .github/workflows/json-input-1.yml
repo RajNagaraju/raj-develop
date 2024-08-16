@@ -1,0 +1,59 @@
+name: Process JSON Input DATA
+
+on:
+  workflow_dispatch:
+    inputs:
+      json_input:
+        description: "Enter all JSON data as a single JSON string"
+        required: true
+        default: '{}'
+
+jobs:
+  process-json:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
+      - name: Parse JSON input
+        run: |
+          # Read JSON input from the workflow input
+          JSON_STRING='${{ github.event.inputs.json_input }}'
+          
+          # Use jq to parse JSON and extract values
+          submit_date=$(echo "$JSON_STRING" | jq -r '.submit_date')
+          component=$(echo "$JSON_STRING" | jq -r '.component')
+          version=$(echo "$JSON_STRING" | jq -r '.version')
+          repo=$(echo "$JSON_STRING" | jq -r '.repo')
+          commithash=$(echo "$JSON_STRING" | jq -r '.commithash')
+          aisw_test_target_goal=$(echo "$JSON_STRING" | jq -r '.aisw_test_target_goal')
+          rocm_cuda_score=$(echo "$JSON_STRING" | jq -r '.rocm_cuda_score')
+          gfxarch=$(echo "$JSON_STRING" | jq -r '.gfxarch')
+          rocm_version=$(echo "$JSON_STRING" | jq -r '.rocm_version')
+          rocm_actual_testcount=$(echo "$JSON_STRING" | jq -r '.rocm_actual_testcount')
+          rocm_score=$(echo "$JSON_STRING" | jq -r '.rocm_score')
+          nvarch=$(echo "$JSON_STRING" | jq -r '.nvarch')
+          cuda_version=$(echo "$JSON_STRING" | jq -r '.cuda_version')
+          cuda_actual_testcount=$(echo "$JSON_STRING" | jq -r '.cuda_actual_testcount')
+          cuda_score=$(echo "$JSON_STRING" | jq -r '.cuda_score')
+          
+          # Print extracted values to logs
+          echo "Submit Date: $submit_date"
+          echo "Component: $component"
+          echo "Version: $version"
+          echo "Repo: $repo"
+          echo "Commit Hash: $commithash"
+          echo "AISW Test Target Goal: $aisw_test_target_goal"
+          echo "ROCm CUDA Score: $rocm_cuda_score"
+          echo "GFXARCH: $gfxarch"
+          echo "ROCm Version: $rocm_version"
+          echo "ROCm Actual Test Count: $rocm_actual_testcount"
+          echo "ROCm Score: $rocm_score"
+          echo "NVARCH: $nvarch"
+          echo "CUDA Version: $cuda_version"
+          echo "CUDA Actual Test Count: $cuda_actual_testcount"
+          echo "CUDA Score: $cuda_score"
