@@ -1,34 +1,27 @@
-name: Hourly changes in MAIN
+name: Hourly Job
 
 on:
   schedule:
-    # Runs every hour
-    - cron: '*/5 * * * *'
+    - cron: '0/2 * * * *'
 
 jobs:
-  check-changes:
+  example-job:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
-      - name: Fetch previous commit
-        id: fetch-previous
-        run: |
-          git fetch origin main
-          git show --name-only HEAD > previous-state.txt || echo "No previous state file"
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'
 
-      - name: Store current state
-        id: store-state
-        run: |
-          git ls-tree -r HEAD --name-only > current-state.txt
-          diff previous-state.txt current-state.txt > changes.diff || true
+      - name: Install dependencies
+        run: npm install
 
-      - name: Print changes
-        run: |
-          if [ -s changes.diff ]; then
-            echo "Changes detected:"
-            cat changes.diff
-          else
-            echo "No changes detected."
-          fi
+      - name: Run tests
+        run: npm test
+
+      - name: Deploy application
+        run: ./deploy-script.sh
