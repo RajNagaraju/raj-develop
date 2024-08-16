@@ -56,13 +56,13 @@ jobs:
           JSON_STRING='${{ github.event.inputs.json_input }}'
           
           # Use jq to parse JSON and extract values
-          schema-version=${{ env.SCHEMA_VERSION }} \
-          submit_date=${{ env.SUBMIT_DATE}} \
-          component=${{ env.COMPONENT}} \
-          version=${{ env.VERSION}} \
-          repo=${{ env.REPO}} \
-          commithash=${{ env.COMMITHASH}} \
-          aisw_test_target_goal=${{ env.AISW_TEST_TARGET_GOAL}} \
+          schema_version="${{ env.SCHEMA_VERSION }}"
+          submit_date="${{ github.event.inputs.SUBMIT_DATE }}"
+          component="${{ github.event.inputs.COMPONENT }}"
+          version="${{ github.event.inputs.VERSION }}"
+          repo="${{ github.event.inputs.REPO }}"
+          commithash="${{ github.event.inputs.COMMITHASH }}"
+          aisw_test_target_goal="${{ github.event.inputs.AISW_TEST_TARGET_GOAL }}"
           rocm_cuda_score=$(echo "$JSON_STRING" | jq -r '.rocm_cuda_score')
           gfxarch=$(echo "$JSON_STRING" | jq -r '.gfxarch')
           rocm_version=$(echo "$JSON_STRING" | jq -r '.rocm_version')
