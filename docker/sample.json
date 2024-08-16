@@ -1,6 +1,6 @@
 {
     "schema_version" : "v4",
-    "submit_date" : "Jul 24, 2024",
+    "submit_date" : "Jul 25, 2024",
     "component" : "Pytorch",
     "version" : "latest",
     "repo" : "https://github.com/pytorch",
@@ -19,4 +19,5 @@
     "rocm_cuda_score_details" : { "comment" : "Additional explanations:  string"},
     "rocm_score_details" : {"comment" : "Additional details about ROCm score: string"},
     "cuda_score_details" : {"comment" : "Additional details about CUDA score: string"}
+    
 }
