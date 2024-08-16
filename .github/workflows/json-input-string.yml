@@ -5,10 +5,82 @@ name: Process JSON Input
 on:
     workflow_dispatch:
         inputs:
-            NAME:
-                description: "Enter the json input as string"
-                required: true
-                default: 'john'
+          SUBMIT_DATE:
+            description: "Enter the submit date (YYYY-MM-DDTHH:MM:SS)"
+            required: true
+            default: ''
+          COMPONENT:
+            description: "Enter the component"
+            required: true
+            default: ''
+          VERSION:
+            description: "Enter the version"
+            required: true
+            default: ''
+          REPO:
+            description: "Enter the repository"
+            required: true
+            default: ''
+          COMMITHASH:
+            description: "Enter the commit hash"
+            required: true
+            default: ''
+          AISW_TEST_TARGET_GOAL:
+            description: "Enter the AISW test target goal"
+            required: true
+            default: '0.00'
+          ROCM_CUDA_SCORE:
+            description: "Enter the ROCm-CUDA score"
+            required: true
+            default: '0.00'
+          GFXARCH:
+            description: "Enter the graphics architecture"
+            required: true
+            default: ''
+          ROCM_VERISON:
+            description: "Enter the ROCm version"
+            required: true
+            default: ''
+          ROCM_ACTUAL_TESTCOUNT:
+            description: "Enter the ROCm actual test count"
+            required: true
+            default: '0.00'
+          ROCM_SCORE:
+            description: "Enter the ROCm score"
+            required: true
+            default: '0.00'
+          NVARCH:
+            description: "Enter the NVIDIA architecture"
+            required: true
+            default: ''
+          CUDA_VERSION:
+            description: "Enter the CUDA version"
+            required: true
+            default: ''
+          CUDA_ACTUAL_TESTCOUNT:
+            description: "Enter the CUDA actual test count"
+            required: true
+            default: '0.00'
+          CUDA_SCORE:
+            description: "Enter the CUDA score"
+            required: true
+            default: '0.00'
+          VERSION_DETAILS:
+            description: "Enter the version details"
+            required: true
+            default: ''
+          ROCM_CUDA_SCORE_DETAILS:
+            description: "Enter the ROCm-CUDA score details"
+            required: true
+            default: ''
+          ROCM_SCORE_DETAILS:
+            description: "Enter the ROCm score details"
+            required: true
+            default: ''
+          CUDA_SCORE_DETAILS:
+            description: "Enter the CUDA score details"
+            required: true
+            default: ''
 
 jobs:
     create-json:
@@ -19,18 +91,51 @@ jobs:
               id: generate_json
               run: |
                 # get the input value
-                name="${{ github.event.inputs.NAME }}"
+                submit_date="${{ github.event.inputs.SUBMIT_DATE }}"
+                component="${{ github.event.inputs.COMPONENT }}"
+                version="${{ github.event.inputs.VERSION }}"
+                repo="${{ github.event.inputs.REPO }}"
+                commithash="${{ github.event.inputs.COMMITHASH }}"
+                aisw_test_target_goal="${{ github.event.inputs.AISW_TEST_TARGET_GOAL }}"
+                rocm_cuda_score="${{ github.event.inputs.ROCM_CUDA_SCORE }}"
+                gfxarch="${{ github.event.inputs.GFXARCH }}"
+                rocm_version="${{ github.event.inputs.ROCM_VERISON }}"
+                rocm_actual_testcount="${{ github.event.inputs.ROCM_ACTUAL_TESTCOUNT }}"
+                rocm_score="${{ github.event.inputs.ROCM_SCORE }}"
+                nvarch="${{ github.event.inputs.NVARCH }}"
+                cuda_version="${{ github.event.inputs.CUDA_VERSION }}"
+                cuda_actual_testcount="${{ github.event.inputs.CUDA_ACTUAL_TESTCOUNT }}"
+                cuda_score="${{ github.event.inputs.CUDA_SCORE }}"
+                version_details="${{ github.event.inputs.VERSION_DETAILS }}"
+                rocm_cuda_score_details="${{ github.event.inputs.ROCM_CUDA_SCORE_DETAILS }}"
+                rocm_score_details="${{ github.event.inputs.ROCM_SCORE_DETAILS }}"
+                cuda_score_details="${{ github.event.inputs.CUDA_SCORE_DETAILS }}"
 
-                # Create a JSON string with the default format
-                JSON_STRING="{\"NAME \": \"$name\"}"
+                # Construct JSON string
+                JSON_STRING=$(cat <<EOF 
+                {
+                  "SUBMIT_DATE": "$submit_date",
+                  "COMPONENT": "$component",
+                  "VERSION": "$version",
+                  "REPO": "$repo",
+                  "COMMITHASH": "$commithash",
+                  "AISW_TEST_TARGET_GOAL": "$aisw_test_target_goal",
+                  "ROCM_CUDA_SCORE": "$rocm_cuda_score",
+                  "GFXARCH": "$gfxarch",
+                  "ROCM_VERSION": "$rocm_version",
+                  "ROCM_ACTUAL_TESTCOUNT": "$rocm_actual_testcount",
+                  "ROCM_SCORE": "$rocm_score",
+                  "NVARCH": "$nvarch",
+                  "CUDA_VERSION": "$cuda_version",
+                  "CUDA_ACTUAL_TESTCOUNT": "$cuda_actual_testcount",
+                  "CUDA_SCORE": "$cuda_score",
+                  "VERSION_DETAILS": "$version_details",
+                  "ROCM_CUDA_SCORE_DETAILS": "$rocm_cuda_score_details",
+                  "ROCM_SCORE_DETAILS": "$rocm_score_details",
+                  "CUDA_SCORE_DETAILS": "$cuda_score_details"
+                }
+                EOF
+                    )
 
-                # Print the JSON string to the logs
-                echo "Generated JSON: $JSON_STRING"
-
-                # Optionally set the JSON string as an output for further use in other steps
-                echo "json_string=$JSON_STRING" >> $GITHUB_ENV
-
-            - name: Use the JSON string
-              run: |
-                # Access the JSON string from the environment variable
-                echo "Using JSON string from the environment variable: ${{ env.json_string }}"
+                # Print the json string to logs
+                echo " Generated JSON:  $JSON_STRING"
