@@ -3,34 +3,18 @@
 name: Process JSON Input
 
 on:
-    workflow_dispatch:
-        inputs:
-            NAME:
-                description: "Enter the json input as string"
-                required: true
-                default: 'john'
-
+  workflow_dispatch:
+    
 jobs:
-    create-json:
-        runs-on: ubuntu-latest
+  create-json:
+    runs-on: ubuntu-latest
 
-        steps:
-            - name: Generate Json string
-              id: generate_json
-              run: |
-                # get the input value
-                name="${{ github.event.inputs.NAME }}"
+    steps:
+      - name: Read and process sample json file
+        run: |
+          # sample json file loading
+          JSON_FILE='sample.json'
 
-                # Create a JSON string with the default format
-                JSON_STRING="{\"NAME \": \"$name\"}"
-
-                # Print the JSON string to the logs
-                echo "Generated JSON: $JSON_STRING"
-
-                # Optionally set the JSON string as an output for further use in other steps
-                echo "json_string=$JSON_STRING" >> $GITHUB_ENV
-
-            - name: Use the JSON string
-              run: |
-                # Access the JSON string from the environment variable
-                echo "Using JSON string from the environment variable: ${{ env.json_string }}"
+          # read the sample json and ouput it
+          JSON_STRING=$(cat $JSON_FILE)
+          echo "Read JSOn: $JSON_STRING"
