@@ -10,11 +10,11 @@ on:
       COMPONENT_VERSION:
         description: 'Enter the component:"", and version: "", '
         required: true
-        default: '{}'
+        default: '{"component" : "Pytorch", "version" : "latest"}'
       REPO_COMMITHASH:
         description: 'Enter the repo:"", and commithas: "", '
         required: true
-        default: ''
+        default: '{"repo" : "https://github.com/pytorch", "commithash" : "4eee2e7a6dfbd9caab6a1e59088744ae91f2aa25"}'
       AISW_TEST_TARGET_GOAL:
         description: "Enter the AISW test target goal"
         required: true
