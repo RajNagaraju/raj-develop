@@ -28,13 +28,13 @@ on:
         required: true
         default: '0.00'
       ROCM_DETAILS:
-        description: "Enter the ROCm-CUDA score"
+        description: "Enter json format details ROCM_CUDA_SCORE:, GFXARCH:, ROCM_VERISON:, ROCM_ACTUAL_TESTCOUNT:, ROCM_SCORE: "
         required: true
-        default: '{ROCM_CUDA_SCORE:"", GFXARCH:"", ROCM_VERISON:"", ROCM_ACTUAL_TESTCOUNT:"", ROCM_SCORE:""}'
+        default: '{}'
       NV_DETAILS:
-        description: "Enter the NVIDIA architecture"
+        description: "Enter json fromat details NVARCH:, CUDA_VERSION:, CUDA_ACTUAL_TESTCOUNT:, CUDA_SCORE:"
         required: true
-        default: '{NVARCH:"", CUDA_VERSION:"", CUDA_ACTUAL_TESTCOUNT:"", CUDA_SCORE:"" }'
+        default: '{}'
 
 jobs:
   process-json:
@@ -74,6 +74,7 @@ jobs:
           cuda_score=$(echo "$JSON_STRING" | jq -r '.cuda_score')
           
           # Print extracted values to logs
+          echo "Schema_version: $schema_version"
           echo "Submit Date: $submit_date"
           echo "Component: $component"
           echo "Version: $version"
