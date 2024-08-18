@@ -30,16 +30,10 @@ jobs:
             # Split each pair by colon
             IFS=':' read -r key value <<< "$pair"
 
-            # Trim whitespace from key and value
-            key=$(echo "$key" | xargs)
-            value=$(echo "$value" | xargs)
-
             # Append to the JSON string
             json_string+="\"$key\": \"$value\", "
           done
 
-          # Remove the trailing comma and space, and close the JSON string
-          json_string=$(echo "$json_string" | sed 's/, $//')
           json_string+="}"
 
           # Print the constructed JSON string
