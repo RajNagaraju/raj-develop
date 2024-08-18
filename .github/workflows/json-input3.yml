@@ -78,9 +78,10 @@ jobs:
           rocm_cuda_score_details='${{ github.event.inputs.ROCM_CUDA_SCORE_DETAILS }}' >> file1.txt
           rocm_score_details='${{ github.event.inputs.ROCM_SCORE_DETAILS }}' >> file1.txt
           cuda_score_details='${{ github.event.inputs.CUDA_SCORE_DETAILS }}' >> file1.txt
-
-          # reading file1.txt
-          $(cat file1.txt)
+          
+      - name: Read and print file contents
+        run: |
+          cat file1.txt
 
           # Print extracted values to logs
           # echo "Schema_version: $schema_version" >> file1.txt
