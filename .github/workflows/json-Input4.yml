@@ -83,24 +83,29 @@ jobs:
           cuda_score_details='${{ github.event.inputs.CUDA_SCORE_DETAILS }}'
 
           # Split component_version by "/"
-          #IFS='/' read -r component version <<< "$component_version"
+          IFS='/' read -r component version <<< "$component_version"
+          IFS='/' read -r rocm_cuda_score gfxarch rocm_version rocm_actual_testcount rocm_actual_testcount <<< "$rocm_details"
 
           #Split repo_commithash by "/commit "
           repo=$(echo "$repo_commithash" | awk -F '/commit/' '{print $1}')
           commithash=$(echo "$repo_commithash" | awk -F '/commit/' '{print $2}')
 
-          # Check results before trimming
-          echo "Debug Repo: $repo"
-          echo "Debug CommitHash: $commithash"
-
           # Removing if any white space
-          #component=$(echo "$component" | sed 's/[[:space:]]//g' )
-          #version=$(echo "$version" | sed 's/[[:space:]]//g' )
+          component=$(echo "$component" | sed 's/[[:space:]]//g' )
+          version=$(echo "$version" | sed 's/[[:space:]]//g' )
           repo=$(echo "$repo" | sed 's/[[:space:]]//g')
           commithash=$(echo "$commithash" | sed 's/[[:space:]]//g')
           
           # Print the split values to logs
-          #echo "Component: $component"
-          #echo "Version: $version"
-          echo "Repo : $repo"
-          echo "CommitHash: $commithash"
+          echo '"schema_version": "$schema_version"'
+          echo '"submit_date": "$submit_date"'
+          echo "component: $component"
+          echo "version: $version"
+          echo "repo : $repo"
+          echo "commitHash: $commithash"
+          echo "aisw_test_target_goal: $aisw_test_target_goal"
+          echo "rocm_cuda_score: $rocm_cuda_score"
+          echo "gfxarch: $gfxarch"
+          echo "rocm_version: $rocm_version"
+          echo "rocm_actual_testcount: $rocm_actual_testcount"
+          echo "$rocm_score: $rocm_score"
