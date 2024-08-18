@@ -80,28 +80,17 @@ jobs:
           cuda_score_details='${{ github.event.inputs.CUDA_SCORE_DETAILS }}'
 
           # Print extracted values to logs
-          echo "Schema_version: $schema_version"
-          echo "Submit Date: $submit_date"
-          echo "Component_version: $component_version"
-          echo "Component: $component"
-          echo "Version: $version"
-          echo "Repo: $repo"
-          echo "Commit Hash: $commithash"
+          echo "Schema_version: $schema_version" >> file1.txt
+          echo "Submit Date: $submit_date" >> file1.txt
+          echo "Component_version: $component_version" >> file1.txt
           echo "Repo_Commithash: $repo_commithash"
-          echo "AISW Test Target Goal: $aisw_test_target_goal"
-          echo "ROCm CUDA Score: $rocm_details"
-          echo "ROCm CUDA Score: $rocm_cuda_score"
-          echo "GFXARCH: $gfxarch"
-          echo "ROCm Version: $rocm_version"
-          echo "ROCm Actual Test Count: $rocm_actual_testcount"
-          echo "ROCm Score: $rocm_score"
-          echo "Nvida: $nvidia_details"
-          echo "NVARCH: $nvarch"
-          echo "CUDA Version: $cuda_version"
-          echo "CUDA Actual Test Count: $cuda_actual_testcount"
-          echo "CUDA Score: $cuda_score"
-          echo "Version_details: $version_details"
-          echo "Rocm_cuda_score_details: $rocm_cuda_score_details"
-          echo "Rocm_score_details: $rocm_score_details"
-          echo "Cuda_score_details: $cuda_score_details"
+          echo "AISW Test Target Goal: $aisw_test_target_goal" >> file1.txt
+          echo "ROCm CUDA Score: $rocm_details" >> file1.txt
+          echo "Nvida: $nvidia_details" >> file1.txt
+          echo "Version_details: $version_details" >> file1.txt
+          echo "Rocm_cuda_score_details: $rocm_cuda_score_details" >> file1.txt
+          echo "Rocm_score_details: $rocm_score_details" >> file1.txt
+          echo "Cuda_score_details: $cuda_score_details" >> file1.txt
+
+          cat $file1.txt
           
