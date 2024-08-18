@@ -70,17 +70,17 @@ jobs:
         run: |
 
           # convert input values to json
-          schema_version="${{ env.SCHEMA_VERSION }}" >> file1.txt
-          submit_date="${{ github.event.inputs.SUBMIT_DATE }}" >> file1.txt
-          component_version="${{ github.event.inputs.COMPONENT_VERSION }}" >> file1.txt
-          repo_commithash="${{ github.event.inputs.REPO_COMMITHASH }}" >> file1.txt
-          aisw_test_target_goal="${{ github.event.inputs.AISW_TEST_TARGET_GOAL }}" >> file1.txt
-          rocm_details="${{ github.event.inputs.ROCM_DETAILS }}" >> file1.txt
-          nvidia_details="${{ github.event.inputs.NV_DETAILS }}" >> file1.txt
-          version_details='${{ github.event.inputs.VERSION_DETAILS }}' >> file1.txt
-          rocm_cuda_score_details='${{ github.event.inputs.ROCM_CUDA_SCORE_DETAILS }}' >> file1.txt
-          rocm_score_details='${{ github.event.inputs.ROCM_SCORE_DETAILS }}' >> file1.txt
-          cuda_score_details='${{ github.event.inputs.CUDA_SCORE_DETAILS }}' >> file1.txt
+          echo "schema_version=${{ env.SCHEMA_VERSION }}" >> file1.txt
+          echo "submit_date=${{ github.event.inputs.SUBMIT_DATE }}" >> file1.txt
+          echo "component_version=${{ github.event.inputs.COMPONENT_VERSION }}" >> file1.txt
+          echo "repo_commithash=${{ github.event.inputs.REPO_COMMITHASH }}" >> file1.txt
+          echo "aisw_test_target_goal=${{ github.event.inputs.AISW_TEST_TARGET_GOAL }}" >> file1.txt
+          echo "rocm_details=${{ github.event.inputs.ROCM_DETAILS }}" >> file1.txt
+          echo "nvidia_details=${{ github.event.inputs.NV_DETAILS }}" >> file1.txt
+          echo "version_details=${{ github.event.inputs.VERSION_DETAILS }}" >> file1.txt
+          echo "rocm_cuda_score_details=${{ github.event.inputs.ROCM_CUDA_SCORE_DETAILS }}" >> file1.txt
+          echo "rocm_score_details=${{ github.event.inputs.ROCM_SCORE_DETAILS }}" >> file1.txt
+          echo "cuda_score_details=${{ github.event.inputs.CUDA_SCORE_DETAILS }}" >> file1.txt
           
       - name: Read and print file contents
         run: |
