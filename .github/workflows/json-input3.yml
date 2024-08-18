@@ -1,0 +1,94 @@
+name: JSON INPUT
+
+on:
+  workflow_dispatch:
+    inputs:
+      SUBMIT_DATE:
+        description: "Enter the submit date (YYYY-MM-DDTHH:MM:SS)"
+        required: true
+        default: '2024-08-16'
+        type: string
+      # parse string to json string as component: pytorch, version: 1.2
+      COMPONENT_VERSION:
+        description: 'Enter the component/version'
+        required: true
+        default: 'pytorch/latest'
+        type: string
+      #split this url string to two json objects repo:https:github.com/plan commithash:  
+      REPO_COMMITHASH:
+        description: 'Enter repo URL Commit and split into two parts url and commit id'
+        required: true
+        default: 'https://github.com/pytorch/pytorch/commit/4eee2e7a6dfbd9caab6a1e59088744ae91f2aa25'
+        type: string
+      AISW_TEST_TARGET_GOAL:
+        description: "Enter the AISW test target goal"
+        required: true
+        default: '65785'
+        type: string
+      ROCM_DETAILS:
+        description: "Enter rocm_cuda_score/gfxarch/rocm_version/rocm_actual_testcount/rocm_score/"
+        required: true
+        default: '96.5/mi210/6.2/5545/98.6'
+        type: string
+      NV_DETAILS:
+        description: "Enter string nvarch/cuda_version/cuda_actual_testcount/cuda_score"
+        required: true
+        default: 'a100/12.1/5678/98.6'
+      VERSION_DETAILS:
+        description: "Enter json format string key:value key1:value1"
+        required: true
+        default: 'mkl:2024.1/python:3.8'
+        type: string
+      ROCM_CUDA_SCORE_DETAILS:
+        description: "Enter the ROCm-CUDA score details "
+        required: true
+        default: 'comment:additinal/string'
+        type: string
+      ROCM_SCORE_DETAILS:
+        description: "Enter the ROCm score details"
+        required: true
+        default: 'comment:additinal/string'
+        type: string
+      CUDA_SCORE_DETAILS:
+        description: "Enter the CUDA score details"
+        required: true
+        default: 'comment:additinal/string'
+        type: string
+
+jobs:
+  process-json:
+    runs-on: ubuntu-latest
+
+    env:
+      SCHEMA_VERSION: "V4"
+
+    steps:
+      - name: Parse JSON Input
+        run: |
+
+          # convert input values to json
+          schema_version="${{ env.SCHEMA_VERSION }}"
+          submit_date="${{ github.event.inputs.SUBMIT_DATE }}"
+          component_version="${{ github.event.inputs.COMPONENT_VERSION }}"
+          repo_commithash="${{ github.event.inputs.REPO_COMMITHASH }}"
+          aisw_test_target_goal="${{ github.event.inputs.AISW_TEST_TARGET_GOAL }}"
+          rocm_details="${{ github.event.inputs.ROCM_DETAILS }}"
+          nvidia_details="${{ github.event.inputs.NV_DETAILS }}"
+          version_details='${{ github.event.inputs.VERSION_DETAILS }}'
+          rocm_cuda_score_details='${{ github.event.inputs.ROCM_CUDA_SCORE_DETAILS }}'
+          rocm_score_details='${{ github.event.inputs.ROCM_SCORE_DETAILS }}'
+          cuda_score_details='${{ github.event.inputs.CUDA_SCORE_DETAILS }}'
+
+          # Print extracted values to logs
+          echo "Schema_version: $schema_version"
+          echo "Submit Date: $submit_date"
+          echo "Component_version: $component_version"
+          echo "Repo_Commithash: $repo_commithash"
+          echo "AISW Test Target Goal: $aisw_test_target_goal"
+          echo "ROCm CUDA Score: $rocm_details"
+          echo "Nvida: $nvdia_details"
+          echo "Version_details: $version_details"
+          echo "Rocm_cuda_score_details: $rocm_cuda_score_details"
+          echo "Rocm_score_details: $rocm_score_details"
+          echo "Cuda_score_details: $cuda_score_details"
+          
