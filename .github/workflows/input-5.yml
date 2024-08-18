@@ -34,6 +34,8 @@ jobs:
             json_string+="\"$key\": \"$value\", "
           done
 
+          # Remove the trailing comma and space, and close the JSON string
+          json_string=$(echo "$json_string" | sed 's/, $//')
           json_string+="}"
 
           # Print the constructed JSON string
