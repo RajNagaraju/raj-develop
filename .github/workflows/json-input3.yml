@@ -67,30 +67,33 @@ jobs:
         run: |
 
           # convert input values to json
-          schema_version="${{ env.SCHEMA_VERSION }}"
-          submit_date="${{ github.event.inputs.SUBMIT_DATE }}"
-          component_version="${{ github.event.inputs.COMPONENT_VERSION }}"
-          repo_commithash="${{ github.event.inputs.REPO_COMMITHASH }}"
-          aisw_test_target_goal="${{ github.event.inputs.AISW_TEST_TARGET_GOAL }}"
-          rocm_details="${{ github.event.inputs.ROCM_DETAILS }}"
-          nvidia_details="${{ github.event.inputs.NV_DETAILS }}"
-          version_details='${{ github.event.inputs.VERSION_DETAILS }}'
-          rocm_cuda_score_details='${{ github.event.inputs.ROCM_CUDA_SCORE_DETAILS }}'
-          rocm_score_details='${{ github.event.inputs.ROCM_SCORE_DETAILS }}'
-          cuda_score_details='${{ github.event.inputs.CUDA_SCORE_DETAILS }}'
+          schema_version="${{ env.SCHEMA_VERSION }}" >> file1.txt
+          submit_date="${{ github.event.inputs.SUBMIT_DATE }}" >> file1.txt
+          component_version="${{ github.event.inputs.COMPONENT_VERSION }}" >> file1.txt
+          repo_commithash="${{ github.event.inputs.REPO_COMMITHASH }}" >> file1.txt
+          aisw_test_target_goal="${{ github.event.inputs.AISW_TEST_TARGET_GOAL }}" >> file1.txt
+          rocm_details="${{ github.event.inputs.ROCM_DETAILS }}" >> file1.txt
+          nvidia_details="${{ github.event.inputs.NV_DETAILS }}" >> file1.txt
+          version_details='${{ github.event.inputs.VERSION_DETAILS }}' >> file1.txt
+          rocm_cuda_score_details='${{ github.event.inputs.ROCM_CUDA_SCORE_DETAILS }}' >> file1.txt
+          rocm_score_details='${{ github.event.inputs.ROCM_SCORE_DETAILS }}' >> file1.txt
+          cuda_score_details='${{ github.event.inputs.CUDA_SCORE_DETAILS }}' >> file1.txt
+
+          # reading file1.txt
+          $(cat file1.txt)
 
           # Print extracted values to logs
-          echo "Schema_version: $schema_version" >> file1.txt
-          echo "Submit Date: $submit_date" >> file1.txt
-          echo "Component_version: $component_version" >> file1.txt
-          echo "Repo_Commithash: $repo_commithash"
-          echo "AISW Test Target Goal: $aisw_test_target_goal" >> file1.txt
-          echo "ROCm CUDA Score: $rocm_details" >> file1.txt
-          echo "Nvida: $nvidia_details" >> file1.txt
-          echo "Version_details: $version_details" >> file1.txt
-          echo "Rocm_cuda_score_details: $rocm_cuda_score_details" >> file1.txt
-          echo "Rocm_score_details: $rocm_score_details" >> file1.txt
-          echo "Cuda_score_details: $cuda_score_details" >> file1.txt
+          # echo "Schema_version: $schema_version" >> file1.txt
+          # echo "Submit Date: $submit_date" >> file1.txt
+          # echo "Component_version: $component_version" >> file1.txt
+          # echo "Repo_Commithash: $repo_commithash"
+          # echo "AISW Test Target Goal: $aisw_test_target_goal" >> file1.txt
+          #echo "ROCm CUDA Score: $rocm_details" >> file1.txt
+          #echo "Nvida: $nvidia_details" >> file1.txt
+          #echo "Version_details: $version_details" >> file1.txt
+          #echo "Rocm_cuda_score_details: $rocm_cuda_score_details" >> file1.txt
+          #echo "Rocm_score_details: $rocm_score_details" >> file1.txt
+          #echo "Cuda_score_details: $cuda_score_details" >> file1.txt
 
-          cat $file1.txt
+          
           
