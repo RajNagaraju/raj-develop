@@ -69,16 +69,33 @@ jobs:
       - name: Split input string
         run: |
 
-          # Retrieve the input parameter
-          input1="${{ github.event.inputs.COMPONENT_VERSION }}"
+          # Retrieve the input parameters
+          schema_version="${{ env.SCHEMA_VERSION }}"
+          submit_date="${{ github.event.inputs.SUBMIT_DATE }}"
+          component_version="${{ github.event.inputs.COMPONENT_VERSION }}"
+          repo_commithash="${{ github.event.inputs.REPO_COMMITHASH }}"
+          aisw_test_target_goal="${{ github.event.inputs.AISW_TEST_TARGET_GOAL }}"
+          rocm_details="${{ github.event.inputs.ROCM_DETAILS }}"
+          nvidia_details="${{ github.event.inputs.NV_DETAILS }}"
+          version_details='${{ github.event.inputs.VERSION_DETAILS }}'
+          rocm_cuda_score_details='${{ github.event.inputs.ROCM_CUDA_SCORE_DETAILS }}'
+          rocm_score_details='${{ github.event.inputs.ROCM_SCORE_DETAILS }}'
+          cuda_score_details='${{ github.event.inputs.CUDA_SCORE_DETAILS }}'
 
-          # Split input value
-          IFS='/' read -r component version <<< "$input1"
+          # Split component_version by "/"
+          IFS='/' read -r component version <<< "$component_version"
+
+          #Split repo_commithash by "/commit "
+          IFS='/commit/' read -r repo commithash <<< "$repo_commithash"
 
           # Removing if any white space
           component=$(echo "$component" | sed 's/[[:space:]]//g' )
           version=$(echo "$version" | sed 's/[[:space:]]//g' )
+          repo=$(echo "$repo" | sed 's/[[:space:]]//g' )
+          commithash=$(echo "$commithash" | sed 's/[[:space:]]//g' )
 
           # Print the split values to logs
           echo "Component: $component"
           echo "Version: $version"
+          echo "Repo : $repo"
+          echo "CommitHash: $commithash"
