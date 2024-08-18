@@ -90,7 +90,7 @@ jobs:
           commithash=$(echo "$repo_commithash" | awk -F '/commit/' '{print $2}')
 
           # COnstruct json string
-          version_details_string="{${github.event.inputs.VERSION_DETAILS}}"
+          version_details_string="{${version_details}}"
           
           #Printing the User Input
           echo "\"schema_version\": \"$schema_version\""
