@@ -96,7 +96,7 @@ jobs:
           echo "ROCm Actual Test Count: $rocm_actual_testcount"
           echo "ROCm Score: $rocm_score"
           echo "Nvida: $nvidia_details"
-          echo "NVARCH: $nvarch
+          echo "NVARCH: $nvarch"
           echo "CUDA Version: $cuda_version"
           echo "CUDA Actual Test Count: $cuda_actual_testcount"
           echo "CUDA Score: $cuda_score"
