@@ -92,7 +92,7 @@ jobs:
           component=$(echo "$component" | sed 's/[[:space:]]//g' )
           version=$(echo "$version" | sed 's/[[:space:]]//g' )
           repo=$(echo "$repo")
-          commithash=$(echo "$commithash" | sed 's/[[:space:]]//g' )
+          commithash=$(echo "$commithash")
 
           # Print the split values to logs
           echo "Component: $component"
