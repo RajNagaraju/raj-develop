@@ -84,13 +84,16 @@ jobs:
           IFS='/' read -r component version <<< "$component_version"
           IFS='/' read -r rocm_cuda_score gfxarch rocm_version rocm_actual_testcount rocm_score <<< "$rocm_details"
           IFS='/' read -r nvarch cuda_version cuda_actual_testcount cuda_score <<< "$nvidia_details"
+          IFS=':' read -r key value <<< "$version_details"
+          IFS=':' read -r key1 value1 <<< "$version_details"
+        
 
           #Split repo_commithash by "/commit "
           repo=$(echo "$repo_commithash" | awk -F '/commit/' '{print $1}')
           commithash=$(echo "$repo_commithash" | awk -F '/commit/' '{print $2}')
 
           # COnstruct json string
-          version_details_string="{${version_details}}"
+          version_details_string="{\"$key\":\"$value\"}"
           
           #Printing the User Input
           echo "\"schema_version\": \"$schema_version\""
