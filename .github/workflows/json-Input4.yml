@@ -88,6 +88,10 @@ jobs:
           #Split repo_commithash by "/commit "
           IFS='/commit/' read -r repo commithash <<< "$repo_commithash"
 
+          # Check results before trimming
+          echo "Debug Repo: $repo"
+          echo "Debug CommitHash: $commithash"
+
           # Removing if any white space
           #component=$(echo "$component" | sed 's/[[:space:]]//g' )
           #version=$(echo "$version" | sed 's/[[:space:]]//g' )
