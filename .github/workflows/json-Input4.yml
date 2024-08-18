@@ -35,12 +35,12 @@ on:
       VERSION_DETAILS:
         description: "Enter key:value/key2:value2"
         required: true
-        default: 'mkl:2024.1/python:3.8'
+        default: 'mkl:2024.1, python:3.8'
         type: string
       ROCM_CUDA_SCORE_DETAILS:
         description: "Enter the ROCm-CUDA score details "
         required: true
-        default: 'comment:additinal/string'
+        default: 'comment:additinal:string'
         type: string
       ROCM_SCORE_DETAILS:
         description: "Enter the ROCm score details"
@@ -84,16 +84,33 @@ jobs:
           IFS='/' read -r component version <<< "$component_version"
           IFS='/' read -r rocm_cuda_score gfxarch rocm_version rocm_actual_testcount rocm_score <<< "$rocm_details"
           IFS='/' read -r nvarch cuda_version cuda_actual_testcount cuda_score <<< "$nvidia_details"
-          IFS=':' read -r key value <<< "$version_details"
-          IFS=':' read -r key1 value1 <<< "$version_details"
-        
+          IFS=':' read -r key value <<< "$rocm_cuda_score_details"
+
+          #construct json string for rocm_cuda-score_details
+          rocm_cuda_score_details="{\"$key\":\"$value\"}"
 
           #Split repo_commithash by "/commit "
           repo=$(echo "$repo_commithash" | awk -F '/commit/' '{print $1}')
           commithash=$(echo "$repo_commithash" | awk -F '/commit/' '{print $2}')
 
-          # COnstruct json string
-          version_details_string="{\"$key\":\"$value\"}"
+          # Initialize the JSON string
+          json_string="{"
+
+          # Split the input string by commas
+          IFS=',' read -r -a pairs <<< "$version_details"
+
+          # Loop through the key-value pairs
+          for pair in "${pairs[@]}"; do
+            # Split each pair by colon
+            IFS=':' read -r key value <<< "$pair"
+
+            # Append to the JSON string
+            json_string+="\"$key\": \"$value\", "
+          done
+
+          # Remove the trailing comma and space, and close the JSON string
+          json_string=$(echo "$json_string" | sed 's/, $//')
+          json_string+="}"
           
           #Printing the User Input
           echo "\"schema_version\": \"$schema_version\""
@@ -112,6 +129,5 @@ jobs:
           echo "\"cuda_version\": \"$cuda_version\""
           echo "\"cuda_actual_testcountt\": \"$cuda_actual_testcount\""
           echo "\"cuda_score\": \"$cuda_score\""
-          echo "\"version_details\" : \"$version_details_string\""
-          echo "key: $key"
-          echo "value: $value"
+          echo "\"version_details\" : $json_string
+          echo "\"rocm_cuda_score_details\": $rocm_cuda_score_details"
