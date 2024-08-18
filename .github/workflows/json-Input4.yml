@@ -8,15 +8,13 @@ on:
         required: true
         default: '2024-08-16'
         type: string
-      # parse string to json string as component: pytorch, version: 1.2
       COMPONENT_VERSION:
         description: 'Enter the component/version'
         required: true
         default: 'pytorch/latest'
-        type: string
-      #split this url string to two json objects repo:https:github.com/plan commithash:  
+        type: string 
       REPO_COMMITHASH:
-        description: 'Enter repo URL Commit and split into two parts url and commit id'
+        description: 'Enter repo URL with commithash'
         required: true
         default: 'https://github.com/pytorch/pytorch/commit/4eee2e7a6dfbd9caab6a1e59088744ae91f2aa25'
         type: string
@@ -35,7 +33,7 @@ on:
         required: true
         default: 'a100/12.1/5678/98.6'
       VERSION_DETAILS:
-        description: "Enter json format string key:value key1:value1"
+        description: "Enter key:value/key2:value2"
         required: true
         default: 'mkl:2024.1/python:3.8'
         type: string
@@ -90,14 +88,10 @@ jobs:
           #Split repo_commithash by "/commit "
           repo=$(echo "$repo_commithash" | awk -F '/commit/' '{print $1}')
           commithash=$(echo "$repo_commithash" | awk -F '/commit/' '{print $2}')
-
-          # Removing if any white space
-          component=$(echo "$component" | sed 's/[[:space:]]//g' )
-          version=$(echo "$version" | sed 's/[[:space:]]//g' )
-          repo=$(echo "$repo" | sed 's/[[:space:]]//g')
-          commithash=$(echo "$commithash" | sed 's/[[:space:]]//g')
           
-          # Print the split values to logs
+      - name: Print the JSON DATA
+        run: |
+          #Printing the User Input
           echo "\"schema_version\": \"$schema_version\""
           echo "\"submit_date\": \"$submit_date\""
           echo "\"component\": \"$component\""
