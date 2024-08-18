@@ -64,7 +64,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v4
         
-      - name: Split input string
+      - name: Split input string & Print JSON data
         run: |
 
           # Retrieve the input parameters
@@ -75,7 +75,7 @@ jobs:
           aisw_test_target_goal="${{ github.event.inputs.AISW_TEST_TARGET_GOAL }}"
           rocm_details="${{ github.event.inputs.ROCM_DETAILS }}"
           nvidia_details="${{ github.event.inputs.NV_DETAILS }}"
-          version_details='${{ github.event.inputs.VERSION_DETAILS }}'
+          version_details="${{ github.event.inputs.VERSION_DETAILS }}"
           rocm_cuda_score_details='${{ github.event.inputs.ROCM_CUDA_SCORE_DETAILS }}'
           rocm_score_details='${{ github.event.inputs.ROCM_SCORE_DETAILS }}'
           cuda_score_details='${{ github.event.inputs.CUDA_SCORE_DETAILS }}'
@@ -88,9 +88,10 @@ jobs:
           #Split repo_commithash by "/commit "
           repo=$(echo "$repo_commithash" | awk -F '/commit/' '{print $1}')
           commithash=$(echo "$repo_commithash" | awk -F '/commit/' '{print $2}')
+
+          # COnstruct json string
+          version_details_string="{${github.event.inputs.VERSION_DETAILS}}"
           
-      - name: Print the JSON DATA
-        run: |
           #Printing the User Input
           echo "\"schema_version\": \"$schema_version\""
           echo "\"submit_date\": \"$submit_date\""
@@ -108,3 +109,4 @@ jobs:
           echo "\"cuda_version\": \"$cuda_version\""
           echo "\"cuda_actual_testcountt\": \"$cuda_actual_testcount\""
           echo "\"cuda_score\": \"$cuda_score\""
+          echo "\"version_details\" : \"$version_details_string\""
