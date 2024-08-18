@@ -86,7 +86,7 @@ jobs:
           IFS='/' read -r component version <<< "$component_version"
 
           #Split repo_commithash by "/commit "
-          IFS='/commit/' read -r repo commithash <<< "$repo_commithash"
+          IFS='/commit' read -r repo commithash <<< "$repo_commithash"
 
           # Removing if any white space
           component=$(echo "$component" | sed 's/[[:space:]]//g' )
