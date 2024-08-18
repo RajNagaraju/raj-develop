@@ -129,5 +129,5 @@ jobs:
           echo "\"cuda_version\": \"$cuda_version\""
           echo "\"cuda_actual_testcountt\": \"$cuda_actual_testcount\""
           echo "\"cuda_score\": \"$cuda_score\""
-          echo "\"version_details\" : $json_string
+          echo "\"version_details\" : $json_string"
           echo "\"rocm_cuda_score_details\": $rocm_cuda_score_details"
