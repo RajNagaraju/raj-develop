@@ -84,7 +84,8 @@ jobs:
 
           # Split component_version by "/"
           IFS='/' read -r component version <<< "$component_version"
-          IFS='/' read -r rocm_cuda_score gfxarch rocm_version rocm_actual_testcount rocm_actual_testcount <<< "$rocm_details"
+          IFS='/' read -r rocm_cuda_score gfxarch rocm_version rocm_actual_testcount rocm_score <<< "$rocm_details"
+          IFS='/' read -r nvarch cuda_version cuda_actual_testcount cuda_score <<< "$nvidia_details"
 
           #Split repo_commithash by "/commit "
           repo=$(echo "$repo_commithash" | awk -F '/commit/' '{print $1}')
@@ -97,9 +98,9 @@ jobs:
           commithash=$(echo "$commithash" | sed 's/[[:space:]]//g')
           
           # Print the split values to logs
-          echo '"schema_version": "$schema_version"'
-          echo '"submit_date": "$submit_date"'
-          echo "component: $component"
+          echo '"schema_version": "($schema_version)"'
+          echo '"submit_date": $submit_date'
+          echo ""component": "$component""
           echo "version: $version"
           echo "repo : $repo"
           echo "commitHash: $commithash"
@@ -108,4 +109,8 @@ jobs:
           echo "gfxarch: $gfxarch"
           echo "rocm_version: $rocm_version"
           echo "rocm_actual_testcount: $rocm_actual_testcount"
-          echo "$rocm_score: $rocm_score"
+          echo "rocm_score: $rocm_score"
+          echo "nvarch: $nvarch"
+          echo "cuda_version: $cuda_version"
+          echo "cuda_actual_testcountt: $cuda_actual_testcount"
+          echo "cuda_score: $cuda_score"
