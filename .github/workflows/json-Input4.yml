@@ -113,3 +113,5 @@ jobs:
           echo "\"cuda_actual_testcountt\": \"$cuda_actual_testcount\""
           echo "\"cuda_score\": \"$cuda_score\""
           echo "\"version_details\" : \"$version_details_string\""
+          echo "key: $key"
+          echo "value: $value"
