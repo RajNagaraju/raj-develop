@@ -86,7 +86,8 @@ jobs:
           #IFS='/' read -r component version <<< "$component_version"
 
           #Split repo_commithash by "/commit "
-          IFS='commit' read -r repo commithash <<< "$repo_commithash"
+          repo=$(echo "$repo_commithash" | awk -F '/commit/' '{print $1}')
+          commithash=$(echo "$repo_commithash" | awk -F '/commit/' '{print $2}')
 
           # Check results before trimming
           echo "Debug Repo: $repo"
