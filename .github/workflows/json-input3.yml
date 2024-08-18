@@ -70,9 +70,9 @@ jobs:
         run: |
 
           # convert input values to json
-          echo "schema_version: "${{ env.SCHEMA_VERSION }}"" >> file1.txt
-          echo "submit_date: "${{ github.event.inputs.SUBMIT_DATE }}"" >> file1.txt
-          echo "component_version: "${{ github.event.inputs.COMPONENT_VERSION }}"" >> file1.txt
+          echo "schema_version: ${{ env.SCHEMA_VERSION }}" >> file1.txt
+          echo "submit_date: ${{ github.event.inputs.SUBMIT_DATE }}" >> file1.txt
+          echo "component_version: ${{ github.event.inputs.COMPONENT_VERSION }}" >> file1.txt
           echo "repo_commithash: ${{ github.event.inputs.REPO_COMMITHASH }}" >> file1.txt
           echo "aisw_test_target_goal: ${{ github.event.inputs.AISW_TEST_TARGET_GOAL }}" >> file1.txt
           echo "rocm_details: ${{ github.event.inputs.ROCM_DETAILS }}" >> file1.txt
@@ -85,19 +85,6 @@ jobs:
       - name: Read and print file contents
         run: |
           cat file1.txt
-
-          # Print extracted values to logs
-          # echo "Schema_version: $schema_version" >> file1.txt
-          # echo "Submit Date: $submit_date" >> file1.txt
-          # echo "Component_version: $component_version" >> file1.txt
-          # echo "Repo_Commithash: $repo_commithash"
-          # echo "AISW Test Target Goal: $aisw_test_target_goal" >> file1.txt
-          #echo "ROCm CUDA Score: $rocm_details" >> file1.txt
-          #echo "Nvida: $nvidia_details" >> file1.txt
-          #echo "Version_details: $version_details" >> file1.txt
-          #echo "Rocm_cuda_score_details: $rocm_cuda_score_details" >> file1.txt
-          #echo "Rocm_score_details: $rocm_score_details" >> file1.txt
-          #echo "Cuda_score_details: $cuda_score_details" >> file1.txt
 
           
           
