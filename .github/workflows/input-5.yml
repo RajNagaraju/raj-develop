@@ -91,7 +91,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: use gh CLI to submit PR
         run: |
-          gh pr create -B main -H auto-json-wf-branch --title 'github-action PR request for updating JSON file' --body 'github-action PR request for update json file'
+          gh pr create -B main -H $BRANCH_NAME --title 'github-action PR request for updating JSON file' --body 'github-action PR request for update JSON file'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # Remove repo
