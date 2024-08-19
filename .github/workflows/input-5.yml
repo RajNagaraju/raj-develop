@@ -21,10 +21,16 @@ jobs:
       - name: clean up repo if it exists
         run: |
           cd $GITHUB_WORKSPACE
-          pwd
-      - name: checkout a branch
-        run: git checkout -b auto-json-wf-branch main
+          rm -rf raj-develop
+          
+      - name: Generate Unique Branch Name
+        id: generate_branch
+        run: echo "BRANCH_NAME=auto-json-input-${{ github.run_id }}" >> $GITHUB_ENV
         
+      - name: Checkout Unique Branch
+        run: |
+          git checkout -b $BRANCH_NAME 
+          
       - name: Convert String to JSON
         run: |
           # Retrieve the input parameter
@@ -52,7 +58,7 @@ jobs:
           # Print the constructed JSON string
           json_data=$(cat <<EOF
           {
-                  Constructed JSON: $json_string
+                  "Constructed JSON": $json_string
           } 
           EOF
           )
