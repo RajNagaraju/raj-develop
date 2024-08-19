@@ -131,23 +131,26 @@ jobs:
           version_details_string+="}"
           
           #Printing the generated data
-          echo "\"schema_version\": \"$schema_version\""
-          echo "\"submit_date\": \"$submit_date\""
-          echo "\"component\": \"$component\""
-          echo "\"version\": \"$version\""
-          echo "\"repo\" : \"$repo\""
-          echo "\"commitHash\": \"$commithash\""
-          echo "\"aisw_test_target_goal\": \"$aisw_test_target_goal\""
-          echo "\"rocm_cuda_score\": \"$rocm_cuda_score\""
-          echo "\"gfxarch\": \"$gfxarch\""
-          echo "\"rocm_version\": \"$rocm_version\""
-          echo "\"rocm_actual_testcount\": \"$rocm_actual_testcount\""
-          echo "\"rocm_score\": \"$rocm_score\""
-          echo "\"nvarch\": \"$nvarch\""
-          echo "\"cuda_version\": \"$cuda_version\""
-          echo "\"cuda_actual_testcountt\": \"$cuda_actual_testcount\""
-          echo "\"cuda_score\": \"$cuda_score\""
-          echo "\"version_details\" : $version_details_string"
-          echo "\"rocm_cuda_score_details\": $rocm_cuda_score_details"
-          echo "\"rocm_score_details\": $rocm_score_detailss"
-          echo "\"cuda_score_details\": $cuda_score_details"
+          echo
+          "{
+             \"schema_version\": \"$schema_version\",
+             \"submit_date\": \"$submit_date\",
+             \"component\": \"$component\",
+             \"version\": \"$version\",
+             \"repo\" : \"$repo\",
+             \"commitHash\": \"$commithash\",
+             \"aisw_test_target_goal\": \"$aisw_test_target_goal\",
+             \"rocm_cuda_score\": \"$rocm_cuda_score\",
+             \"gfxarch\": \"$gfxarch\",
+             \"rocm_version\": \"$rocm_version\",
+             \"rocm_actual_testcount\": \"$rocm_actual_testcount\",
+             \"rocm_score\": \"$rocm_score\",
+             \"nvarch\": \"$nvarch\",
+             \"cuda_version\": \"$cuda_version\",
+             \"cuda_actual_testcountt\": \"$cuda_actual_testcount\",
+             \"cuda_score\": \"$cuda_score\",
+             \"version_details\" : $version_details_string",
+             \"rocm_cuda_score_details\": $rocm_cuda_score_details",
+             \"rocm_score_details\": $rocm_score_detailss",
+             \"cuda_score_details\": $cuda_score_details"
+          }"
