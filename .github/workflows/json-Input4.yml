@@ -185,11 +185,11 @@ jobs:
             echo "Component is 'pytorch' and version is 'latest'. Moving file to latest"
             
             # Copy the file to the target directory
-            cp "$FILE_PATH" "$LATEST_PATH/"
+            mv "$FILE_PATH" "$LATEST_PATH/"
           
           else
             echo "Component is not 'pytorch' or version is not 'latest'. Moving file to stable"
-            cp "$FILE_PATH" "$STABLE_PATH/"
+            mv "$FILE_PATH" "$STABLE_PATH/"
           fi
       
       - name: Verify File Move
@@ -216,7 +216,7 @@ jobs:
       - name: print branch
         run: git branch
       # Run git status
-      - name: git status to show new untracked archived files
+      - name: git status to show new untracked files
         run: git status
        # Run git status
       - name: git ls-files --others
