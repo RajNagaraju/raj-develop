@@ -76,13 +76,14 @@ jobs:
       # Run git status
       - name: git status to show new untracked archived files
         run: git status
+      - name: git ls-files --others
+        run: git ls-files --others --exclude-standard --full-name
       - name: git add untracked files
-        run: |
-          git add docker/sample.json
+        run: git add `git ls-files --others --exclude-standard --full-name`
       - name: git status
         run: git status
       - name: git commit
-        run: git commit -m "update json file"
+        run: git commit -am "update json file"
       - name: git push branch
         run: git push --set-upstream origin $BRANCH_NAME
       - name: gh disable prompt
