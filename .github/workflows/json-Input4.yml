@@ -10,7 +10,7 @@ on:
       SUBMIT_DATE:
         description: "Enter the submit date (YYYY-MM-DDTHH:MM:SS)"
         required: true
-        default: '2024-08-16'
+        default: '2024-08-19'
         type: string
       COMPONENT_VERSION:
         description: 'Enter the component/version'
@@ -65,6 +65,9 @@ jobs:
 
     # Define the set of steps or tasks executed by the job
     steps:
+      - name: checkout code
+        run: actions/checkout@v4
+        
       - name: Split input string & Print the data
         run: |
 
@@ -146,4 +149,4 @@ jobs:
                   "rocm_cuda_score_details": '"$rocm_cuda_score_details"',
                   "rocm_score_details": '"$rocm_score_details"',
                   "cuda_score_details": '"$cuda_score_details"'
-          }'
+          }' > docker/sample.json
