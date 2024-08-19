@@ -1,7 +1,11 @@
+# this job is taking string inputs from user and printing
 name: JSON INPUT 4 yaml
 
+# This controls when the workflow is run. Set on to workflow
 on:
+  # This allows workflow to be run manually from Actions tab
   workflow_dispatch:
+    # Retrieving inputs from the user
     inputs:
       SUBMIT_DATE:
         description: "Enter the submit date (YYYY-MM-DDTHH:MM:SS)"
@@ -24,47 +28,49 @@ on:
         default: '65785'
         type: string
       ROCM_DETAILS:
-        description: "Enter rocm_cuda_score/gfxarch/rocm_version/rocm_actual_testcount/rocm_score/"
+        description: "Enter details of rocm_cuda_score/gfxarch/rocm_version/rocm_actual_testcount/rocm_score"
         required: true
         default: '96.5/mi210/6.2/5545/98.6'
         type: string
       NV_DETAILS:
-        description: "Enter string nvarch/cuda_version/cuda_actual_testcount/cuda_score"
+        description: "Enter details of nvarch/cuda_version/cuda_actual_testcount/cuda_score"
         required: true
-        default: 'a100/12.1/5678/98.6'
+        default: 'a100/12.1/5678/99.6'
       VERSION_DETAILS:
-        description: "Enter key:value/key2:value2"
+        description: "Enter Version Details key:value,key2:value2"
         required: true
-        default: 'mkl:2024.1, python:3.8'
+        default: 'mkl:2024.1,python:3.8'
         type: string
       ROCM_CUDA_SCORE_DETAILS:
-        description: "Enter the ROCm-CUDA score details "
+        description: "Enter the ROCm-CUDA score details comment:Additinal explanation: string"
         required: true
-        default: 'comment : Additinal explanation: string'
+        default: 'comment:Additinal explanation: string'
         type: string
       ROCM_SCORE_DETAILS:
-        description: "Enter the ROCm score details"
+        description: "Enter the ROCm score details comment:Additional details about ROCm score: string"
         required: true
-        default: 'comment : Additional details about ROCm score: string'
+        default: 'comment:Additional details about ROCm score: string'
         type: string
       CUDA_SCORE_DETAILS:
-        description: "Enter the CUDA score details"
+        description: "Enter the CUDA score details comment:Additional details about CUDA score: string"
         required: true
-        default: 'comment : Additional details about CUDA score: string'
+        default: 'comment:Additional details about CUDA score: string'
         type: string
 
+# The jobs section defines jobs to run. Each job has completion status
 jobs:
+  # JSON Process job
   process-json:
+    # Specify the runner that the job will run on
     runs-on: ubuntu-latest
 
+    # environment variable for jobs/steps
     env:
       SCHEMA_VERSION: "V4"
 
+    # Define the set of steps or tasks executed by the job
     steps:
-      - name: checkout
-        uses: actions/checkout@v4
-        
-      - name: Split input string & Print JSON data
+      - name: Split input string & Print the data
         run: |
 
           # Retrieve the input parameters
@@ -80,7 +86,11 @@ jobs:
           rocm_score_details='${{ github.event.inputs.ROCM_SCORE_DETAILS }}'
           cuda_score_details='${{ github.event.inputs.CUDA_SCORE_DETAILS }}'
 
-          # Split component_version by "/"
+          # Split component_version by "/ and :"
+          # IFS used to split a string into variables based on a specified delimiter
+          # read command reads a line from standard input and splits it into fields
+          # The <<< operator redirects this string into the read command
+          
           IFS='/' read -r component version <<< "$component_version"
           IFS='/' read -r rocm_cuda_score gfxarch rocm_version rocm_actual_testcount rocm_score <<< "$rocm_details"
           IFS='/' read -r nvarch cuda_version cuda_actual_testcount cuda_score <<< "$nvidia_details"
@@ -88,21 +98,21 @@ jobs:
           IFS=':' read -r key value <<< "$rocm_score_details"
           IFS=':' read -r key value <<< "$cuda_score_details"
 
-          #construct json string for rocm_cuda-score_details
+          #construct json string for rocm_cuda_score_details
           rocm_cuda_score_details="{\"$key\" : \"$value\"}"
 
-          #construct json string for rocm_cuda-score_details
+          #construct json string for rocm_score_details
           rocm_score_detailss="{\"$key\" : \"$value\"}"
 
-          #construct json string for rocm_cuda-score_details
+          #construct json string for cuda_score_details
           cuda_score_details="{\"$key\" : \"$value\"}"
 
-          #Split repo_commithash by "/commit "
+          #Split repo_commithash by "/commit/ "
           repo=$(echo "$repo_commithash" | awk -F '/commit/' '{print $1}')
           commithash=$(echo "$repo_commithash" | awk -F '/commit/' '{print $2}')
 
-          # Initialize the JSON string
-          json_string="{"
+          # Initialize the JSON string for version details
+          version_details_string="{"
 
           # Split the input string by commas
           IFS=',' read -r -a pairs <<< "$version_details"
@@ -113,14 +123,14 @@ jobs:
             IFS=':' read -r key value <<< "$pair"
 
             # Append to the JSON string
-            json_string+="\"$key\" : \"$value\", "
+            version_details_string+="\"$key\" : \"$value\", "
           done
 
           # Remove the trailing comma and space, and close the JSON string
-          json_string=$(echo "$json_string" | sed 's/, $//')
-          json_string+="}"
+          version_details_string=$(echo "$version_details_string" | sed 's/, $//')
+          version_details_string+="}"
           
-          #Printing the User Input
+          #Printing the generated data
           echo "\"schema_version\": \"$schema_version\""
           echo "\"submit_date\": \"$submit_date\""
           echo "\"component\": \"$component\""
@@ -137,7 +147,7 @@ jobs:
           echo "\"cuda_version\": \"$cuda_version\""
           echo "\"cuda_actual_testcountt\": \"$cuda_actual_testcount\""
           echo "\"cuda_score\": \"$cuda_score\""
-          echo "\"version_details\" : $json_string"
+          echo "\"version_details\" : $version_details_string"
           echo "\"rocm_cuda_score_details\": $rocm_cuda_score_details"
           echo "\"rocm_score_details\": $rocm_score_detailss"
           echo "\"cuda_score_details\": $cuda_score_details"
