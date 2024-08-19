@@ -40,17 +40,17 @@ on:
       ROCM_CUDA_SCORE_DETAILS:
         description: "Enter the ROCm-CUDA score details "
         required: true
-        default: 'comment:additinal:string'
+        default: 'comment : Additinal explanation: string'
         type: string
       ROCM_SCORE_DETAILS:
         description: "Enter the ROCm score details"
         required: true
-        default: 'comment:additinal/string'
+        default: 'comment : Additional details about ROCm score: string'
         type: string
       CUDA_SCORE_DETAILS:
         description: "Enter the CUDA score details"
         required: true
-        default: 'comment:additinal/string'
+        default: 'comment : Additional details about CUDA score: string'
         type: string
 
 jobs:
@@ -85,9 +85,17 @@ jobs:
           IFS='/' read -r rocm_cuda_score gfxarch rocm_version rocm_actual_testcount rocm_score <<< "$rocm_details"
           IFS='/' read -r nvarch cuda_version cuda_actual_testcount cuda_score <<< "$nvidia_details"
           IFS=':' read -r key value <<< "$rocm_cuda_score_details"
+          IFS=':' read -r key value <<< "$rocm_score_details"
+          IFS=':' read -r key value <<< "$cuda_score_details"
 
           #construct json string for rocm_cuda-score_details
-          rocm_cuda_score_details="{\"$key\":\"$value\"}"
+          rocm_cuda_score_details="{\"$key\" : \"$value\"}"
+
+          #construct json string for rocm_cuda-score_details
+          rocm_score_detailss="{\"$key\" : \"$value\"}"
+
+          #construct json string for rocm_cuda-score_details
+          cuda_score_details="{\"$key\" : \"$value\"}"
 
           #Split repo_commithash by "/commit "
           repo=$(echo "$repo_commithash" | awk -F '/commit/' '{print $1}')
@@ -105,7 +113,7 @@ jobs:
             IFS=':' read -r key value <<< "$pair"
 
             # Append to the JSON string
-            json_string+="\"$key\": \"$value\", "
+            json_string+="\"$key\" : \"$value\", "
           done
 
           # Remove the trailing comma and space, and close the JSON string
@@ -131,3 +139,5 @@ jobs:
           echo "\"cuda_score\": \"$cuda_score\""
           echo "\"version_details\" : $json_string"
           echo "\"rocm_cuda_score_details\": $rocm_cuda_score_details"
+          echo "\"rocm_score_details\": $rocm_score_detailss"
+          echo "\"cuda_score_details\": $cuda_score_details"
