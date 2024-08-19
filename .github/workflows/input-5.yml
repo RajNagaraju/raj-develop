@@ -45,7 +45,7 @@ jobs:
           json_data=$(cat <<EOF
           {
                   "Constructed JSON: $json_string"
-          }' 
+          } 
           EOF)
           
           # printing output to file
