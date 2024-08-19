@@ -130,26 +130,26 @@ jobs:
           #Printing the generated data
           json_data=$(cat <<EOF
           {
-                  "schema_version": "'"$schema_version"'",
-                  "submit_date": "'"$submit_date"'",
-                  "component": "'"$component"'",
-                  "version": "'"$version"'",
-                  "repo": "'"$repo"'",
-                  "commitHash": "'"$commithash"'",
-                  "aisw_test_target_goal": "'"$aisw_test_target_goal"'",
-                  "rocm_cuda_score": "'"$rocm_cuda_score"'",
-                  "gfxarch": "'"$gfxarch"'",
-                  "rocm_version": "'"$rocm_version"'",
-                  "rocm_actual_testcount": "'"$rocm_actual_testcount"'",
+                  "schema_version": "$schema_version",
+                  "submit_date": "$submit_date",
+                  "component": "$component",
+                  "version": "$version",
+                  "repo": "$repo",
+                  "commitHash": "$commithash",
+                  "aisw_test_target_goal": "$aisw_test_target_goal",
+                  "rocm_cuda_score": "$rocm_cuda_score",
+                  "gfxarch": "$gfxarch",
+                  "rocm_version": "$rocm_version",
+                  "rocm_actual_testcount": "$rocm_actual_testcount",
                   "rocm_score": "'"$rocm_score"'",
-                  "nvarch": "'"$nvarch"'",
-                  "cuda_version": "'"$cuda_version"'",
-                  "cuda_actual_testcountt": "'"$cuda_actual_testcount"'",
-                  "cuda_score": "'"$cuda_score"'",
-                  "version_details": '"$version_details_string"',
-                  "rocm_cuda_score_details": '"$rocm_cuda_score_details"',
-                  "rocm_score_details": '"$rocm_score_details"',
-                  "cuda_score_details": '"$cuda_score_details"'
+                  "nvarch": "$nvarch",
+                  "cuda_version": "$cuda_version",
+                  "cuda_actual_testcountt": "$cuda_actual_testcount",
+                  "cuda_score": "$cuda_score",
+                  "version_details": $version_details_string,
+                  "rocm_cuda_score_details": $rocm_cuda_score_details,
+                  "rocm_score_details": $rocm_score_details,
+                  "cuda_score_details": $cuda_score_details
           }
           EOF
           )
@@ -198,5 +198,8 @@ jobs:
             echo "file is not found"
             exit 1
           fi
+
+          ls $GITHUB_WORKSPACE/docker/rocm/ubuntu22/6.0
+          ls $GITHUB_WORKSPACE/docker/ubuntu22/rocm-6.2
 
           
