@@ -64,8 +64,9 @@ jobs:
           )
           
           # printing output to file
-          echo "$json_data" > docker/sample.json
-
+          echo "$json_data" > docker/sample-${{ github.run_id }}.json
+          echo "$json_data"
+          
       - name: git config user github-actions bot
         run: |
           git config --local user.name 'github-actions[bot]'
