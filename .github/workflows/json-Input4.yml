@@ -67,6 +67,19 @@ jobs:
     steps:
       - name: checkout code
         uses: actions/checkout@v4
+      # Remove repo
+      - name: clean up repo if it exists
+        run: |
+          cd $GITHUB_WORKSPACE
+          rm -rf raj-develop
+          
+      - name: Generate Unique Branch Name
+        id: generate_branch
+        run: echo "BRANCH_NAME=auto-json-input-${{ github.run_id }}" >> $GITHUB_ENV
+        
+      - name: Checkout Unique Branch
+        run: |
+          git checkout -b $BRANCH_NAME
         
       - name: Split input string & Print the data
         run: |
@@ -169,7 +182,7 @@ jobs:
 
           # Check if the pattern is found in the file
           if grep -q '"component": "pytorch"' "$FILE_PATH" && grep -q '"version": "latest"' "$FILE_PATH"; then
-            echo "Version is 'latest'. Moving file to latest"
+            echo "Component is 'pytorch' and version is 'latest'. Moving file to latest"
             
             # Copy the file to the target directory
             cp "$FILE_PATH" "$LATEST_PATH/"
@@ -196,5 +209,23 @@ jobs:
             exit 1
           fi
           
+      - name: git config user github-actions bot
+        run: |
+          git config --local user.name 'github-actions[bot]'
+          git config --local user.email 'github-actions[bot]@users.noreply.github.com'
+      - name: print branch
+        run: git branch
+      # Run git status
+      - name: git status to show new untracked archived files
+        run: git status
+       # Run git status
+      - name: git ls-files --others
+        run: git ls-files --others --exclude-standard --full-name
+      - name: git add untracked files
+        run: git add `git ls-files --others --exclude-standard --full-name`
+      - name: git status
+        run: git status
+      - name: git commit
+        run: git commit -am "update json file"
 
           
