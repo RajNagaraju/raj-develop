@@ -39,4 +39,6 @@ jobs:
           json_string+="}"
 
           # Print the constructed JSON string
-          echo "Constructed JSON: $json_string"
+          echo "{
+                  "Constructed JSON: $json_string"
+                }"
