@@ -52,7 +52,7 @@ jobs:
           # Print the constructed JSON string
           json_data=$(cat <<EOF
           {
-                  "Constructed JSON: $json_string"
+                  Constructed JSON: $json_string
           } 
           EOF
           )
