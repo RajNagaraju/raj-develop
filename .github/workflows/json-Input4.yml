@@ -168,18 +168,15 @@ jobs:
           STABLE_PATH="$GITHUB_WORKSPACE/docker/ubuntu22/rocm-6.2"
 
           # Check if the pattern is found in the file
-          if grep -q '"version": "latest"' "$FILE_PATH"; then
+          if grep -q '"component": "pytorch"' "$FILE_PATH" && grep -q '"version": "latest"' "$FILE_PATH"; then
             echo "Version is 'latest'. Moving file to latest"
             
             # Copy the file to the target directory
             cp "$FILE_PATH" "$LATEST_PATH/"
-            
-          elif [ -f "$FILE_PATH" ]; then
-            echo "Version is not latest, Moving file to stable"
-            # Copy the file to the target directory
-            cp "$FILE_PATH" "$STABLE_PATH/"
+          
           else
-            echo "version not found"
+            echo "Component is not 'pytorch' or version is not 'latest'. Moving file to stable"
+            cp "$FILE_PATH" "$STABLE_PATH/"
           fi
       
       - name: Verify File Move
@@ -192,14 +189,12 @@ jobs:
             echo "File successfully moved to $LATEST_PATH."
             
           elif [ -f "$STABLE_PATH/$FILE_NAME" ]; then
-            echo "File is moved to $STABLE_PATH."
+            echo "File is succesfuly moved to $STABLE_PATH."
             
           else
-            echo "file is not found"
+            echo "file is not found either directory"
             exit 1
           fi
-
-          ls $GITHUB_WORKSPACE/docker/rocm/ubuntu22/6.0
-          ls $GITHUB_WORKSPACE/docker/ubuntu22/rocm-6.2
+          
 
           
