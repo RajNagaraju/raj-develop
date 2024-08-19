@@ -42,6 +42,11 @@ jobs:
           json_string+="}"
 
           # Print the constructed JSON string
-          json_data=echo '{
+          json_data=$(cat <<EOF
+          {
                   "Constructed JSON: $json_string"
-          }' > docker/sample.json
+          }' 
+          EOF)
+          
+          # printing output to file
+          echo "$json_data" > docker/sample.json
