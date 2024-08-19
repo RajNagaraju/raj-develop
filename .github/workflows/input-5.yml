@@ -83,7 +83,7 @@ jobs:
       - name: git commit
         run: git commit -m "update json file"
       - name: git push branch
-        run: git push --set-upstream origin auto-json-input-$BRANCH_NAME
+        run: git push --set-upstream origin $BRANCH_NAME
       - name: gh disable prompt
         run: |
           gh config set prompt disabled
