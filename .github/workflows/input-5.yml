@@ -16,6 +16,14 @@ jobs:
     steps:
       - name: checkout code
         uses: actions/checkout@v4
+                
+      # Remove repo
+      - name: clean up repo if it exists
+        run: |
+          cd $GITHUB_WORKSPACE
+          pwd
+      - name: checkout a branch
+        run: git checkout -b auto-json-wf-branch main
         
       - name: Convert String to JSON
         run: |
@@ -51,17 +59,7 @@ jobs:
           
           # printing output to file
           echo "$json_data" > docker/sample.json
-          
-      # Remove repo
-      - name: clean up repo if it exists
-        run: |
-          cd $GITHUB_WORKSPACE
-          pwd
-      # Check out repository under $GITHUB_WORKSPACE
-      - name: checkout repo
-        uses: actions/checkout@v4
-      - name: checkout a branch
-        run: git checkout -b auto-json-wf-branch main
+
       - name: git config user github-actions bot
         run: |
           git config --local user.name 'github-actions[bot]'
@@ -71,15 +69,13 @@ jobs:
       # Run git status
       - name: git status to show new untracked archived files
         run: git status
-      # Find untracked files
-      - name: git ls-files --others
-        run: git ls-files --others --exclude-standard --full-name
       - name: git add untracked files
-        run: git add `git ls-files --others --exclude-standard --full-name`
+        run: |
+          git add docker/sample.json
       - name: git status
         run: git status
       - name: git commit
-        run: git commit -am"archive json file"
+        run: git commit -m "update json file"
       - name: git push branch
         run: git push --set-upstream origin auto-json-wf-branch
       - name: gh disable prompt
@@ -89,7 +85,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: use gh CLI to submit PR
         run: |
-          gh pr create -B main -H auto-json-wf-branch --title 'github-action PR request for archiving JSON file' --body 'github-action PR request for archiving JSON file'
+          gh pr create -B main -H auto-json-wf-branch --title 'github-action PR request for archiving JSON file' --body 'github-action PR request for update json file'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # Remove repo
