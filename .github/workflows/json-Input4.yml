@@ -80,7 +80,7 @@ jobs:
           cat_cs_details='${{ github.event.inputs.CAT_CS_DETAILS }}'
           version_details="${{ github.event.inputs.VERSION_DETAILS }}"
 
-          # Split component_version by "/ and :"
+          # Split inputs by "/"
           # IFS used to split a string into variables based on a specified delimiter
           # read command reads a line from standard input and splits it into fields
           # The <<< operator redirects this string into the read command
@@ -101,7 +101,7 @@ jobs:
           #construct json string for cuda_score_details
           cuda_score_details="{\"comment\" : \"$cuda_score_details\"}"
 
-          #Split repo_commithash by "/commit/ "
+          # Split repo_commithash by -F "/commit/ "
           repo=$(echo "$repo_commithash" | awk -F '/commit/' '{print $1}')
           commithash=$(echo "$repo_commithash" | awk -F '/commit/' '{print $2}')
 
