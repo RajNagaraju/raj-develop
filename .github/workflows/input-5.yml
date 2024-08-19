@@ -51,3 +51,11 @@ jobs:
           
           # printing output to file
           echo "$json_data" > docker/sample.json
+          
+      - name: Commit and Push Changes
+        run: |
+         git config --local user.name 'github-actions[bot]'
+         git config --local user.email 'github-actions[bot]@users.noreply.github.com'
+         git add docker/sample.json
+         git commit -m "Update docker/sample.json with new JSON data"
+         git push origin main
