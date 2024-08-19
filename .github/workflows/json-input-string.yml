@@ -4,6 +4,11 @@ name: Process JSON Input
 
 on:
   workflow_dispatch:
+    inputs:
+      JSON_FILE:
+        description: "the path to the json file"
+        required: true
+        type: string
     
 jobs:
   create-json:
@@ -16,8 +21,8 @@ jobs:
       - name: Read and process sample json file
         run: |
           # sample json file loading
-          JSON_FILE='sample.json'
+          json_file_path='${{ github.event.inputs.JSON_FILE }}'
 
           # read the sample json and ouput it
-          JSON_STRING=$(cat $JSON_FILE)
+          JSON_STRING=$(cat $json_file_path)
           echo "Read JSON: $JSON_STRING"
