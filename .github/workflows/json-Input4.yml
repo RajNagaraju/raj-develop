@@ -66,7 +66,7 @@ jobs:
     # Define the set of steps or tasks executed by the job
     steps:
       - name: checkout code
-        run: actions/checkout@v4
+        uses: actions/checkout@v4
         
       - name: Split input string & Print the data
         run: |
