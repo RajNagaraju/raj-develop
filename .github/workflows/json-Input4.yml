@@ -150,7 +150,7 @@ jobs:
              \"cuda_actual_testcountt\": \"$cuda_actual_testcount\",
              \"cuda_score\": \"$cuda_score\",
              \"version_details\" : $version_details_string",
-             \"rocm_cuda_score_details\": $rocm_cuda_score_details",
-             \"rocm_score_details\": $rocm_score_detailss",
-             \"cuda_score_details\": $cuda_score_details"
+             \"rocm_cuda_score_details\": $rocm_cuda_score_details,
+             \"rocm_score_details\": $rocm_score_details,
+             \"cuda_score_details\": $cuda_score_details
           }"
