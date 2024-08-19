@@ -132,7 +132,7 @@ jobs:
           
           #Printing the generated data
           echo
-          "{
+          '{
              \"schema_version\": \"$schema_version\",
              \"submit_date\": \"$submit_date\",
              \"component\": \"$component\",
@@ -152,5 +152,5 @@ jobs:
              \"version_details\" : $version_details_string,
              \"rocm_cuda_score_details\": $rocm_cuda_score_details,
              \"rocm_score_details\": $rocm_score_details,
-             \"cuda_score_details\": $cuda_score_details,
-            }"
+             \"cuda_score_details\": $cuda_score_details
+            }'
