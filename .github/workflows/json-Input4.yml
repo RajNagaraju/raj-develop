@@ -102,7 +102,7 @@ jobs:
           rocm_cuda_score_details="{\"$key\" : \"$value\"}"
 
           #construct json string for rocm_score_details
-          rocm_score_detailss="{\"$key\" : \"$value\"}"
+          rocm_score_details="{\"$key\" : \"$value\"}"
 
           #construct json string for cuda_score_details
           cuda_score_details="{\"$key\" : \"$value\"}"
