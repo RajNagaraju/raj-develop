@@ -76,6 +76,7 @@ jobs:
       # Run git status
       - name: git status to show new untracked archived files
         run: git status
+       # Run git status
       - name: git ls-files --others
         run: git ls-files --others --exclude-standard --full-name
       - name: git add untracked files
