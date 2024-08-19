@@ -153,4 +153,4 @@ jobs:
              \"rocm_cuda_score_details\": $rocm_cuda_score_details,
              \"rocm_score_details\": $rocm_score_details,
              \"cuda_score_details\": $cuda_score_details
-          }"
+            }"
