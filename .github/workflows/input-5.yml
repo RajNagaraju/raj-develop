@@ -52,10 +52,48 @@ jobs:
           # printing output to file
           echo "$json_data" > docker/sample.json
           
-      - name: Commit and Push Changes
+      # Remove repo
+      - name: clean up repo if it exists
         run: |
-         git config --local user.name 'github-actions[bot]'
-         git config --local user.email 'github-actions[bot]@users.noreply.github.com'
-         git add docker/sample.json
-         git commit -m "Update docker/sample.json with new JSON data"
-         git push origin main
+          cd $GITHUB_WORKSPACE
+          pwd
+      # Check out repository under $GITHUB_WORKSPACE
+      - name: checkout repo
+        uses: actions/checkout@v4
+      - name: checkout a branch
+        run: git checkout -b auto-json-wf-branch main
+      - name: git config user github-actions bot
+        run: |
+          git config --local user.name 'github-actions[bot]'
+          git config --local user.email 'github-actions[bot]@users.noreply.github.com'
+      - name: print branch
+        run: git branch
+      # Run git status
+      - name: git status to show new untracked archived files
+        run: git status
+      # Find untracked files
+      - name: git ls-files --others
+        run: git ls-files --others --exclude-standard --full-name
+      - name: git add untracked files
+        run: git add `git ls-files --others --exclude-standard --full-name`
+      - name: git status
+        run: git status
+      #- name: git commit
+       # run: git commit -am"archive json file"
+      #- name: git push branch
+        #run: git push --set-upstream origin auto-json-wf-branch
+      #- name: gh disable prompt
+        #run: |
+          #gh config set prompt disabled
+        #env:
+         # GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #- name: use gh CLI to submit PR
+       #run: |
+          #gh pr create -B main -H auto-json-wf-branch --title 'github-action PR request for archiving JSON file' --body 'github-action PR request for archiving JSON file'
+        #env:
+          #GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Remove repo
+      #- name: clean up repo
+        #run: |
+          #cd $GITHUB_WORKSPACE
+          #rm -rf aisw-hud
