@@ -174,7 +174,7 @@ jobs:
             # Copy the file to the target directory
             cp "$FILE_PATH" "$LATEST_PATH/"
             
-          elif
+          elif [ -f "$FILE_PATH" ]; then
             echo "Version is not latest, Moving file to stable"
             # Copy the file to the target directory
             cp "$FILE_PATH" "$STABLE_PATH/"
@@ -188,8 +188,10 @@ jobs:
           TARGET_PATH="docker/rocm/ubuntu22/6.0" # Adjust if needed
           if [ -f "$LATEST_PATH/$FILE_NAME" ]; then
             echo "File successfully moved to $LATEST_PATH."
+            
           elif [ -f "$STABLE_PATH/$FILE_NAME" ]; then
             echo "File is moved to $STABLE_PATH."
+            
           else
             echo "file is not found"
             exit 1
