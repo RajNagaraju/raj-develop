@@ -78,22 +78,22 @@ jobs:
         run: git add `git ls-files --others --exclude-standard --full-name`
       - name: git status
         run: git status
-      #- name: git commit
-       # run: git commit -am"archive json file"
-      #- name: git push branch
-        #run: git push --set-upstream origin auto-json-wf-branch
-      #- name: gh disable prompt
-        #run: |
-          #gh config set prompt disabled
-        #env:
-         # GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #- name: use gh CLI to submit PR
-       #run: |
-          #gh pr create -B main -H auto-json-wf-branch --title 'github-action PR request for archiving JSON file' --body 'github-action PR request for archiving JSON file'
-        #env:
-          #GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: git commit
+        run: git commit -am"archive json file"
+      - name: git push branch
+        run: git push --set-upstream origin auto-json-wf-branch
+      - name: gh disable prompt
+        run: |
+          gh config set prompt disabled
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: use gh CLI to submit PR
+        run: |
+          gh pr create -B main -H auto-json-wf-branch --title 'github-action PR request for archiving JSON file' --body 'github-action PR request for archiving JSON file'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # Remove repo
-      #- name: clean up repo
-        #run: |
-          #cd $GITHUB_WORKSPACE
-          #rm -rf aisw-hud
+      - name: clean up repo
+        run: |
+          cd $GITHUB_WORKSPACE
+          rm -rf raj-develop
