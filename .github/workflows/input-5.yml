@@ -46,7 +46,8 @@ jobs:
           {
                   "Constructed JSON: $json_string"
           } 
-          EOF)
+          EOF
+          )
           
           # printing output to file
           echo "$json_data" > docker/sample.json
