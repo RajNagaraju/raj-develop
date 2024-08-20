@@ -24,12 +24,13 @@ def move_file_based_on_content(file_path):
     # Determine the target directory
     if component == 'pytorch' and version == 'latest':
         target_dir = latest_dir
+        new_file = 'sample.json'
     else:
         target_dir = stable_dir
+        new_file = 'sample.json'
 
     # Define the target file path
-    base_name = os.path.basename(file_path)
-    target_file_path = os.path.join(target_dir, base_name)
+    target_file_path = os.path.join(target_dir, new_file)
 
     # Move the file
     shutil.move(file_path, target_file_path)
