@@ -107,6 +107,9 @@ jobs:
         run: |
           #run the python script to verify and move the file to actual path
           python3 $GITHUB_WORKSPACE/scripts/python/latest-or-stable.py
+
+          git add .
+          git status
       
       - name: git config user github-actions bot
         run: |
