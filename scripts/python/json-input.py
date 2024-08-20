@@ -3,7 +3,7 @@ import os
 from urllib.parse import urlparse
 
 # Retrieve input parameters from environment variables
-schema_version = os.getenv()
+schema_version = os.getenv('schema_version', 'V4')
 submit_date = os.getenv('submit_date', '2024-08-16')
 component_version = os.getenv('component_version', 'pytorch/12.1')
 repo_commithash = os.getenv('repo_commithash', 'https://github.com/repo/pytorch/commit/r497th98r7bf87')
