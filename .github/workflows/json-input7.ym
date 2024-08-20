@@ -1,5 +1,5 @@
 # this job is taking string inputs from user and printing
-name: JSON INPUT STRING Ubuntu latest
+name: JSON INPUT 7 yaml
 
 # This controls when the workflow is run. Set on to workflow
 on:
