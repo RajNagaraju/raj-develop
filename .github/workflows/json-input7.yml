@@ -80,6 +80,6 @@ jobs:
           cat_cs_details: ${{ github.event.inputs.CAT_CS_DETAILS }}
           version_details: ${{ github.event.inputs.VERSION_DETAILS }}
         run: |
-          python3 scripts/python/json-input.py
+          python3 $GITHUB_WORKSPACE/scripts/python/json-input.py
           ls -lrt
           
