@@ -1,0 +1,257 @@
+
+# this job is taking string inputs from user and printing
+name: JSON INPUT STRING Ubuntu latest
+
+# This controls when the workflow is run. Set on to workflow
+on:
+  # This allows workflow to be run manually from Actions tab
+  workflow_dispatch:
+    # Retrieving inputs from the user
+    inputs:
+      SUBMIT_DATE:
+        description: "Enter the submit date (YYYY-MM-DDTHH:MM:SS)"
+        required: true
+        default: '2024-08-19'
+        type: string
+      COMPONENT_VERSION:
+        description: 'Enter the component/version'
+        required: true
+        default: 'pytorch/latest'
+        type: string 
+      REPO_COMMITHASH:
+        description: 'Enter repo URL with commithash'
+        required: true
+        default: 'https://github.com/pytorch/pytorch/commit/4eee2e7a6dfbd9caab6a1e59088744ae91f2aa25'
+        type: string
+      ROCM_CUDA_DETAILS:
+        description: "Enter details of rocm_cuda_score/rocm_cuda_score_details"
+        required: true
+        default: '98.44/Additional explanations: string'
+        type: string
+      GFX_ROCM:
+        description: 'Enter gfxarch/rocm_version'
+        required: true
+        default: 'MI250/6.1'
+        type: string
+      NV_CUDA:
+        description: "Enter nvarch/cuda_version"
+        required: true
+        default: 'A10G/12.1'
+        type: string
+      TTG_RAT_RS_DETAILS:
+        description: "Enter details of aisw_total_test_goal/rocm_actual_testcount/rocm_score/rocm_score_details"
+        required: true
+        default: '359944/358763/99.67/Additional explanations: string'
+      CAT_CS_DETAILS:
+        description: "Enter the  cuda_actual_testcount/cuda_score/cuda_score_details"
+        required: true
+        default: '359149/99.77/Additinal explanation: string'
+        type: string
+      VERSION_DETAILS:
+        description: "Enter Version Details key:value,key2:value2"
+        required: true
+        default: 'mkl:2024.1,python:3.8'
+        type: string
+
+# The jobs section defines jobs to run. Each job has completion status
+jobs:
+  # JSON Process job
+  process-json:
+    # Specify the runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # environment variable for jobs/steps
+    env:
+      SCHEMA_VERSION: "v4"
+
+    # Define the set of steps or tasks executed by the job
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+      # Remove repo
+      - name: clean up repo if it exists
+        run: |
+          cd $GITHUB_WORKSPACE
+          rm -rf raj-develop
+
+      - name: git config user github-actions bot
+        run: |
+          git config --local user.name 'github-actions[bot]'
+          git config --local user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Split input string & Print the data
+        run: |
+
+          # Retrieve the input parameters
+          schema_version="${{ env.SCHEMA_VERSION }}"
+          submit_date="${{ github.event.inputs.SUBMIT_DATE }}"
+          component_version="${{ github.event.inputs.COMPONENT_VERSION }}"
+          repo_commithash="${{ github.event.inputs.REPO_COMMITHASH }}"
+          rocm_cuda_details="${{ github.event.inputs.ROCM_CUDA_DETAILS }}"
+          gfx_rocm="${{ github.event.inputs.GFX_ROCM }}"
+          nvarch_cuda="${{ github.event.inputs.NV_CUDA }}"
+          ttg_rat_rs_details="${{ github.event.inputs.TTG_RAT_RS_DETAILS }}"
+          cat_cs_details='${{ github.event.inputs.CAT_CS_DETAILS }}'
+          version_details="${{ github.event.inputs.VERSION_DETAILS }}"
+
+          # Split inputs by "/"
+          # IFS used to split a string into variables based on a specified delimiter
+          # read command reads a line from standard input and splits it into fields
+          # The <<< operator redirects this string into the read command
+          
+          IFS='/' read -r component version <<< "$component_version"
+          IFS='/' read -r rocm_cuda_score rocm_cuda_score_details <<< "$rocm_cuda_details"
+          IFS='/' read -r gfxarch rocm_version <<< "$gfx_rocm"
+          IFS='/' read -r nvarch cuda_version <<< "$nvarch_cuda"
+          IFS='/' read -r aisw_test_target_goal rocm_actual_testcount rocm_score rocm_score_details <<< "$ttg_rat_rs_details"
+          IFS='/' read -r cuda_actual_testcount cuda_score cuda_score_details <<< "$cat_cs_details"
+
+          #construct json string for rocm_cuda_score_details
+          rocm_cuda_score_details="{\"comment\" : \"$rocm_cuda_score_details\"}"
+
+          #construct json string for rocm_score_details
+          rocm_score_details="{\"comment\" : \"$rocm_score_details\"}"
+
+          #construct json string for cuda_score_details
+          cuda_score_details="{\"comment\" : \"$cuda_score_details\"}"
+
+          # Split repo_commithash by -F "/commit/ "
+          repo=$(echo "$repo_commithash" | awk -F '/commit/' '{print $1}')
+          commithash=$(echo "$repo_commithash" | awk -F '/commit/' '{print $2}')
+
+          # Initialize the JSON string for version details
+          version_details_string="{"
+
+          # Split the input string by commas
+          IFS=',' read -r -a pairs <<< "$version_details"
+
+          # Loop through the key-value pairs
+          for pair in "${pairs[@]}"; do
+            # Split each pair by colon
+            IFS=':' read -r key value <<< "$pair"
+
+            # Append to the JSON string
+            version_details_string+="\"$key\" : \"$value\", "
+          done
+
+          # Remove the trailing comma and space, and close the JSON string
+          version_details_string=$(echo "$version_details_string" | sed 's/, $//')
+          version_details_string+="}"
+
+          #Printing the generated data
+          json_data=$(cat <<EOF
+          {
+                  "schema_version": "$schema_version",
+                  "submit_date": "$submit_date",
+                  "component": "$component",
+                  "version": "$version",
+                  "repo": "$repo",
+                  "commitHash": "$commithash",
+                  "aisw_test_target_goal": "$aisw_test_target_goal",
+                  "rocm_cuda_score": "$rocm_cuda_score",
+                  "gfxarch": "$gfxarch",
+                  "rocm_version": "$rocm_version",
+                  "rocm_actual_testcount": "$rocm_actual_testcount",
+                  "rocm_score": "'"$rocm_score"'",
+                  "nvarch": "$nvarch",
+                  "cuda_version": "$cuda_version",
+                  "cuda_actual_testcountt": "$cuda_actual_testcount",
+                  "cuda_score": "$cuda_score",
+                  "version_details": $version_details_string,
+                  "rocm_cuda_score_details": $rocm_cuda_score_details,
+                  "rocm_score_details": $rocm_score_details,
+                  "cuda_score_details": $cuda_score_details
+          }
+          EOF
+          )
+
+          # print json data output to file
+          echo "$json_data"
+          echo "$json_data" > $GITHUB_WORKSPACE/sample1.json
+
+      # create unique brach
+      - name: Set branch name
+        run: echo "BRANCH_NAME=auto-json-input-${{ github.run_id }}" >> $GITHUB_ENV
+        
+      # search $component $version
+      - name: Search for Pattern
+        id: search_pattern
+        run: |
+          # Define the file to read and the pattern to search for
+          FILE_PATH="$GITHUB_WORKSPACE/sample1.json"
+          LATEST_PATH="$GITHUB_WORKSPACE/metrics/rocm_cuda_score/json/pytorch/latest"
+          STABLE_PATH="$GITHUB_WORKSPACE/metrics/rocm_cuda_score/json/pytorch/stable"
+
+          mkdir -p $GITHUB_WORKSPACE/metrics/rocm_cuda_score/json/pytorch/latest
+          mkdir -p $GITHUB_WORKSPACE/metrics/rocm_cuda_score/json/pytorch/stable
+
+          # Check if the pattern is found in the file
+          if grep -q '"component": "pytorch"' "$FILE_PATH" && grep -q '"version": "latest"' "$FILE_PATH"; then
+            echo "Component is 'pytorch' and version is 'latest'. Moving file to latest"
+          
+            # Copy the file to the target directory
+            mv "$FILE_PATH" "$LATEST_PATH/"
+
+            # Git checkout branch
+            git checkout -b "$BRANCH_NAME"
+
+            # stage the changes
+            git add "$LATEST_PATH/sample1.json"
+
+            # Commit the change
+            git commit -m "Move sample1.json to stable path based on component and version"
+
+            #git push
+            git push --set-upstream origin "$BRANCH_NAME"
+
+            #gh disable promt
+            gh config set prompt disabled
+
+            env:
+              GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            
+            #use GH CLI to submit PR
+            gh pr create -B main -H $BRANCH_NAME --title 'github-action PR request for updating JSON file' --body 'github-action PR request for update JSON file'
+
+          else
+            echo "Component is not 'pytorch' or version is not 'latest'. Moving file to stable"
+            mv "$FILE_PATH" "$STABLE_PATH/"
+
+            # Git checkout branch
+            git checkout -b "$BRANCH_NAME"
+
+            # stage the changes
+            git add "$STABLE_PATH/sample1.json"
+
+            # Commit the change
+            git commit -m "Move sample1.json to stable path based on component and version"
+
+            #git push
+            git push --set-upstream origin "$BRANCH_NAME"
+
+            #gh disable promt
+            gh config set prompt disabled
+
+            env:
+              GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            
+            #use GH CLI to submit PR
+            gh pr create -B main -H $BRANCH_NAME --title 'github-action PR request for updating JSON file' --body 'github-action PR request for update JSON file'
+          fi
+    
+      - name: Verify File Move
+        run: |
+          FILE_NAME=$(basename sample1.json)
+          LATEST_PATH="$GITHUB_WORKSPACE/metrics/rocm_cuda_score/json/pytorch/latest" 
+          STABLE_PATH="$GITHUB_WORKSPACE/metrics/rocm_cuda_score/json/pytorch/stable"
+
+          if [ -f "$LATEST_PATH/$FILE_NAME" ]; then
+            echo "File successfully moved to $LATEST_PATH."
+          
+          elif [ -f "$STABLE_PATH/$FILE_NAME" ]; then
+            echo "File is succesfuly moved to $STABLE_PATH."
+          
+          else
+            echo "file is not found either directory"
+            exit 1
+          fi
