@@ -99,7 +99,7 @@ jobs:
           cat output.json
       - name: validate component and version 
         run: |
-          #run the pytho script to verify and move the file to new location
+          #run the python script to verify and move the file to actual path
           python3 $GITHUB_WORKSPACE/scripts/python/latest-or-stable.py
       
       - name: git config user github-actions bot
@@ -109,7 +109,6 @@ jobs:
       
       - name: print branch
         run: |
-           mv $GITHUB_WORKSPACE/output.json $GITHUB_WORKSPACE/docker/
            git branch
       
       # Run git status
