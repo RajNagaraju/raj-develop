@@ -108,10 +108,14 @@ jobs:
           python3 $GITHUB_WORKSPACE/scripts/python/json-input.py
 
           #view output.json file
-          cat $GITHUB_WORKSPACE/sample.json
+          echo " cat $GITHUB_WORKSPACE/output.json "
+          cat $GITHUB_WORKSPACE/output.json
           
           #run the python script to verify and move the file to actual path
           python3 $GITHUB_WORKSPACE/scripts/python/latest-or-stable.py
+
+          echo "ls -lrt $GITHUB_WORKSPACE/docker/ubuntu22/rocm-6.2/"
+          ls -lrt $GITHUB_WORKSPACE/docker/ubuntu22/rocm-6.2/
 
           git status
       
