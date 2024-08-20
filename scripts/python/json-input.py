@@ -3,6 +3,7 @@ import os
 from urllib.parse import urlparse
 
 # Retrieve input parameters from environment variables
+schema_version = os.getenv()
 submit_date = os.getenv('submit_date', '2024-08-16')
 component_version = os.getenv('component_version', 'pytorch/12.1')
 repo_commithash = os.getenv('repo_commithash', 'https://github.com/repo/pytorch/commit/r497th98r7bf87')
@@ -41,7 +42,7 @@ version_details_dict = dict(pair.split(':') for pair in version_details.split(',
 
 # Construct JSON object
 output_json = {
-    "schema_version": "v4",
+    "schema_version": schema_version,
     "submit_date": submit_date,
     "component": component,
     "version": version,
