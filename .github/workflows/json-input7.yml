@@ -81,6 +81,14 @@ jobs:
         run: |
           git checkout -b $BRANCH_NAME main
       
+      - name: git config user github-actions bot
+        run: |
+          git config --local user.name 'github-actions[bot]'
+          git config --local user.email 'github-actions[bot]@users.noreply.github.com'
+      
+      - name: print branch
+        run: git branch
+      
       - name: Run Python script
         # storing user input into environment variables
         env:
@@ -98,27 +106,14 @@ jobs:
         run: |
           echo "Run python script to generate json output"
           python3 $GITHUB_WORKSPACE/scripts/python/json-input.py
-      
-      - name: View output.json file
-        run: |
-          # View output.json file
-          cat output.json
-      - name: validate component and version 
-        run: |
+
+          #view output.json file
+          cat $GITHUB_WORKSPACE/sample.json
+          
           #run the python script to verify and move the file to actual path
           python3 $GITHUB_WORKSPACE/scripts/python/latest-or-stable.py
 
-          git add .
           git status
-      
-      - name: git config user github-actions bot
-        run: |
-          git config --local user.name 'github-actions[bot]'
-          git config --local user.email 'github-actions[bot]@users.noreply.github.com'
-      
-      - name: print branch
-        run: |
-           git branch
       
       # Run git status
       - name: git status to show new untracked archived files
@@ -128,7 +123,7 @@ jobs:
       - name: git ls-files --others
         run: git ls-files --others --exclude-standard --full-name
       - name: git add untracked files
-        run: git add .
+        run: git add `git ls-files --others --exclude-standard --full-name`
       - name: git status
         run: git status
       - name: git commit
