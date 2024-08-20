@@ -59,9 +59,6 @@ jobs:
     # Specify the runner that the job will run on
     runs-on: ubuntu-latest
 
-    # environment variable for jobs/steps
-    
-
     # Define the set of steps or tasks executed by the job
     steps:
       - name: clean up repo if it exists
@@ -79,15 +76,7 @@ jobs:
       
       - name: Checkout Unique Branch
         run: |
-          git checkout -b $BRANCH_NAME main
-      
-      - name: git config user github-actions bot
-        run: |
-          git config --local user.name 'github-actions[bot]'
-          git config --local user.email 'github-actions[bot]@users.noreply.github.com'
-      
-      - name: print branch
-        run: git branch
+          git checkout -b $BRANCH_NAME
       
       - name: Run Python script
         # storing user input into environment variables
@@ -106,18 +95,32 @@ jobs:
         run: |
           echo "Run python script to generate json output"
           python3 $GITHUB_WORKSPACE/scripts/python/json-input.py
-
-          #view output.json file
-          echo " cat $GITHUB_WORKSPACE/output.json "
+      
+      - name: View output.json file
+        run: |
+          # View output.json file
           cat $GITHUB_WORKSPACE/output.json
-          
+      
+      - name: validate component and version 
+        run: |
           #run the python script to verify and move the file to actual path
           python3 $GITHUB_WORKSPACE/scripts/python/latest-or-stable.py
 
-          echo "ls -lrt $GITHUB_WORKSPACE/docker/ubuntu22/rocm-6.2/"
+          # view the file path
+          echo "view latest version directory"
           ls -lrt $GITHUB_WORKSPACE/docker/ubuntu22/rocm-6.2/
 
-          git status
+          echo "view stable version directory"
+          ls -lrt $GITHUB_WORKSPACE/docker/ubuntu22/rocm-6.2/
+      
+      - name: git config user github-actions bot
+        run: |
+          git config --local user.name 'github-actions[bot]'
+          git config --local user.email 'github-actions[bot]@users.noreply.github.com'
+      
+      - name: print branch
+        run: |
+           git branch
       
       # Run git status
       - name: git status to show new untracked archived files
@@ -127,11 +130,11 @@ jobs:
       - name: git ls-files --others
         run: git ls-files --others --exclude-standard --full-name
       - name: git add untracked files
-        run: git add $(git ls-files --others --exclude-standard --full-name)
+        run: git add `git ls-files --others --exclude-standard --full-name`
       - name: git status
         run: git status
       - name: git commit
-        run: git commit -m "creating json file with python"
+        run: git commit -am "create json file"
       - name: git push branch
         run: git push --set-upstream origin 
       - name: gh disable prompt
