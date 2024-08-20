@@ -173,6 +173,12 @@ jobs:
       - name: Set branch name
         run: echo "BRANCH_NAME=auto-json-input-${{ github.run_id }}" >> $GITHUB_ENV
         
+      - name: gh disable prompt
+        run: |
+          gh config set prompt disabled
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
       # search $component $version
       - name: Search for Pattern
         id: search_pattern
@@ -206,15 +212,9 @@ jobs:
 
             #gh disable promt
             gh config set prompt disabled
-
-            env:
-              GH_TOKEN: ${{ github.token }}
             
             #use GH CLI to submit PR
             gh pr create -B main -H $BRANCH_NAME --title 'github-action PR request for updating JSON file' --body 'github-action PR request for update JSON file'
-
-            env:
-              GH_TOKEN: ${{ github.token }}
             
           else
             echo "Component is not 'pytorch' or version is not 'latest'. Moving file to stable"
@@ -234,15 +234,9 @@ jobs:
 
             #gh disable promt
             gh config set prompt disabled
-
-            env:
-              GH_TOKEN: ${{ github.token }}
             
             #use GH CLI to submit PR
             gh pr create -B main -H $BRANCH_NAME --title 'github-action PR request for updating JSON file' --body 'github-action PR request for update JSON file'
-
-            env:
-              GH_TOKEN: ${{ github.token }}
             
           fi
     
