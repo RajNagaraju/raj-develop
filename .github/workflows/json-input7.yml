@@ -79,7 +79,7 @@ jobs:
       
       - name: Checkout Unique Branch
         run: |
-          git checkout -b $BRANCH_NAME
+          git checkout -b $BRANCH_NAME main
       
       - name: Run Python script
         # storing user input into environment variables
