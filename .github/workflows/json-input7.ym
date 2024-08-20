@@ -1,0 +1,85 @@
+# this job is taking string inputs from user and printing
+name: JSON INPUT STRING Ubuntu latest
+
+# This controls when the workflow is run. Set on to workflow
+on:
+  # This allows workflow to be run manually from Actions tab
+  workflow_dispatch:
+    # Retrieving inputs from the user
+    inputs:
+      SUBMIT_DATE:
+        description: "Enter the submit date (YYYY-MM-DDTHH:MM:SS)"
+        required: true
+        default: '2024-08-19'
+        type: string
+      COMPONENT_VERSION:
+        description: 'Enter the component/version'
+        required: true
+        default: 'pytorch/latest'
+        type: string 
+      REPO_COMMITHASH:
+        description: 'Enter repo URL with commithash'
+        required: true
+        default: 'https://github.com/pytorch/pytorch/commit/4eee2e7a6dfbd9caab6a1e59088744ae91f2aa25'
+        type: string
+      ROCM_CUDA_DETAILS:
+        description: "Enter details of rocm_cuda_score/rocm_cuda_score_details"
+        required: true
+        default: '98.44/Additional explanations: string'
+        type: string
+      GFX_ROCM:
+        description: 'Enter gfxarch/rocm_version'
+        required: true
+        default: 'MI250/6.1'
+        type: string
+      NV_CUDA:
+        description: "Enter nvarch/cuda_version"
+        required: true
+        default: 'A10G/12.1'
+        type: string
+      TTG_RAT_RS_DETAILS:
+        description: "Enter details of aisw_total_test_goal/rocm_actual_testcount/rocm_score/rocm_score_details"
+        required: true
+        default: '359944/358763/99.67/Additional explanations: string'
+      CAT_CS_DETAILS:
+        description: "Enter the  cuda_actual_testcount/cuda_score/cuda_score_details"
+        required: true
+        default: '359149/99.77/Additinal explanation: string'
+        type: string
+      VERSION_DETAILS:
+        description: "Enter Version Details key:value,key2:value2"
+        required: true
+        default: 'mkl:2024.1,python:3.8'
+        type: string
+
+# The jobs section defines jobs to run. Each job has completion status
+jobs:
+  # JSON Process job
+  process-json:
+    # Specify the runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # environment variable for jobs/steps
+    
+
+    # Define the set of steps or tasks executed by the job
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+      - name: Run Python script
+        # input environment variables
+        env:
+          schema_version: v4
+          submit_date: ${{ github.event.inputs.SUBMIT_DATE }}
+          component_version: ${{ github.event.inputs.COMPONENT_VERSION }}
+          repo_commithash: ${{ github.event.inputs.REPO_COMMITHASH }}
+          ocm_cuda_details: ${{ github.event.inputs.ROCM_CUDA_DETAILS }}
+          gfx_rocm: ${{ github.event.inputs.GFX_ROCM }}
+          nvarch_cuda: ${{ github.event.inputs.NV_CUDA }}
+          ttg_rat_rs_details: ${{ github.event.inputs.TTG_RAT_RS_DETAILS }}
+          cat_cs_details: ${{ github.event.inputs.CAT_CS_DETAILS }}
+          version_details: ${{ github.event.inputs.VERSION_DETAILS }}
+        run: |
+          #printing the env var
+          echo "${{ env.submit_date }}"
+          
