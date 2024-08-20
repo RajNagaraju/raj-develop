@@ -108,12 +108,42 @@ jobs:
           #run the python script to verify and move the file to actual path
           python3 $GITHUB_WORKSPACE/scripts/python/latest-or-stable.py
       
+      - name: git config user github-actions bot
+        run: |
           git config --local user.name 'github-actions[bot]'
           git config --local user.email 'github-actions[bot]@users.noreply.github.com'
-    
-          git branch
-          git status
-          git ls-files --others --exclude-standard --full-name
-          git add `git ls-files --others --exclude-standard --full-name`
-          git status
       
+      - name: print branch
+        run: |
+           git branch
+      
+      # Run git status
+      - name: git status to show new untracked archived files
+        run: git status
+      
+      # Find untracked files
+      - name: git ls-files --others
+        run: git ls-files --others --exclude-standard --full-name
+      - name: git add untracked files
+        run: git add .
+      - name: git status
+        run: git status
+      - name: git commit
+        run: git commit -m "creating json file with python"
+      - name: git push branch
+        run: git push --set-upstream origin 
+      - name: gh disable prompt
+        run: |
+          gh config set prompt disabled
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: use gh CLI to submit PR
+        run: |
+          gh pr create -B main -H $BRANCH_NAME --title 'github-action PR request for creating JSON file' --body 'github-action PR request for creating JSON file'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Remove repo
+      - name: clean up repo
+        run: |
+          cd $GITHUB_WORKSPACE
+          rm -rf raj-develop
