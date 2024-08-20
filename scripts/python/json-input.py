@@ -66,6 +66,6 @@ output_json = {
 
 # Write to a JSON file
 with open('output.json', 'w') as json_file:
-    json.dump(output_json, json_file, indent=4)
+    json.dump(output_json, json_file, indent=4, separators=(',', ': '))
 
 print("JSON file created successfully.")
