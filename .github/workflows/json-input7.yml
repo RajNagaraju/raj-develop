@@ -102,5 +102,8 @@ jobs:
 
           echo "stable dir"
           ls -lrt $GITHUB_WORKSPACE/docker/rocm/ubuntu22/6.0/
+
+          echo "view sample.json"
+          cat sample.json
       
     
