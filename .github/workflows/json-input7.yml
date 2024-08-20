@@ -72,10 +72,13 @@ jobs:
       - name: checkout code
         uses: actions/checkout@v4
       
-      - name: checkout a unique branch
+      - name: generate unique branch
         id: generate_branch
         run: |
           echo "BRANCH_NAME=auto-json-input-${{ github.run_id }}" >> $GITHUB_ENV
+      
+      - name: Checkout Unique Branch
+        run: |
           git checkout -b $BRANCH_NAME
       
       - name: Run Python script
