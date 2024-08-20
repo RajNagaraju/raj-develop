@@ -136,7 +136,7 @@ jobs:
       - name: git commit
         run: git commit -am "create json file"
       - name: git push branch
-        run: git push --set-upstream origin 
+        run: git push --set-upstream origin $BRANCH_NAME
       - name: gh disable prompt
         run: |
           gh config set prompt disabled
