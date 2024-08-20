@@ -66,8 +66,12 @@ jobs:
     steps:
       - name: checkout code
         uses: actions/checkout@v4
+      
+      - name: checkout a unique branch
+        run: echo "BRANCH_NAME=auto-json-input-${{ github.run_id }}" >> $GITHUB_ENV
+      
       - name: Run Python script
-        # input environment variables
+        # storing user input into environment variables
         env:
           schema_version: "v4"
           submit_date: ${{ github.event.inputs.SUBMIT_DATE }}
@@ -79,6 +83,7 @@ jobs:
           ttg_rat_rs_details: ${{ github.event.inputs.TTG_RAT_RS_DETAILS }}
           cat_cs_details: ${{ github.event.inputs.CAT_CS_DETAILS }}
           version_details: ${{ github.event.inputs.VERSION_DETAILS }}
+        
         run: |
           echo "Run python script to generate json output"
           python3 $GITHUB_WORKSPACE/scripts/python/json-input.py
@@ -87,4 +92,15 @@ jobs:
         run: |
           # View output.json file
           cat output.json
-          
+      - name: component and version validation
+        run: |
+          #run the pytho script to verify and move the file to new location
+          python3 $GITHUB_WORKSPACE/scripts/python/latest-or-stable.py
+
+          echo "latest dir"
+          ls -lrt $GITHUB_WORKSPACE/docker/ubuntu22/rocm-6.2/
+
+          echo "stable dir"
+          ls -lrt $GITHUB_WORKSPACE/docker/rocm/ubuntu22/6.0/
+      
+    
