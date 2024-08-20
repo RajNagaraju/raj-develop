@@ -123,7 +123,7 @@ jobs:
       - name: git ls-files --others
         run: git ls-files --others --exclude-standard --full-name
       - name: git add untracked files
-        run: git add `git ls-files --others --exclude-standard --full-name`
+        run: git add $(git ls-files --others --exclude-standard --full-name)
       - name: git status
         run: git status
       - name: git commit
