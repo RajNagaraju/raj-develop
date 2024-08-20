@@ -27,7 +27,9 @@ def move_file_based_on_content(file_path):
         new_file = 'sample.json'
     else:
         target_dir = stable_dir
-        new_file = 'sample.json'
+        # Handle version formatting for non-latest versions
+        version_safe = version.replace('.', '_')
+        new_file = f'pytorch_{version_safe}.json'
 
     # Define the target file path
     target_file_path = os.path.join(target_dir, new_file)
