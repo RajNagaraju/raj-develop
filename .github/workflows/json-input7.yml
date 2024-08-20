@@ -69,7 +69,7 @@ jobs:
       - name: Run Python script
         # input environment variables
         env:
-          schema_version: v4
+          schema_version: "v4"
           submit_date: ${{ github.event.inputs.SUBMIT_DATE }}
           component_version: ${{ github.event.inputs.COMPONENT_VERSION }}
           repo_commithash: ${{ github.event.inputs.REPO_COMMITHASH }}
