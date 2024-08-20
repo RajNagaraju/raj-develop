@@ -242,7 +242,7 @@ jobs:
             gh pr create -B main -H $BRANCH_NAME --title 'github-action PR request for updating JSON file' --body 'github-action PR request for update JSON file'
             
             env:
-              GH_TOKEN: ${{ secrets.GITHUB_TOKEN }
+              GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           fi
     
       - name: Verify File Move
