@@ -1,2 +1,2 @@
 FROM ubuntu:18.04
-RUN echo 'Hellor , World Hi Raj !' > /test.txt
+RUN echo 'Hello, amazing World !' > /test.txt
