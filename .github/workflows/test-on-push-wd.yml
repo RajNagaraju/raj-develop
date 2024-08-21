@@ -1,0 +1,19 @@
+name: test-on-push and workflow_dispatch
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/test-on-push-wd.yml'
+      - 'docker/Dockerfile'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run a one-line script
+        run: echo "Hello, world!"
