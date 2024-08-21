@@ -7,6 +7,8 @@ on:
     paths:
       - '.github/workflows/test-on-push-wd.yml'
       - 'docker/Dockerfile'
+  workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
