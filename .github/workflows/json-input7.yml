@@ -49,7 +49,7 @@ on:
       VERSION_DETAILS:
         description: "Enter Version Details key:value,key2:value2"
         required: true
-        default: 'mkl:2024.1,python:3.8'
+        default: '{"mkl" : "2024.1", "python" : "3.8"}'
         type: string
 
 # The jobs section defines jobs to run. Each job has completion status
