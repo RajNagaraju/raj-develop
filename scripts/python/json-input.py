@@ -12,19 +12,7 @@ gfx_rocm = os.getenv('gfx_rocm', 'MI250/6.1')
 nvarch_cuda = os.getenv('nvarch_cuda', 'A10G/12.1')
 ttg_rat_rs_details = os.getenv('ttg_rat_rs_details', '359944/358763/99.67/{"comment" : "Additional details about ROCm score: string"')
 cat_cs_details = os.getenv('cat_cs_details', '359149/99.77/{"comment" : "Additional details about CUDA score: string"}')
-version_details = os.getenv('version_details', 'mkl:2024.1,python:3.8')
-
-# Custom JSON encoder for compact representation of nested dictionaries
-class CompactJSONEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, dict):
-            return {k: self.default(v) for k, v in obj.items()}
-        return super().default(obj)
-
-    def encode(self, obj):
-        if isinstance(obj, dict):
-            return '{' + ', '.join(f'"{k}": {self.encode(v)}' for k, v in obj.items()) + '}'
-        return super().encode(obj)
+version_details = os.getenv('version_details', {"mkl" : "2024.1", "python" : "3.8"})
 
 # Process `component_version`
 component, version = component_version.split('/')
@@ -56,7 +44,7 @@ cuda_score_value = cuda_score_value.strip()
 cuda_score_details = json.loads(cuda_score_value)
 
 # Process `version_details`
-version_details_dict = dict(pair.split(':') for pair in version_details.split(','))
+version_details_dict = json.loads(version_details)
 
 # Construct JSON object
 output_json = {
@@ -84,7 +72,6 @@ output_json = {
 
 # Write to a JSON file
 with open('output.json', 'w') as json_file:
-    json.dump(output_json, json_file, indent=4, cls=CompactJSONEncoder)
+    json.dump(output_json, json_file, indent=3)
 
-print(json.dumps(output_json, indent=4, cls=CompactJSONEncoder))
 print("output.json file created successfully.")
