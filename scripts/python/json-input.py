@@ -23,7 +23,8 @@ repo = parsed_url.path.split('/commit/')[0]
 commit_hash = parsed_url.path.split('/commit/')[1]
 
 # Process `rocm_cuda_details`
-rocm_cuda_score, rocm_cuda_score_details = rocm_cuda_details.split('/', 1)
+rocm_cuda_score, rocm_cuda_score_value = rocm_cuda_details.split('/', 1)
+rocm_cuda_score_details = json.loads(rocm_cuda_score_value)
 
 # Process ` rocm_cuda_score_details`
 #rocm_cuda_comment, rocm_cuda_value = rocm_cuda_score_details.split(':', 1)
