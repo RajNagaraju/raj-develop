@@ -86,4 +86,5 @@ output_json = {
 with open('output.json', 'w') as json_file:
     json.dump(output_json, json_file, indent=4, cls=CompactJSONEncoder)
 
+print(json.dumps(output_json, indent=4, cls=CompactJSONEncoder))
 print("output.json file created successfully.")
