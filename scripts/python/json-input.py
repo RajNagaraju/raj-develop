@@ -26,7 +26,7 @@ commit_hash = parsed_url.path.split('/commit/')[1]
 rocm_cuda_score, rocm_cuda_score_details = rocm_cuda_details.split('/', 1)
 
 # Process ` rocm_cuda_score_details`
-rocm_cuda_comment, rocm_cuda_value = rocm_cuda_score_details.split(':' 1)
+rocm_cuda_comment, rocm_cuda_value = rocm_cuda_score_details.split(':', 1)
 
 # Process `gfx_rocm`
 gfxarch, rocm_version = gfx_rocm.split('/')
