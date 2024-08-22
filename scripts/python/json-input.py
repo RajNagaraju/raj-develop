@@ -14,6 +14,18 @@ ttg_rat_rs_details = os.getenv('ttg_rat_rs_details', '359944/358763/99.67/{"comm
 cat_cs_details = os.getenv('cat_cs_details', '359149/99.77/{"comment" : "Additional details about CUDA score: string"}')
 version_details = os.getenv('version_details', 'mkl:2024.1,python:3.8')
 
+# Custom JSON encoder for compact representation of nested dictionaries
+class CompactJSONEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, dict):
+            return {k: self.default(v) for k, v in obj.items()}
+        return super().default(obj)
+
+    def encode(self, obj):
+        if isinstance(obj, dict):
+            return '{' + ', '.join(f'"{k}": {self.encode(v)}' for k, v in obj.items()) + '}'
+        return super().encode(obj)
+
 # Process `component_version`
 component, version = component_version.split('/')
 
