@@ -40,11 +40,11 @@ on:
       TTG_RAT_RS_DETAILS:
         description: "Enter details of aisw_total_test_goal/rocm_actual_testcount/rocm_score/rocm_score_details"
         required: true
-        default: '359944/358763/99.67/Additional explanations: string'
+        default: '359944/358763/99.67/{"comment" : "Additional details about ROCm score: string"}'
       CAT_CS_DETAILS:
         description: "Enter the  cuda_actual_testcount/cuda_score/cuda_score_details"
         required: true
-        default: '359149/99.77/Additinal explanation: string'
+        default: '359149/99.77/{"comment" : "Additional details about CUDA score: string"}'
         type: string
       VERSION_DETAILS:
         description: "Enter Version Details key:value,key2:value2"
