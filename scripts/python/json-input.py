@@ -10,8 +10,8 @@ repo_commithash = os.getenv('repo_commithash', 'https://github.com/repo/pytorch/
 rocm_cuda_details = os.getenv('rocm_cuda_details', '98.44/{"comment" : "Additional details about ROCm score: string"}')
 gfx_rocm = os.getenv('gfx_rocm', 'MI250/6.1')
 nvarch_cuda = os.getenv('nvarch_cuda', 'A10G/12.1')
-ttg_rat_rs_details = os.getenv('ttg_rat_rs_details', '359944/358763/99.67/Additional explanations: string')
-cat_cs_details = os.getenv('cat_cs_details', '359149/99.77/Additinal explanation: string')
+ttg_rat_rs_details = os.getenv('ttg_rat_rs_details', '359944/358763/99.67/{"comment" : "Additional details about ROCm score: string"')
+cat_cs_details = os.getenv('cat_cs_details', '359149/99.77/{"comment" : "Additional details about CUDA score: string"}')
 version_details = os.getenv('version_details', 'mkl:2024.1,python:3.8')
 
 # Process `component_version`
@@ -27,9 +27,6 @@ rocm_cuda_score, rocm_cuda_score_value = rocm_cuda_details.split('/', 1)
 rocm_cuda_score_value = rocm_cuda_score_value.strip()
 rocm_cuda_score_details = json.loads(rocm_cuda_score_value)
 
-# Process ` rocm_cuda_score_details`
-#rocm_cuda_comment, rocm_cuda_value = rocm_cuda_score_details.split(':', 1)
-
 # Process `gfx_rocm`
 gfxarch, rocm_version = gfx_rocm.split('/')
 
@@ -37,10 +34,14 @@ gfxarch, rocm_version = gfx_rocm.split('/')
 nvarch, cuda_version = nvarch_cuda.split('/')
 
 # Process `ttg_rat_rs_details`
-aisw_test_target_goal, rocm_actual_testcount, rocm_score, rocm_score_details = ttg_rat_rs_details.split('/', 3)
+aisw_test_target_goal, rocm_actual_testcount, rocm_score, rocm_score_value = ttg_rat_rs_details.split('/', 3)
+rocm_score_value = rocm_score_value.strip()
+rocm_score_details = json.loads(rocm_score_value)
 
 # Process `cat_cs_details`
-cuda_actual_testcount, cuda_score, cuda_score_details = cat_cs_details.split('/', 2)
+cuda_actual_testcount, cuda_score, cuda_score_value = cat_cs_details.split('/', 2)
+cuda_score_value = cuda_score_value.strip()
+cuda_score_details = json.loads(cuda_score_value)
 
 # Process `version_details`
 version_details_dict = dict(pair.split(':') for pair in version_details.split(','))
@@ -65,8 +66,8 @@ output_json = {
     "cuda_score": cuda_score,
     "version_details": version_details_dict,
     "rocm_cuda_score_details": rocm_cuda_score_details,
-    "rocm_score_details": {"comment": rocm_score_details},
-    "cuda_score_details": {"comment": cuda_score_details}
+    "rocm_score_details": rocm_score_details,
+    "cuda_score_details": cuda_score_details
 }
 
 # Write to a JSON file
