@@ -7,7 +7,7 @@ schema_version = os.getenv('schema_version', 'V4')
 submit_date = os.getenv('submit_date', '2024-08-16')
 component_version = os.getenv('component_version', 'pytorch/12.1')
 repo_commithash = os.getenv('repo_commithash', 'https://github.com/repo/pytorch/commit/r497th98r7bf87')
-rocm_cuda_details = os.getenv('rocm_cuda_details', '{comment:98.44/Additional explanations: string}')
+rocm_cuda_details = os.getenv('rocm_cuda_details', '98.44/{"comment" : "Additional details about ROCm score: string"}')
 gfx_rocm = os.getenv('gfx_rocm', 'MI250/6.1')
 nvarch_cuda = os.getenv('nvarch_cuda', 'A10G/12.1')
 ttg_rat_rs_details = os.getenv('ttg_rat_rs_details', '359944/358763/99.67/Additional explanations: string')
@@ -24,6 +24,7 @@ commit_hash = parsed_url.path.split('/commit/')[1]
 
 # Process `rocm_cuda_details`
 rocm_cuda_score, rocm_cuda_score_value = rocm_cuda_details.split('/', 1)
+rocm_cuda_score_value = rocm_cuda_score_value.strip()
 rocm_cuda_score_details = json.loads(rocm_cuda_score_value)
 
 # Process ` rocm_cuda_score_details`
