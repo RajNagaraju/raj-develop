@@ -25,7 +25,7 @@ on:
       ROCM_CUDA_DETAILS:
         description: "Enter details of rocm_cuda_score/rocm_cuda_score_details"
         required: true
-        default: '98.44/Additional explanations: string'
+        default: '98.44/{"comment" : "Additional details about ROCm score: string"}'
         type: string
       GFX_ROCM:
         description: 'Enter gfxarch/rocm_version'
