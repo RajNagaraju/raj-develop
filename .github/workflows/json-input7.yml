@@ -135,18 +135,18 @@ jobs:
         run: git status
       - name: git commit
         run: git commit -am "create json file"
-      - name: git push branch
-        run: git push --set-upstream origin $BRANCH_NAME
-      - name: gh disable prompt
-        run: |
-          gh config set prompt disabled
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: use gh CLI to submit PR
-        run: |
-          gh pr create -B main -H $BRANCH_NAME --title 'github-action PR request for creating JSON file' --body 'github-action PR request for creating JSON file'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #- name: git push branch
+        #run: git push --set-upstream origin $BRANCH_NAME
+      #- name: gh disable prompt
+        #run: |
+          #gh config set prompt disabled
+        #env:
+          #GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #- name: use gh CLI to submit PR
+        #run: |
+          #gh pr create -B main -H $BRANCH_NAME --title 'github-action PR request for creating JSON file' --body 'github-action PR request for creating JSON file'
+        #env:
+          #GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # Remove repo
       - name: clean up repo
         run: |
