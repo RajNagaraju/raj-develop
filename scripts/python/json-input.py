@@ -73,10 +73,6 @@ output_json = {
 # Write to a JSON file
 with open('output.json', 'w') as json_file:
     json.dump(output_json, json_file, indent=1)
-
-# Print the contents of output.json file
-print("\nContents of output.json:")
-with open('output.json', 'r') as json_file:
-    print(json_file.read())
     
 print("output.json file created successfully.")
+print("json output", output_json)
