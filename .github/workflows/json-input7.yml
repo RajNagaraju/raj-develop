@@ -85,7 +85,7 @@ jobs:
           submit_date: ${{ github.event.inputs.SUBMIT_DATE }}
           component_version: ${{ github.event.inputs.COMPONENT_VERSION }}
           repo_commithash: ${{ github.event.inputs.REPO_COMMITHASH }}
-          ocm_cuda_details: ${{ github.event.inputs.ROCM_CUDA_DETAILS }}
+          rocm_cuda_details: ${{ github.event.inputs.ROCM_CUDA_DETAILS }}
           gfx_rocm: ${{ github.event.inputs.GFX_ROCM }}
           nvarch_cuda: ${{ github.event.inputs.NV_CUDA }}
           ttg_rat_rs_details: ${{ github.event.inputs.TTG_RAT_RS_DETAILS }}
