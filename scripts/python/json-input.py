@@ -119,5 +119,8 @@ def move_file_based_on_content(file_path):
     shutil.move(file_path, target_file_path)
     print(f"File moved to: {target_file_path}")
 
+#print output.json file content
+print("output.json:", json_file_path)
+
 # Execute the function
 move_file_based_on_content(json_file_path)
