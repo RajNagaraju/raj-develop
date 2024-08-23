@@ -119,7 +119,7 @@ jobs:
       - name: git commit
         run: git commit -am "create json file"
       - name: git push branch
-        run: git push --set-upstream origin $BRANCH_NAME
+        run: git push --set-upstream origin auto-json-wf-input-patch1
       - name: gh disable prompt
         run: |
           gh config set prompt disabled
