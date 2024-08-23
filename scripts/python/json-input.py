@@ -1,7 +1,7 @@
 import json
 import os
 import shutil
-from urllib.parse import urlparse
+#from urllib.parse import urlparse
 
 # Retrieve input parameters from environment variables
 schema_version = os.getenv('schema_version', 'V4')
@@ -25,9 +25,10 @@ class CustomJSONEncoder(json.JSONEncoder):
 component, version = component_version.split('/')
 
 # Process `repo_commithash`
-parsed_url = urlparse(repo_commithash)
-repo = parsed_url.path.split('/commit/')[0]
-commit_hash = parsed_url.path.split('/commit/')[1]
+repo, commithash = repo_commithash.split('/commit/')
+#parsed_url = urlparse(repo_commithash)
+#repo = parsed_url.path.split('/commit/')[0]
+#commit_hash = parsed_url.path.split('/commit/')[1]
 
 # Process `rocm_cuda_details`
 rocm_cuda_score, rocm_cuda_score_value = rocm_cuda_details.split('/', 1)
@@ -59,7 +60,7 @@ output_json = {
     "submit_date": submit_date,
     "component": component,
     "version": version,
-    "repo": f"https://github.com{repo}",
+    "repo": repo,
     "commitHash": commit_hash,
     "aisw_test_target_goal": aisw_test_target_goal,
     "rocm_cuda_score": rocm_cuda_score,
