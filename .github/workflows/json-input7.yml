@@ -99,12 +99,10 @@ jobs:
       - name: View output.json file
         run: |
           # View output.json file
-          cat $GITHUB_WORKSPACE/output.json
+          cat $GITHUB_WORKSPACE/docker/ubuntu22/rocm-6.2/sample.json
       
       - name: validate component and version 
         run: |
-          #run the python script to verify and move the file to actual path
-          python3 $GITHUB_WORKSPACE/scripts/python/latest-or-stable.py
           # view the file path
           echo "view latest version directory"
           ls -lrt $GITHUB_WORKSPACE/docker/ubuntu22/rocm-6.2/
@@ -133,18 +131,18 @@ jobs:
         run: git status
       - name: git commit
         run: git commit -am "create json file"
-      #- name: git push branch
-        #run: git push --set-upstream origin $BRANCH_NAME
-      #- name: gh disable prompt
-        #run: |
-          #gh config set prompt disabled
-        #env:
-          #GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #- name: use gh CLI to submit PR
-        #run: |
-          #gh pr create -B main -H $BRANCH_NAME --title 'github-action PR request for creating JSON file' --body 'github-action PR request for creating JSON file'
-        #env:
-          #GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: git push branch
+        run: git push --set-upstream origin $BRANCH_NAME
+      - name: gh disable prompt
+        run: |
+          gh config set prompt disabled
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: use gh CLI to submit PR
+        run: |
+          gh pr create -B main -H $BRANCH_NAME --title 'github-action PR request for creating JSON file' --body 'github-action PR request for creating JSON file'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # Remove repo
       - name: clean up repo
         run: |
