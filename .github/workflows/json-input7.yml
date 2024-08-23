@@ -69,14 +69,14 @@ jobs:
       - name: checkout code
         uses: actions/checkout@v4
       
-      - name: generate unique branch
-        id: generate_branch
-        run: |
-          echo "BRANCH_NAME=auto-json-input-${{ github.run_id }}" >> $GITHUB_ENV
+      #- name: generate unique branch
+        #id: generate_branch
+        #run: |
+          #echo "BRANCH_NAME=auto-json-input-${{ github.run_id }}" >> $GITHUB_ENV
       
-      - name: Checkout Unique Branch
+      - name: Checkout Branch
         run: |
-          git checkout -b $BRANCH_NAME
+          git checkout -b auto-json-wf-input-patch1
       
       - name: Run Python script
         # storing user input into environment variables
@@ -94,20 +94,7 @@ jobs:
         
         run: |
           echo "Run python script to generate json output"
-          python3 $GITHUB_WORKSPACE/scripts/python/json-input.py
-      
-      - name: View output.json file
-        run: |
-          # View output.json file
-          cat $GITHUB_WORKSPACE/docker/ubuntu22/rocm-6.2/sample.json
-      
-      - name: validate component and version 
-        run: |
-          # view the file path
-          echo "view latest version directory"
-          ls -lrt $GITHUB_WORKSPACE/docker/ubuntu22/rocm-6.2/
-          echo "view stable version directory"
-          ls -lrt $GITHUB_WORKSPACE/docker/ubuntu22/rocm-6.2/
+          python3 $GITHUB_WORKSPACE/scripts/python/json-input.py 
       
       - name: git config user github-actions bot
         run: |
@@ -140,7 +127,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: use gh CLI to submit PR
         run: |
-          gh pr create -B main -H $BRANCH_NAME --title 'github-action PR request for creating JSON file' --body 'github-action PR request for creating JSON file'
+          gh pr create -B main -H auto-json-wf-input-patch1 --title 'github-action PR request for creating JSON file' --body 'github-action PR request for creating JSON file'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # Remove repo
