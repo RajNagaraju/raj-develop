@@ -14,6 +14,12 @@ ttg_rat_rs_details = os.getenv('ttg_rat_rs_details', '359944/358763/99.67/{"comm
 cat_cs_details = os.getenv('cat_cs_details', '359149/99.77/{"comment" : "Additional details about CUDA score: string"}')
 version_details = os.getenv('version_details', {"mkl" : "2024.1", "python" : "3.8"})
 
+# Custom JSONEncoder to format without extra new lines
+class CustomJSONEncoder(json.JSONEncoder):
+    def encode(self, obj):
+        # Use the default encoding method
+        return super().encode(obj).replace('\n ', ' ')
+
 # Process `component_version`
 component, version = component_version.split('/')
 
@@ -72,7 +78,7 @@ output_json = {
 
 # Write to a JSON file
 with open('output.json', 'w') as json_file:
-    json.dump(output_json, json_file, indent=0, separators=(',', ': '))
+    json.dump(output_json, json_file, indent=0, separators=(',', ': '), cls=CustomJSONEncoder)
     
 print("output.json file created successfully.")
 
