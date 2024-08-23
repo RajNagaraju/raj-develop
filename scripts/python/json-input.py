@@ -61,7 +61,7 @@ output_json = {
     "component": component,
     "version": version,
     "repo": repo,
-    "commitHash": commit_hash,
+    "commitHash": commithash,
     "aisw_test_target_goal": aisw_test_target_goal,
     "rocm_cuda_score": rocm_cuda_score,
     "gfxarch": gfxarch,
