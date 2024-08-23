@@ -75,4 +75,4 @@ with open('output.json', 'w') as json_file:
     json.dump(output_json, json_file, indent=1)
     
 print("output.json file created successfully.")
-print("json output", output_json)
+
