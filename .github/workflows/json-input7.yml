@@ -7,10 +7,10 @@ on:
   workflow_dispatch:
     # Retrieving inputs from the user
     inputs:
-      SUBMIT_DATE:
-        description: "Enter the submit date (YYYY-MM-DDTHH:MM:SS)"
+      SUBMIT_DATE_SYSTEM_SPEC:
+        description: "Enter the submit date (YYYY-MM-DD)/systemspec(SMC4124)"
         required: true
-        default: '2024-08-19'
+        default: '2024-08-19/SMC4124'
         type: string
       COMPONENT_VERSION:
         description: 'Enter the component/version'
@@ -20,15 +20,10 @@ on:
       REPO_COMMITHASH:
         description: 'Enter repo URL with commithash'
         required: true
-        default: 'https://github.com/pytorch/pytorch/commit/4eee2e7a6dfbd9caab6a1e59088744ae91f2aa25'
-        type: string
-      ROCM_CUDA_DETAILS:
-        description: "Enter details of rocm_cuda_score/rocm_cuda_score_details"
-        required: true
-        default: '98.44/{"comment" : "Additional details about ROCm score: string"}'
+        default: 'https://github.com/ROCm/component_repo/commit/4eee2e7a6dfbd9caab6a1e59088744ae91f2aa25'
         type: string
       GFX_ROCM:
-        description: 'Enter gfxarch/rocm_version'
+        description: 'Enter gfxarch/rocm_version/'
         required: true
         default: 'MI250/6.1'
         type: string
@@ -37,25 +32,35 @@ on:
         required: true
         default: 'A10G/12.1'
         type: string
-      TTG_RAT_RS_DETAILS:
-        description: "Enter details of aisw_total_test_goal/rocm_actual_testcount/rocm_score/rocm_score_details"
+      ROCM_UT_FAIL_PASS_SKIP_DESELECT_WARN_ERR:
+        description: "Enter rocm_ut_failed/passed/skipped/deselected/warning/errors"
         required: true
-        default: '359944/358763/99.67/{"comment" : "Additional details about ROCm score: string"}'
-      CAT_CS_DETAILS:
-        description: "Enter the  cuda_actual_testcount/cuda_score/cuda_score_details"
+        default: '100/358763/358763/358763/358763/358763'
+        type: string
+      CUDA_UT_FAIL_PASS_SKIP_DESELECT_WARN_ERR:
+        description: "Enter rocm_ut_failed/passed/skipped/deselected/warning/errors"
         required: true
-        default: '359149/99.77/{"comment" : "Additional details about CUDA score: string"}'
+        default: '358763/358763/358763/358763/358763/358763'
         type: string
       VERSION_DETAILS:
         description: "Enter Version Details key:value,key2:value2"
         required: true
         default: '{"mkl" : "2024.1", "python" : "3.8"}'
         type: string
+      ROCM_SCORE_DETAILS:
+        description: "Enter details of {rocm_score_details}"
+        required: true
+        default: '{"logurl" : "URL to test log", "artifacturl" : "Link to test artifactory", "comment" : "Additional details about ROCm score"}'
+      CUDA_SCORE_DETAILS:
+        description: "Enter the {cuda_score_details}"
+        required: true
+        default: '{"logurl" : "URL to test log", "artifacturl" : "Link to test artifactory", "comment" : "Additional details about ROCm score"}'
+        type: string
 
 # The jobs section defines jobs to run. Each job has completion status
 jobs:
   # JSON Process job
-  process-json:
+  rocm-cuda-ut-score:
     # Specify the runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -74,23 +79,24 @@ jobs:
         #run: |
           #echo "BRANCH_NAME=auto-json-input-${{ github.run_id }}" >> $GITHUB_ENV
       
-      - name: Checkout Branch
-        run: |
-          git checkout -b auto-json-wf-input-patch1
+      #- name: Checkout Branch
+        #run: |
+          #git checkout -b auto-json-wf-input-patch1
       
       - name: Run Python script
         # storing user input into environment variables
         env:
           schema_version: "v4"
-          submit_date: ${{ github.event.inputs.SUBMIT_DATE }}
+          submit_date: ${{ github.event.inputs.SUBMIT_DATE_SYSTEM_SPEC }}
           component_version: ${{ github.event.inputs.COMPONENT_VERSION }}
           repo_commithash: ${{ github.event.inputs.REPO_COMMITHASH }}
-          rocm_cuda_details: ${{ github.event.inputs.ROCM_CUDA_DETAILS }}
           gfx_rocm: ${{ github.event.inputs.GFX_ROCM }}
           nvarch_cuda: ${{ github.event.inputs.NV_CUDA }}
-          ttg_rat_rs_details: ${{ github.event.inputs.TTG_RAT_RS_DETAILS }}
-          cat_cs_details: ${{ github.event.inputs.CAT_CS_DETAILS }}
+          rocm_ut_fail_pass_skip_deselect_warn_err: ${{ github.event.inputs.ROCM_UT_FAIL_PASS_SKIP_DESELECT_WARN_ERR }}
+          cuda_ut_fail_pass_skip_deselect_warn_err: ${{ github.event.inputs.CUDA_UT_FAIL_PASS_SKIP_DESELECT_WARN_ERR }}
           version_details: ${{ github.event.inputs.VERSION_DETAILS }}
+          rocm_score_details: ${{ github.event.inputs.ROCM_SCORE_DETAILS }}
+          cuda_score_details: ${{ github.event.inputs.CUDA_SCORE_DETAILS }}
         
         run: |
           echo "Run python script to generate json output"
@@ -118,18 +124,18 @@ jobs:
         run: git status
       - name: git commit
         run: git commit -am "create json file"
-      - name: git push branch
-        run: git push --set-upstream origin auto-json-wf-input-patch1
+      #- name: git push branch
+        #run: git push --set-upstream origin auto-json-wf-input-patch1
       - name: gh disable prompt
         run: |
           gh config set prompt disabled
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: use gh CLI to submit PR
-        run: |
-          gh pr create -B main -H auto-json-wf-input-patch1 --title 'github-action PR request for creating JSON file' --body 'github-action PR request for creating JSON file'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #- name: use gh CLI to submit PR
+        #run: |
+          #gh pr create -B main -H auto-json-wf-input-patch1 --title 'github-action PR request for creating JSON file' --body 'github-action PR request for creating JSON file'
+        #env:
+          #GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # Remove repo
       - name: clean up repo
         run: |
