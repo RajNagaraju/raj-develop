@@ -100,7 +100,7 @@ jobs:
         
         run: |
           echo "Run python script to generate json output"
-          python3 $GITHUB_WORKSPACE/scripts/python/json-input.py 
+          python3 $GITHUB_WORKSPACE/scripts/python/json-input-ut.py 
       
       - name: git config user github-actions bot
         run: |
