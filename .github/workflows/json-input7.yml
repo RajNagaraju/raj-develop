@@ -87,7 +87,7 @@ jobs:
         # storing user input into environment variables
         env:
           schema_version: "v4"
-          submit_date: ${{ github.event.inputs.SUBMIT_DATE_SYSTEM_SPEC }}
+          submit_date_system_spec: ${{ github.event.inputs.SUBMIT_DATE_SYSTEM_SPEC }}
           component_version: ${{ github.event.inputs.COMPONENT_VERSION }}
           repo_commithash: ${{ github.event.inputs.REPO_COMMITHASH }}
           gfx_rocm: ${{ github.event.inputs.GFX_ROCM }}
