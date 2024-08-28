@@ -91,14 +91,7 @@ os.makedirs(latest_dir, exist_ok=True)
 os.makedirs(stable_dir, exist_ok=True)
 
 # Function to move the file based on conditions
-def move_file_based_on_content(file_path, user_component):
-    """
-    Move the file based on the content of the JSON file and the user-provided component.
-
-    Args:
-        file_path (str): Path to the JSON file.
-        user_component (str): Component value provided by the user to match against.
-    """
+def move_file_based_on_content(file_path):
     # Read and parse the JSON file
     with open(file_path, 'r') as file:
         data = json.load(file)
@@ -107,20 +100,15 @@ def move_file_based_on_content(file_path, user_component):
     component = data.get('component')
     version = data.get('version')
 
-    if component is None or version is None:
-        raise ValueError("The JSON file must contain 'component' and 'version' fields.")
-
-    # Check if the component and version meet the condition based on user input
-    if component == user_component and version == 'latest':
+    # Determine the target directory
+    if component == component and version == 'latest':
         target_dir = latest_dir
-        new_file = f'{component}.json'  # Use component value to name the file for the latest directory
-        print(new_file)
+        new_file = f'{component}.json'
     else:
         target_dir = stable_dir
         # Handle version formatting for non-latest versions
         version_safe = version.replace('.', '_')
-        new_file = f'{component}_{version_safe}.json'  # Use component value and formatted version for the stable directory
-        print(new_file)
+        new_file = f'pytorch_{version_safe}.json'
 
     # Define the target file path
     target_file_path = os.path.join(target_dir, new_file)
@@ -128,7 +116,6 @@ def move_file_based_on_content(file_path, user_component):
     # Move the file
     shutil.move(file_path, target_file_path)
     print(f"File moved to: {target_file_path}")
-    
 
 # Read and print the JSON file to logs
 with open('output.json', 'r') as json_file:
@@ -137,4 +124,4 @@ with open('output.json', 'r') as json_file:
     print(json_data)
 
 # Execute the function
-move_file_based_on_content(json_file_path, user_component)
+move_file_based_on_content(json_file_path)
