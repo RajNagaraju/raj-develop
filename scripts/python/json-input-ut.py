@@ -134,4 +134,4 @@ with open('output.json', 'r') as json_file:
     print(json_data)
 
 # Execute the function
-move_file_based_on_content(json_file_path)
+move_file_based_on_content(json_file_path, user_component)
