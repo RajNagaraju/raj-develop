@@ -1,4 +1,4 @@
-name: Build docker image for 6.2
+name: New Input Build docker image for 6.2
 
 on:
   workflow_dispatch:  
