@@ -101,14 +101,14 @@ def move_file_based_on_content(file_path):
     version = data.get('version')
 
     # Determine the target directory
-    if component == component and version == 'latest':
+    if version == 'latest':
         target_dir = latest_dir
         new_file = f'{component}.json'
     else:
         target_dir = stable_dir
         # Handle version formatting for non-latest versions
         version_safe = version.replace('.', '_')
-        new_file = f'pytorch_{version_safe}.json'
+        new_file = f'{component}_{version_safe}.json'
 
     # Define the target file path
     target_file_path = os.path.join(target_dir, new_file)
