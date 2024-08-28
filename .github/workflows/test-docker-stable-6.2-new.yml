@@ -1,4 +1,4 @@
-name: New Input Build docker image for 6.2
+name: Build docker image for 6.2 New Input
 
 on:
   workflow_dispatch:  
@@ -27,7 +27,7 @@ jobs:
   build:
     runs-on: [self-hosted, rocm-framework-38]
     env:
-      DOCKERFILE_PATH: "docker/ubuntu22/Dockerfile"
+      DOCKERFILE_PATH: "docker/ubuntu22/rocm-6.2/Dockerfile"
 
     steps:
     - name: checkout main branch
