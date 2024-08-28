@@ -1,20 +1,34 @@
-name: Rocm test 6.2 push action
+name: Build docker image for 6.2
 
 on:
-  workflow_dispatch:
-
+  workflow_dispatch:  
+    inputs:
+      ROCM_REPO:
+        description: 'rocm repo'
+        required: true
+        default: "6.2"
+      ROCM_VERSION:
+        description: 'rocm-ver'
+        required: true
+        default: "6.2.0"
+      ROCM_LIB_VERSION:
+        description: 'rocm-lib-ver'
+        required: true
+        default: "60200"
+      ROCM_PATH:
+        description: 'rocm-path'
+        required: true
+        default: "/opt/rocm-6.2"
+      IMAGE_TAG:
+        description: 'docker tag'
+        required: true
+        default: "6.2.0-ub22"
 jobs:
   build:
     runs-on: [self-hosted, rocm-framework-38]
-
     env:
-      ROCM_REPO: "6.2"
-      ROCM_VERSION: "6.2.0"
-      ROCM_LIB_VERSION: "60200"
-      ROCM_PATH: "/opt/rocm-6.2.0"
-      IMAGE_TAG: "6.2.0-ub22"
-      DOCKERFILE_PATH: "docker/ubuntu22/rocm-6.2/Dockerfile"
-      
+      DOCKERFILE_PATH: "docker/ubuntu22/Dockerfile"
+
     steps:
     - name: checkout main branch
       uses: actions/checkout@v4
@@ -27,17 +41,16 @@ jobs:
     
     - name: Build the Docker image
       run: |
-          #Build Docker image
+          #Building docker image
           docker build \
             --no-cache \
-            --build-arg rocm_repo=${{ env.ROCM_REPO }} \
-            --build-arg rocm_version=${{ env.ROCM_VERSION }} \
-            --build-arg rocm_lib_version=${{ env.ROCM_LIB_VERSION }} \
-            --build-arg rocm_path=${{ env.ROCM_PATH }} \
-            --tag nlingamp/rocm:${{ env.IMAGE_TAG }} \
-            --file ${{ env.DOCKERFILE_PATH }} \
+            --build-arg rocm_repo=${{ github.event.inputs.ROCM_REPO }} \
+            --build-arg rocm_version=${{ github.event.inputs.ROCM_VERSION }} \
+            --build-arg rocm_lib_version=${{ github.event.inputs.ROCM_LIB_VERSION }} \
+            --build-arg rocm_path=${{ github.event.inputs.ROCM_PATH }} \
+            --tag nlingamp/rocm:${{ github.event.inputs.IMAGE_TAG }} \
+            --file $DOCKERFILE_PATH \
             .
-            
     - name: Push Docker image to Docker Hub
       run: |
-        docker push nlingamp/rocm:${{ env.IMAGE_TAG }}
+        docker push nlingamp/rocm:${{ github.event.inputs.IMAGE_TAG }}
