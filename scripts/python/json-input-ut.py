@@ -114,11 +114,13 @@ def move_file_based_on_content(file_path, user_component):
     if component == user_component and version == 'latest':
         target_dir = latest_dir
         new_file = f'{component}.json'  # Use component value to name the file for the latest directory
+        print(new_file)
     else:
         target_dir = stable_dir
         # Handle version formatting for non-latest versions
         version_safe = version.replace('.', '_')
         new_file = f'{component}_{version_safe}.json'  # Use component value and formatted version for the stable directory
+        print(new_file)
 
     # Define the target file path
     target_file_path = os.path.join(target_dir, new_file)
@@ -126,6 +128,7 @@ def move_file_based_on_content(file_path, user_component):
     # Move the file
     shutil.move(file_path, target_file_path)
     print(f"File moved to: {target_file_path}")
+    
 
 # Read and print the JSON file to logs
 with open('output.json', 'r') as json_file:
