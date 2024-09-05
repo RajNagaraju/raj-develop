@@ -26,9 +26,9 @@ jobs:
         id: ping_servers
         run: |
           # Run the Ansible ping module and capture the output
-          ansible all -i ${{ github.event.inputs.inventory_path }} -m ping -o > ping_results.txt
-          cat ping_results.txt
-
+          ansible all -i ${{ github.event.inputs.inventory_path }} -m ping -o > $GITHUB_WORKSPACE/ping_results.txt
+          cat $GITHUB_WORKSPACE/ping_results.txt
+          
         env:
           ANSIBLE_HOST_KEY_CHECKING: "False"
           
@@ -41,8 +41,8 @@ jobs:
 
       - name: Filter Non-Responding Servers
         run: |
-          grep 'FAILED!' ping_results.txt > failed_servers.txt
-          if [ -s failed_servers.txt ]; then
+          grep 'FAILED!' ping_results.txt > $GITHUB_WORKSPACE/failed_servers.txt
+          if [ -s $GITHUB_WORKSPACE/failed_servers.txt ]; then
             echo "Sending email with the list of non-responding servers."
           else
           echo "All servers responded successfully."
