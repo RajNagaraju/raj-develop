@@ -6,7 +6,7 @@ on:
       inventory_path:
         description: 'Path to the inventory file or folder'
         required: true
-        default: 'inventory'
+        default: 'inventory/mi300x'
 jobs:
   Ping-servers:
     runs-on: ubuntu-latest
