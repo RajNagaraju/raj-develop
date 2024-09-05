@@ -16,7 +16,9 @@ jobs:
              sudo apt install -y software-properties-common sshpass python3-pip
              python3 -m pip install virtualenv
              pip3 install -r requirements.txt
-      - run: ./venv_setup.sh
+      - run: |
+         chmod +x venv_setup.sh
+         ./venv_setup.sh
       - run: source venv/bin/activate
       - run: ls -lart 
       
