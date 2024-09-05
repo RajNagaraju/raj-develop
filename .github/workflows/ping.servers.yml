@@ -37,15 +37,21 @@ jobs:
         run: |
           # Run the Ansible ping module and capture the output
           ansible all -i ${{ github.event.inputs.inventory_path }} -m ping -o > ping_results.txt || echo "Ping failed" >> ping_results.txt
+          cat ping_results.txt
 
       - name: Process Ping Results
         run: |
           # Check for successful pings and failed pings
           grep 'SUCCESS' ping_results.txt | awk '{print $1, "Online"}' > final_results.txt
+          echo "final results"
+          cat final_results.txt
+          
           grep 'FAILED' ping_results.txt | awk '{print $1, "Offline"}' >> final_results.txt
+          echo "final results-2"
+          cat final_results.txt
 
-      - name: Upload Ping Results
-        uses: actions/upload-artifact@v3
-        with:
-          name: ping-results
-          path: final_results.txt
+      #- name: Upload Ping Results
+        #uses: actions/upload-artifact@v3
+        #ith:
+          #name: ping-results
+          #path: final_results.txt
