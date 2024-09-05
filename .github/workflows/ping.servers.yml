@@ -36,7 +36,9 @@ jobs:
         id: ping_servers
         run: |
           # Run the Ansible ping module and capture the output
-          ansible all -i ${{ github.event.inputs.inventory_path }} -m ping -o > $GITHUB_WORKSPACE/ping_results.txt 2>&1 #|| echo "Ping failed" >> $GITHUB_WORKSPACE/ping_results.txt
+          ansible all -i ${{ github.event.inputs.inventory_path }} -m ping -o > $GITHUB_WORKSPACE/$temp_file 
+          # || echo "Ping failed" >> $GITHUB_WORKSPACE/ping_results.txt
+          mv $temp_file $GITHUB_WORKSPACE/ping_results.txt
           cat $GITHUB_WORKSPACE/ping_results.txt
 
       - name: Process Ping Results
