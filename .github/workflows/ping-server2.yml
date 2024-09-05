@@ -31,6 +31,13 @@ jobs:
 
         env:
           ANSIBLE_HOST_KEY_CHECKING: "False"
+          
+      - name: Debugging Information
+        run: |
+          echo "Contents of ping_results.txt:"
+          cat ping_results.txt
+          echo "Contents of failed_servers.txt:"
+          cat failed_servers.txt || echo "failed_servers.txt does not exist or is empty"
 
       - name: Filter Non-Responding Servers
         run: |
