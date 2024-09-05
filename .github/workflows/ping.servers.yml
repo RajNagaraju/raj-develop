@@ -1,5 +1,5 @@
 name: ping servers
-run-name: ${{ github.actor }} is learning GitHub Actions
+run-name: ${{ github.actor }}
 on: 
   workflow_dispatch:
     inputs:
