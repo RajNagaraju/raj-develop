@@ -50,8 +50,10 @@ jobs:
           echo "final results-2"
           cat final_results.txt
 
-      #- name: Upload Ping Results
-        #uses: actions/upload-artifact@v3
-        #ith:
-          #name: ping-results
-          #path: final_results.txt
+      - name: Upload Ping Results
+        uses: actions/upload-artifact@v3
+        with:
+          name: ping-results
+          path: final_results.txt
+          
+      - run: cat final_results.txt
