@@ -1,0 +1,39 @@
+name: learn-github-actions
+run-name: ${{ github.actor }} is learning GitHub Actions
+on: 
+  workflow_dispatch:
+    inputs:
+      inventory_path:
+        description: 'Path to the inventory file or folder'
+        required: true
+        default: 'inventory'
+jobs:
+  Ping-servers:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+             sudo apt install -y software-properties-common sshpass python3-pip
+             python3 -m pip install virtualenv
+             pip3 install -r requirements.txt
+      - run: ./venv_setup.sh
+      - run: source venv/bin/activate
+      - run: ls -lart 
+      
+      - name: Ping servers
+        id: ping_servers
+        run: |
+          # Run the Ansible ping module and capture the output
+          ansible all -i ${{ github.event.inputs.inventory_file }} -m ping -o > ping_results.txt || echo "Ping failed" >> ping_results.txt
+
+      - name: Process Ping Results
+        run: |
+          # Check for successful pings and failed pings
+          grep 'SUCCESS' ping_results.txt | awk '{print $1, "Online"}' > final_results.txt
+          grep 'FAILED' ping_results.txt | awk '{print $1, "Offline"}' >> final_results.txt
+
+      - name: Upload Ping Results
+        uses: actions/upload-artifact@v3
+        with:
+          name: ping-results
+          path: final_results.txt
