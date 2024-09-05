@@ -34,7 +34,7 @@ jobs:
 
       - name: Filter Non-Responding Servers
         run: |
-          grep 'Failed!' ping_results.txt > failed_servers.txt
+          grep 'Failed' ping_results.txt > failed_servers.txt
           if [ -s failed_servers.txt ]; then
             echo "Sending email with the list of non-responding servers."
           else
