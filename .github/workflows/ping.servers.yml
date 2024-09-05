@@ -36,7 +36,7 @@ jobs:
         id: ping_servers
         run: |
           # Run the Ansible ping module and capture the output
-          ansible all -i ${{ github.event.inputs.inventory_path }} -m ping > $GITHUB_WORKSPACE/ping_results.txt 
+          ansible all -i ${{ github.event.inputs.inventory_path }} -m ping -o > $GITHUB_WORKSPACE/ping_results.txt || echo "Ping failed" >> $GITHUB_WORKSPACE/ping_results.txt
           cat $GITHUB_WORKSPACE/ping_results.txt
 
       - name: Process Ping Results
@@ -46,7 +46,7 @@ jobs:
           echo "final results"
           cat $GITHUB_WORKSPACE/final_results.txt
           
-          grep 'FAILED' $GITHUB_WORKSPACE/ping_results.txt | awk '{print $1, "Offline"}' >> $GITHUB_WORKSPACE/final_results.txt
+          grep 'Failed' $GITHUB_WORKSPACE/ping_results.txt | awk '{print $1, "Offline"}' >> $GITHUB_WORKSPACE/final_results.txt
           echo "final results-2"
           cat $GITHUB_WORKSPACE/final_results.txt
 
