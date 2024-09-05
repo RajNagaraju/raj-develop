@@ -36,26 +36,26 @@ jobs:
         id: ping_servers
         run: |
           # Run the Ansible ping module and capture the output
-          ansible all -i ${{ github.event.inputs.inventory_path }} -m ping -o > $GITHUB_WORKSPACE/$temp_file 
+          ansible all -i ${{ github.event.inputs.inventory_path }} -m ping -o > $temp_file 
           # || echo "Ping failed" >> $GITHUB_WORKSPACE/ping_results.txt
-          mv $temp_file $GITHUB_WORKSPACE/ping_results.txt
-          cat $GITHUB_WORKSPACE/ping_results.txt
+          mv $temp_file ping_results.txt
+          cat ping_results.txt
 
       - name: Process Ping Results
         run: |
           # Check for successful pings and failed pings
-          grep 'SUCCESS' $GITHUB_WORKSPACE/ping_results.txt | awk '{print $1, "Online"}' > $GITHUB_WORKSPACE/final_results.txt 
+          grep 'SUCCESS' ping_results.txt | awk '{print $1, "Online"}' > final_results.txt 
           echo "final results"
-          cat $GITHUB_WORKSPACE/final_results.txt
+          cat final_results.txt
           
-          grep 'Failed' $GITHUB_WORKSPACE/ping_results.txt | awk '{print $1, "Offline"}' >> $GITHUB_WORKSPACE/final_results.txt
+          grep 'Failed' ping_results.txt | awk '{print $1, "Offline"}' >> final_results.txt
           echo "final results-2"
-          cat $GITHUB_WORKSPACE/final_results.txt
+          cat final_results.txt
 
       - name: Upload Ping Results
         uses: actions/upload-artifact@v3
         with:
           name: ping-results
-          path: $GITHUB_WORKSPACE/final_results.txt
+          path: final_results.txt
           
-      - run: cat $GITHUB_WORKSPACE/final_results.txt
+      - run: cat final_results.txt
