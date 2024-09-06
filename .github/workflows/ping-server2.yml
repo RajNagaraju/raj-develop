@@ -27,7 +27,8 @@ jobs:
         run: |
           # Run the Ansible ping module and capture the output
           ansible all -i ${{ github.event.inputs.inventory_path }} -m ping -o | tee ping_results.txt
-          cat ping_results.txt
+          echo "ping"
+          ping -c 2 smc300x-clt-r4c6-18.cs-clt.dcgpu
           
         env:
           ANSIBLE_HOST_KEY_CHECKING: "False"
