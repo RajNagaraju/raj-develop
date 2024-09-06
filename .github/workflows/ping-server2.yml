@@ -9,7 +9,7 @@ on:
         default: 'inventory/mi300x'
 jobs:
   Ping-servers:
-    runs-on: [selfhosted]
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
       - run: |
