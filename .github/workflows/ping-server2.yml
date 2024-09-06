@@ -26,7 +26,7 @@ jobs:
         id: ping_servers
         run: |
           # Run the Ansible ping module and capture the output
-          ansible all -i ${{ github.event.inputs.inventory_path }} -m ping -e"nlingamp"-o | tee ping_results.txt
+          ansible all -i ${{ github.event.inputs.inventory_path }} -m ping -e"ansible_user=nlingamp" -o | tee ping_results.txt
           
         env:
           ANSIBLE_HOST_KEY_CHECKING: "False"
