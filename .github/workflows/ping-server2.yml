@@ -48,6 +48,6 @@ jobs:
           fi
 
       - name: cleanup repo
-        run: rm -rf raj-develop
+        run: sudo rm -rf raj-develop/
   
            
