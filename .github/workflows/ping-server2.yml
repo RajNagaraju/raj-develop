@@ -44,7 +44,7 @@ jobs:
           if [ -s failed_servers.txt ]; then
             echo "Sending email with the list of non-responding servers."
           else
-          echo "All servers responded successfully."
+            echo "All servers responded successfully."
           fi
   
            
