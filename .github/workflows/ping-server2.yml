@@ -42,9 +42,9 @@ jobs:
         run: |
           grep 'Failed' ping_results.txt > failed_servers.txt
           if [ -s failed_servers.txt ]; then
-            echo "Sending email with the list of non-responding servers."
+              echo "Sending email with the list of non-responding servers."
           else
-            echo "All servers responded successfully."
+              echo "All servers responded successfully."
           fi
 
       - name: cleanup repo
