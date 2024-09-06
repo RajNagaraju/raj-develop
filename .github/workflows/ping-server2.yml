@@ -47,7 +47,7 @@ jobs:
           
       - name: Filter Non-Responding Servers
         run: |
-          grep 'Failed' final_results-failed.txt > failed_servers.txt
+          grep 'Offline' final_results-failed.txt > failed_servers.txt
           if [ -s failed_servers.txt ]; then
               echo "Sending email with the list of non-responding servers."
           else
