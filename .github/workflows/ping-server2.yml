@@ -26,13 +26,18 @@ jobs:
         id: ping_servers
         run: |
           # Run the Ansible ping module and capture the output
-          ansible all -i ${{ github.event.inputs.inventory_path }} -m ping -o | tee ping_results.txt
-          echo "ping"
-          ping -c 2 smc300x-clt-r4c6-18.cs-clt.dcgpu
+          ansible all -i ${{ github.event.inputs.inventory_path }} -m ping -e"nlingamp"-o | tee ping_results.txt
           
         env:
           ANSIBLE_HOST_KEY_CHECKING: "False"
-
+          
+      - name: Process Ping Results
+        run: |
+          # Check for successful pings and failed pings
+          grep 'SUCCESS' ping_results.txt | awk '{print $1, "Online"}' > final_results.txt 
+          echo "final results"
+          cat final_results.txt
+          
       - name: Filter Non-Responding Servers
         run: |
           grep 'Failed' ping_results.txt > failed_servers.txt
