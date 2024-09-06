@@ -47,13 +47,11 @@ jobs:
           
       - name: Filter Non-Responding Servers
         run: |
-          grep 'Failed' final_results-failed.txt > failed_servers.txt
+          grep 'Failed' ping_results.txt > failed_servers.txt
           if [ -s failed_servers.txt ]; then
               echo "Sending email with the list of non-responding servers."
-              cat failed_servers.txt
           else
               echo "All servers responded successfully."
-              cat final_results.txt
           fi
 
       - name: cleanup repo
