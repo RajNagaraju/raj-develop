@@ -1,3 +1,0 @@
-[navi48]
-navi4x-hw-06  ansible_host="navi4x-hw-06.amd.com" ipmi_user="admin" ipmi_password="admin@123" ipmi_ip="10.216.203.6"   label=mlir
-navi4x-hw-08  ansible_host="navi4x-hw-08.amd.com" ipmi_user="admin" ipmi_password="admin@123" ipmi_ip="10.216.151.66"  label=tensorflow
