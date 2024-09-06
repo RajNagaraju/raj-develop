@@ -57,6 +57,6 @@ jobs:
           fi
 
       - name: cleanup repo
-        run: rm -rf /actions-runner/_work/raj-develop/raj-develop/
+        run: sudo rm -rf /home/raju/actions-runner/_work/raj-develop/raj-develop/
   
            
