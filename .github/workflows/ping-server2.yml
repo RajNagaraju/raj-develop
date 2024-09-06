@@ -41,16 +41,22 @@ jobs:
           echo "final results"
           cat final_results.txt
           
+          grep 'Failed' ping_results.txt | awk '{print $1, "Offline"}' >> final_results-failed.txt
+          echo "final results for failed pings"
+          cat final_results-failed.txt  
+          
       - name: Filter Non-Responding Servers
         run: |
-          grep 'Failed' ping_results.txt > failed_servers.txt
+          grep 'Failed' final_results-failed.txt > failed_servers.txt
           if [ -s failed_servers.txt ]; then
               echo "Sending email with the list of non-responding servers."
+              cat failed_servers.txt
           else
               echo "All servers responded successfully."
+              cat final_results.txt
           fi
 
       - name: cleanup repo
-        run: sudo rm -rf raj-develop/
+        run: rm -rf /actions-runner/_work/raj-develop/raj-develop/
   
            
