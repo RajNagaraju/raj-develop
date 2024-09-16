@@ -1,0 +1,38 @@
+
+# this workflow test rocm docker on gpu self hosted runners MI100, mi210, Mi300a, Mi330x, Navi31
+name: test-rocm-stable-docker-gfx-targets
+
+# This controls when the workflow is run. Set on to workflow_
+on:
+  # This allows workflow to be run manually from Actions tab
+  workflow_dispatch:
+    # When invoked, the user is prompted to enter the following inputs
+    inputs:
+      github_repo:
+        description: 'GitHub Repository Name'
+        required: true
+        default: 'aisw-hud'
+      runner_user:
+        description: 'Runner User'
+        required: true
+        default: 'jenkins'
+      runner_label:
+        description: 'Runner label'
+        required: true
+        default: ''
+      runner_token:
+        description: 'GitHub Runner Token'
+        required: true
+        default: ''
+
+# The jobs section defines jobs to run. Each job has completion status
+jobs:
+  # caling test-rocm-stable-docker-mi100-gfx908.yml workflow
+  setup-runner:
+    uses: RajNagaraju/Raj-Dev/./.github/workflows/diconnect-add-runner-2.yml@main
+    with:
+        GITHUB_REPO: ${{ github.event.inputs.github_repo }}
+        RUNNER_USER: ${{ github.event.inputs.runner_user }}
+        RUNNER_LABEL: ${{ github.event.inputs.runner_label }}
+        RUNNER_TOKEN: ${{ github.event.inputs.runner_token }}
+
