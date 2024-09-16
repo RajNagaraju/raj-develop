@@ -29,7 +29,7 @@ on:
 jobs:
   # caling test-rocm-stable-docker-mi100-gfx908.yml workflow
   setup-runner:
-    uses: RajNagaraju/Raj-Dev/./.github/workflows/diconnect-add-runner-2.yml@main
+    uses: RajNagaraju/Raj-Dev/Raj-Dev/.github/workflows/diconnect-add-runner-2.yml@main
     with:
         GITHUB_REPO: ${{ github.event.inputs.github_repo }}
         RUNNER_USER: ${{ github.event.inputs.runner_user }}
