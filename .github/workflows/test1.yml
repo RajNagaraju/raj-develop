@@ -14,4 +14,6 @@ jobs:
           repository: RajNagaraju/Raj-Dev
           token: ${{ secrets.RAJ_PAT }}
       - name: list the files
-        run: ls -lrt
+        run: |
+          pwd
+          ls -lrt
