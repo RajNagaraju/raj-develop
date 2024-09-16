@@ -1,0 +1,15 @@
+# Example of using PAT to checkout another repository
+name: test repo
+
+on:
+  workflow_dispatch:
+
+jobs:
+  checkout:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code from another repository
+        uses: actions/checkout@v4
+        with:
+          repository: RajNagaraju/Raj-Dev
+          token: ${{ secrets.RAJ_PAT }}
