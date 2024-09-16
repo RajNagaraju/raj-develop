@@ -11,4 +11,4 @@ jobs:
   setup-runner:
     uses: RajNagaraju/Raj-Dev/.github/workflows/test-repo1.yml@main
     secrets:
-      token: ${{ secrets.RAJ_PAT }}
+      token: ${{ secrets.RAJ_TEMP_TOKEN }}
