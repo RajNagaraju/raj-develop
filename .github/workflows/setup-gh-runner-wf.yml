@@ -35,3 +35,8 @@ jobs:
         RUNNER_USER: ${{ github.event.inputs.runner_user }}
         RUNNER_LABEL: ${{ github.event.inputs.runner_label }}
         RUNNER_TOKEN: ${{ github.event.inputs.runner_token }}
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log Message
+        run: echo "Access test successful!"
