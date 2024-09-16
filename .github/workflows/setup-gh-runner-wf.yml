@@ -31,11 +31,12 @@ jobs:
   setup-runner:
     uses: RajNagaraju/Raj-Dev/.github/workflows/diconnect-add-runner-2.yml@main
     with:
-        token: ${{ secrets.RAJ_PAT }}
         GITHUB_REPO: ${{ github.event.inputs.github_repo }}
         RUNNER_USER: ${{ github.event.inputs.runner_user }}
         RUNNER_LABEL: ${{ github.event.inputs.runner_label }}
         RUNNER_TOKEN: ${{ github.event.inputs.runner_token }}
+    secrets:
+        my_pat: ${{ secrets.RAJ_PAT }}
   test:
     runs-on: ubuntu-latest
     steps:
