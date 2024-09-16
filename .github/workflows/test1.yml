@@ -2,18 +2,12 @@
 name: test repo
 
 on:
-  workflow_dispatch:
+  workflow_call:
 
+# The jobs section defines jobs to run. Each job has completion status
 jobs:
-  checkout:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code from another repository
-        uses: actions/checkout@v4
-        with:
-          repository: RajNagaraju/Raj-Dev
-          token: ${{ secrets.RAJ_PAT }}
-      - name: list the files
-        run: |
-          pwd
-          ls -lrt
+  # caling test-rocm-stable-docker-mi100-gfx908.yml workflow
+  setup-runner:
+    uses: RajNagaraju/Raj-Dev/.github/workflows/test-repo1.yml@main
+    secrets:
+      token: ${{ secrets.RAJ_PAT }}
