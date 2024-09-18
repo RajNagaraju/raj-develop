@@ -28,16 +28,14 @@ jobs:
       - name: Ping servers
         id: ping_servers
         run: |
-          # Run the Ansible ping module and capture the output
-          ansible all -i ${{ github.event.inputs.inventory_path }} -m ping -o | tee ping_results.txt || echo "Ping failed" >> ping_results.txt
-          
+          # Run the Ansible ping module and capture the output directly
+          ansible all -i ${{ github.event.inputs.inventory_path }} -m ping -o
+      
       - name: Process Ping Results
         run: |
           # Check for successful pings and failed pings
-          grep 'SUCCESS' ping_results.txt | awk '{print $1, "Online"}' > online_results.txt 
-          echo "Online Servers"
-          cat online_results.txt
+          echo "Online Servers:"
+          ansible all -i ${{ github.event.inputs.inventory_path }} -m ping -o | grep 'SUCCESS' | awk '{print $1, "Online"}'
           
-          grep 'Failed' ping_results.txt | awk '{print $1, "Offline"}' > offline_results.txt
-          echo "Offline servers"
-          cat offline_results.txt
+          echo "Offline Servers:"
+          ansible all -i ${{ github.event.inputs.inventory_path }} -m ping -o | grep 'Failed' | awk '{print $1, "Offline"}'
