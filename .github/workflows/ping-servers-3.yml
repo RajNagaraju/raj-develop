@@ -1,0 +1,33 @@
+# this workflow take the input file and ping all servers from the file
+name: ping servers manually
+
+on: 
+  workflow_dispatch:
+    inputs:
+      inventory_path:
+        description: 'Path to the inventory file or folder'
+        required: true
+        default: 'inventory/mi300x'
+jobs:
+  Ping-servers:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: Ping servers
+        id: ping_servers
+        run: |
+          # Run the Ansible ping module and capture the output
+          ansible all -i ${{ github.event.inputs.inventory_path }} -m ping -o > tee ping_results.txt || echo "Ping failed" >> ping_results.txt
+          
+      - name: Process Ping Results
+        run: |
+          # Check for successful pings and failed pings
+          grep 'SUCCESS' ping_results.txt | awk '{print $1, "Online"}' > online_results.txt 
+          echo "Online Servers"
+          cat online_results.txt
+          
+          grep 'Failed' ping_results.txt | awk '{print $1, "Offline"}' > offline_results.txt
+          echo "Offline servers"
+          cat offline_results.txt
