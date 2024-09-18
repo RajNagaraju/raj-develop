@@ -29,7 +29,7 @@ jobs:
         id: ping_servers
         run: |
           # Run the Ansible ping module and capture the output directly
-          ansible all -i ${{ github.event.inputs.inventory_path }} -m ping -o || echo "Ping failed"
+          ansible all -i ${{ github.event.inputs.inventory_path }} -m ping -o 
 
       - name: Process Ping Results
         run: |
